@@ -1,0 +1,3756 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.1.3",
+    "title": "KMD Logic Gateway Service API"
+  },
+  "paths": {
+    "/subscriptions/{subscriptionId}/gateway/apis": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Retrieve all gateway apis",
+        "operationId": "GetAllApis",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "description": "Limit to APIs for this provider",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ApiListModel"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Adds an api if versionsetid is null and adds a version if versionsetid is not null",
+        "operationId": "CreateApi",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiVersionSetId",
+            "in": "query",
+            "description": "Versionset ID",
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "providerId",
+            "in": "formData",
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "path",
+            "in": "formData",
+            "required": true,
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9]+([_-][a-zA-Z0-9]+)*([/][a-zA-Z0-9]+([_-][a-zA-Z0-9]+)*)*$"
+          },
+          {
+            "name": "visibility",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "Public",
+              "Private"
+            ]
+          },
+          {
+            "name": "apiVersion",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "openApiSpec",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          },
+          {
+            "name": "backendServiceUrl",
+            "in": "formData",
+            "type": "string",
+            "format": "uri"
+          },
+          {
+            "name": "productIds",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "logo",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "documentation",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "Preview",
+              "Active",
+              "Deprecated"
+            ]
+          },
+          {
+            "name": "isCurrent",
+            "in": "formData",
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiListModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Client Error",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/apis/{apiId}": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Retrieves details of an API",
+        "operationId": "GetApi",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "The API ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiListModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Api"
+        ],
+        "operationId": "UpdateApi",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "apiVersion",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "visibility",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "Public",
+              "Private"
+            ]
+          },
+          {
+            "name": "backendServiceUrl",
+            "in": "formData",
+            "type": "string",
+            "format": "uri"
+          },
+          {
+            "name": "productIds",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "logo",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "documentation",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "status",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "Preview",
+              "Active",
+              "Deprecated"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiListModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Client Error",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Api"
+        ],
+        "operationId": "DeleteApi",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Updates IsCurrent Status of required API version",
+        "operationId": "MakeVersionIsCurrent",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "Api Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "isCurrent",
+            "in": "query",
+            "description": "IsCurrent status of API",
+            "required": true,
+            "type": "boolean"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiListModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/apis/{apiId}/products": {
+      "get": {
+        "tags": [
+          "Api"
+        ],
+        "summary": "Retrieve products for specified api",
+        "operationId": "GetApiProducts",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "Api ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductListModel"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-keys/{apiKeyId}": {
+      "get": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Get the details of an API Key",
+        "operationId": "GetApiKey",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiKeyListModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Delete an API Key",
+        "operationId": "DeleteApiKey",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "SubscriptionId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "ApiKeyId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-keys": {
+      "get": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Get the API Keys of a subscription",
+        "operationId": "GetAllApiKeys",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiKeyListModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Create a new API Key",
+        "operationId": "SaveApiKey",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateApiKeyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiKeyListModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-keys/{apiKeyId}/regenerate-primary": {
+      "post": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Regenerate the Primary Key",
+        "operationId": "RegeneratePrimaryKey",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/UpdatedKeyResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-keys/{apiKeyId}/regenerate-secondary": {
+      "post": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Regenerate the Secondary Key",
+        "operationId": "RegenerateSecondaryKey",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/UpdatedKeyResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-keys/{apiKeyId}/manage-state": {
+      "put": {
+        "tags": [
+          "ApiKey"
+        ],
+        "summary": "Update the state of the API key",
+        "operationId": "SaveSubscriptionState",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ApiKeyStateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiKeyListModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-keys/{apiKeyId}/usage": {
+      "get": {
+        "tags": [
+          "ApiKey"
+        ],
+        "operationId": "GetSubscriptionUsageReport",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ReportRecordListModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/api-sets/admin": {
+      "get": {
+        "tags": [
+          "ApiSets"
+        ],
+        "summary": "Get all APIs for Admin",
+        "operationId": "GetAllApisForAdmin",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "providerId",
+            "in": "query",
+            "description": "Limit to APIs for this provider",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetApiSetsResponse"
+            }
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-sets": {
+      "get": {
+        "tags": [
+          "ApiSets"
+        ],
+        "summary": "Get Details of current version of APIs",
+        "operationId": "GetAllApiSets",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "description": "Limit to APIs for this provider",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/GetApiSetsResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/api-sets/{apiVersionSetId}": {
+      "get": {
+        "tags": [
+          "ApiSets"
+        ],
+        "summary": "Get Details of all version for a specific versionSet Id",
+        "operationId": "GetAllVersions",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiVersionSetId",
+            "in": "path",
+            "description": "VersionSet Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApiSetVersionsResponse"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/usage-report/consumer/products/{productId}": {
+      "get": {
+        "tags": [
+          "ConsumerUsageReport"
+        ],
+        "summary": "Retrieve all usage of a product by a subscription within a date range",
+        "operationId": "GetUsageWithinDateRange",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Limit results to this product",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Start date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "End date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApimConsumptionAggregateModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/usage-report/consumer/products/{productId}/api-keys/{apiKeyId}": {
+      "get": {
+        "tags": [
+          "ConsumerUsageReport"
+        ],
+        "summary": "Retrieve all usage of a product by an api key id within a date range",
+        "operationId": "GetUsageByApiKeyWithinDateRange",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Limit results to this product",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "Limit results to this api key",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Start date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "End date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApimConsumptionAggregateModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/policies/custom/{policyId}": {
+      "get": {
+        "tags": [
+          "CustomPolicy"
+        ],
+        "summary": "Get the details of custom policy",
+        "operationId": "GetCustomPolicy",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "The Custom Policy ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CustomPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "CustomPolicy"
+        ],
+        "summary": "Update the custom policy",
+        "operationId": "UpdateCustomPolicy",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "The Custom Policy ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "The Custom Policy Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomPolicyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CustomPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/policies/custom": {
+      "post": {
+        "tags": [
+          "CustomPolicy"
+        ],
+        "summary": "Apply a custom policy",
+        "operationId": "CreateCustomPolicy",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "The Custom Policy Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CustomPolicyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CustomPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/providers": {
+      "get": {
+        "tags": [
+          "GatewayProvider"
+        ],
+        "operationId": "GetGatewayProviders",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProviderDetails"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/policies/entityId={entityId}&entityType={entityType}": {
+      "get": {
+        "tags": [
+          "Policy"
+        ],
+        "summary": "Get all the policies for a product / api",
+        "operationId": "GetAllPolicies",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "entityId",
+            "in": "path",
+            "description": "The id of the entity whose policies are being fetched",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "entityType",
+            "in": "path",
+            "description": "Entity type for either product / api",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "Product",
+              "Api"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PolicyModel"
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/policies/{policyId}": {
+      "get": {
+        "tags": [
+          "Policy"
+        ],
+        "summary": "Get a specific policy",
+        "operationId": "GetPolicy",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "The policy Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/PolicyModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Policy"
+        ],
+        "summary": "Deletes an apim policy",
+        "operationId": "DeletePolicy",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "Apim policy document id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/products/{productId}": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrieve gateway product",
+        "operationId": "GetProduct",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProductListModel"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Updates a product and maps the apis to that product",
+        "operationId": "UpdateProduct",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The product to update",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "providerId",
+            "in": "formData",
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyRequired",
+            "in": "formData",
+            "type": "boolean"
+          },
+          {
+            "name": "clientCredentialRequired",
+            "in": "formData",
+            "type": "boolean"
+          },
+          {
+            "name": "openidConfigIssuer",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "IdentityKmdlogicIo",
+              "LogicidentityprodB2clogicCom",
+              "Custom"
+            ]
+          },
+          {
+            "name": "openidConfigCustomUrl",
+            "in": "formData",
+            "type": "string",
+            "format": "uri"
+          },
+          {
+            "name": "providerApprovalRequired",
+            "in": "formData",
+            "type": "boolean"
+          },
+          {
+            "name": "applicationId",
+            "in": "formData",
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productTerms",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "visibility",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "Public",
+              "Private"
+            ]
+          },
+          {
+            "name": "apiIds",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "logo",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "documentation",
+            "in": "formData",
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProductListModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Deletes the product",
+        "operationId": "DeleteProduct",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "The product to delete",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/products": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrieve all gateway products",
+        "operationId": "GetAllProducts",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "provider",
+            "in": "query",
+            "description": "Limit to products for this provider",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetProductListModel"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Creates a product and maps the apis to that product",
+        "operationId": "CreateProduct",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "name",
+            "in": "formData",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "description",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "providerId",
+            "in": "formData",
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyRequired",
+            "in": "formData",
+            "type": "boolean"
+          },
+          {
+            "name": "providerApprovalRequired",
+            "in": "formData",
+            "type": "boolean"
+          },
+          {
+            "name": "productTerms",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "visibility",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "Public",
+              "Private"
+            ]
+          },
+          {
+            "name": "apiIds",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "logo",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "documentation",
+            "in": "formData",
+            "type": "file"
+          },
+          {
+            "name": "clientCredentialRequired",
+            "in": "formData",
+            "type": "boolean"
+          },
+          {
+            "name": "openidConfigIssuer",
+            "in": "formData",
+            "type": "string",
+            "enum": [
+              "IdentityKmdlogicIo",
+              "LogicidentityprodB2clogicCom",
+              "Custom"
+            ]
+          },
+          {
+            "name": "openidConfigCustomUrl",
+            "in": "formData",
+            "type": "string",
+            "format": "uri"
+          },
+          {
+            "name": "applicationId",
+            "in": "formData",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProductListModel"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/products/admin": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrieve all gateway products for the admin",
+        "operationId": "GetAllProductsForAdmin",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "provider",
+            "in": "query",
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetProductListModel"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/products/{productId}/api-keys": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrieve subscriptions for specified product",
+        "operationId": "GetApiKeys",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ApiKeyListModel"
+              }
+            }
+          },
+          "404": {
+            "description": "Product not found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/products/{productId}/apis": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrieve apis for specified product",
+        "operationId": "GetProductApis",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Product ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ApiListModel"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/usage-report/product-owner/products/{productId}": {
+      "get": {
+        "tags": [
+          "ProductOwnerUsageReport"
+        ],
+        "summary": "Retrieve all usage of a product within a date range",
+        "operationId": "GetUsageWithinDateRange",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Limit results to this product",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Start date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "End date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApimConsumptionAggregateModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/usage-report/product-owner/products/{productId}/api-keys/{apiKeyId}": {
+      "get": {
+        "tags": [
+          "ProductOwnerUsageReport"
+        ],
+        "summary": "Retrieve all usage of a product by an api key id within a date range",
+        "operationId": "GetUsageByApiKeyWithinDateRange",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Limit results to this product",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiKeyId",
+            "in": "path",
+            "description": "Limit results to this api key",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Start date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "End date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ApimConsumptionAggregateModel"
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/usage-report/product-owner/products/{productId}/download": {
+      "get": {
+        "tags": [
+          "ProductOwnerUsageReport"
+        ],
+        "summary": "Download a csv file summarizing product usage by api key",
+        "operationId": "DownloadSubscriptionUsageReport",
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "productId",
+            "in": "path",
+            "description": "Limit results to this product.",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "dateFrom",
+            "in": "query",
+            "description": "Start date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "dateTo",
+            "in": "query",
+            "description": "End date of range.",
+            "required": true,
+            "type": "string",
+            "format": "date-time"
+          },
+          {
+            "name": "downloadReportFormat",
+            "in": "query",
+            "description": "File format.  Either Csv or Xlsx.",
+            "required": true,
+            "type": "string",
+            "enum": [
+              "Csv",
+              "Xlsx"
+            ]
+          },
+          {
+            "name": "includeServerErrors",
+            "in": "query",
+            "description": "Usually 5xx errors are not included.",
+            "type": "boolean",
+            "default": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/publishing": {
+      "post": {
+        "tags": [
+          "Publish"
+        ],
+        "summary": "An endpoint for uploading ZIP file with \"publishing\" content",
+        "operationId": "Publish",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscriptionId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "ZIP file",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/CreateProductResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized user"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/publishing/{requestId}": {
+      "get": {
+        "tags": [
+          "Publish"
+        ],
+        "summary": "Get status for published content",
+        "operationId": "GetPublishStatus",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscriptionId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "requestId",
+            "in": "path",
+            "description": "Id of the publishing request",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "sequenceFrom",
+            "in": "query",
+            "description": "Sequence number to get data from (0 for all)",
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProcessingStatusLog"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized user"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/policies/rate-limit/{policyId}": {
+      "get": {
+        "tags": [
+          "RateLimitPolicy"
+        ],
+        "summary": "Get the details of a rate limit policy",
+        "operationId": "GetRateLimitPolicy",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "The Rate Limit Policy ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RateLimitPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "RateLimitPolicy"
+        ],
+        "summary": "Update the rate limit policy",
+        "operationId": "UpdateRateLimitPolicy",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "policyId",
+            "in": "path",
+            "description": "The Rate Limit Policy ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "The Rate Limit Policy Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RateLimitPolicyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RateLimitPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/policies/rate-limit": {
+      "post": {
+        "tags": [
+          "RateLimitPolicy"
+        ],
+        "summary": "Apply a rate limit policy",
+        "operationId": "CreateRateLimitPolicy",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscription id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "The Rate Limit Policy Request",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RateLimitPolicyRequest"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RateLimitPolicyResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/apis/{apiId}/revisions": {
+      "get": {
+        "tags": [
+          "Revision"
+        ],
+        "summary": "Get a List of all Revisions for a specific API",
+        "operationId": "GetAllRevisions",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "Api Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/RevisionResponseModel"
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Revision"
+        ],
+        "summary": "Creates a Revision for a specific API",
+        "operationId": "CreateRevision",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "Api Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "revisionDescription",
+            "in": "formData",
+            "type": "string"
+          },
+          {
+            "name": "openApiSpec",
+            "in": "formData",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RevisionResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "422": {
+            "description": "Client Error",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/apis/{apiId}/revisions/{apiRevisionId}": {
+      "get": {
+        "tags": [
+          "Revision"
+        ],
+        "summary": "Get a particular Revision for a specific API",
+        "operationId": "GetRevision",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "Api Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiRevisionId",
+            "in": "path",
+            "description": "RevisionId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/RevisionResponseModel"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Revision"
+        ],
+        "summary": "Updates a revision details of a particular revision",
+        "operationId": "UpdateRevision",
+        "consumes": [
+          "application/json",
+          "text/json"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Subscription ID",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiId",
+            "in": "path",
+            "description": "Api Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apiRevisionId",
+            "in": "path",
+            "description": "Apirevision Id",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "request",
+            "in": "body",
+            "description": "The revision details to update",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RevisionUpdateRequestModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "type": "string"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "type": "string"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "ApiListModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "providerId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "Public",
+            "Private"
+          ]
+        },
+        "apiVersionSetId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "apiVersion": {
+          "type": "string"
+        },
+        "apiVersionDescription": {
+          "type": "string"
+        },
+        "openApiSpecUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "productIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "logoUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "documentationUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "synchronization": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Active",
+            "Faulted"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Preview",
+            "Active",
+            "Deprecated"
+          ]
+        },
+        "isCurrent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ProductListModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "apiKeyRequired": {
+          "type": "boolean"
+        },
+        "clientCredentialRequired": {
+          "type": "boolean"
+        },
+        "openidConfigIssuer": {
+          "type": "string",
+          "enum": [
+            "IdentityKmdlogicIo",
+            "LogicidentityprodB2clogicCom",
+            "Custom"
+          ]
+        },
+        "openidConfigCustomUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "applicationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "providerApprovalRequired": {
+          "type": "boolean"
+        },
+        "productTerms": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "Public",
+            "Private"
+          ]
+        },
+        "apiIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "providerId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "logoUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "documentationUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "synchronization": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Active",
+            "Faulted"
+          ]
+        }
+      }
+    },
+    "ApiKeyListModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "subscriptionId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "productId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "primaryKey": {
+          "type": "string"
+        },
+        "secondaryKey": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "Suspended",
+            "Active",
+            "Expired",
+            "Submitted",
+            "Rejected",
+            "Cancelled"
+          ]
+        },
+        "stateComment": {
+          "type": "string"
+        },
+        "requesterName": {
+          "type": "string"
+        },
+        "requesterPhoneNumber": {
+          "type": "string"
+        },
+        "requesterEmail": {
+          "type": "string"
+        },
+        "requesterIntent": {
+          "type": "string"
+        },
+        "synchronization": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Active",
+            "Faulted"
+          ]
+        },
+        "clientCredentialId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "requestDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "allowTracing": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CreateApiKeyRequest": {
+      "required": [
+        "name",
+        "productId"
+      ],
+      "type": "object",
+      "properties": {
+        "productId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "requesterName": {
+          "type": "string"
+        },
+        "requesterEmail": {
+          "format": "email",
+          "type": "string"
+        },
+        "requesterPhoneNumber": {
+          "format": "tel",
+          "type": "string"
+        },
+        "requesterIntent": {
+          "type": "string"
+        },
+        "clientCredentialId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "allowTracing": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UpdatedKeyResponseModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "ApiKeyStateRequest": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "Suspended",
+            "Active",
+            "Expired",
+            "Submitted",
+            "Rejected",
+            "Cancelled"
+          ]
+        }
+      }
+    },
+    "ReportRecordListModel": {
+      "type": "object",
+      "properties": {
+        "apimSubscriptionId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "callCountSuccess": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "callCountFailed": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "callCountBlocked": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "callCountOther": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "callCountTotal": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "bandwidth": {
+          "format": "int64",
+          "type": "integer"
+        }
+      }
+    },
+    "ApiVersionResponse": {
+      "type": "object",
+      "properties": {
+        "apiId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "apiVersion": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "backendServiceUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "publicUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "logoUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "documentationUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "productIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "Public",
+            "Private"
+          ]
+        },
+        "synchronization": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Active",
+            "Faulted"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "Preview",
+            "Active",
+            "Deprecated"
+          ]
+        },
+        "isCurrent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "GetApiSetsResponse": {
+      "type": "object",
+      "properties": {
+        "publishStatus": {
+          "type": "string",
+          "enum": [
+            "UnPublished",
+            "Requested",
+            "Published"
+          ]
+        },
+        "versionSetId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "providerId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "currentVersion": {
+          "$ref": "#/definitions/ApiVersionResponse"
+        }
+      }
+    },
+    "ApiSetVersionsResponse": {
+      "type": "object",
+      "properties": {
+        "versionSetId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "providerId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "versions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiVersionResponse"
+          }
+        }
+      }
+    },
+    "ApimConsumptionAggregateItemModel": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "callCountSuccess": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "callCountBlocked": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "callCountFailed": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "callCountOther": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "callCountTotal": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "bandwidth": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "apiTimeAvg": {
+          "format": "double",
+          "type": "number"
+        },
+        "serviceTimeAvg": {
+          "format": "double",
+          "type": "number"
+        }
+      }
+    },
+    "ApimConsumptionAggregateModel": {
+      "type": "object",
+      "properties": {
+        "dateFrom": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "dateTo": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "intervalType": {
+          "type": "string"
+        },
+        "callCount": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "bandwidth": {
+          "format": "int64",
+          "type": "integer"
+        },
+        "apiTimeAvg": {
+          "format": "double",
+          "type": "number"
+        },
+        "serviceTimeAvg": {
+          "format": "double",
+          "type": "number"
+        },
+        "aggregateDetails": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApimConsumptionAggregateItemModel"
+          }
+        }
+      }
+    },
+    "CustomPolicyResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "xml": {
+          "type": "string"
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "Product",
+            "Api"
+          ]
+        },
+        "policyType": {
+          "type": "string",
+          "enum": [
+            "RateLimit",
+            "SetHeader",
+            "Custom"
+          ]
+        }
+      }
+    },
+    "CustomPolicyRequest": {
+      "required": [
+        "name",
+        "xml"
+      ],
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "xml": {
+          "type": "string"
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "Product",
+            "Api"
+          ]
+        }
+      }
+    },
+    "ProviderDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "providerName": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "logo": {
+          "format": "uri",
+          "type": "string"
+        },
+        "apiMarketplaceDescription": {
+          "type": "string"
+        },
+        "publishStatus": {
+          "type": "string",
+          "enum": [
+            "UnPublished",
+            "Requested",
+            "Published"
+          ]
+        }
+      }
+    },
+    "PolicyModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "Product",
+            "Api"
+          ]
+        },
+        "channel": {
+          "type": "string",
+          "enum": [
+            "Inbound",
+            "Backend",
+            "Outbound",
+            "Onerror"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "synchronization": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Active",
+            "Faulted"
+          ]
+        },
+        "policyType": {
+          "type": "string",
+          "enum": [
+            "RateLimit",
+            "SetHeader",
+            "Custom"
+          ]
+        }
+      }
+    },
+    "GetProductListModel": {
+      "type": "object",
+      "properties": {
+        "publishStatus": {
+          "type": "string",
+          "enum": [
+            "UnPublished",
+            "Requested",
+            "Published"
+          ]
+        },
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "apiKeyRequired": {
+          "type": "boolean"
+        },
+        "clientCredentialRequired": {
+          "type": "boolean"
+        },
+        "openidConfigIssuer": {
+          "type": "string",
+          "enum": [
+            "IdentityKmdlogicIo",
+            "LogicidentityprodB2clogicCom",
+            "Custom"
+          ]
+        },
+        "openidConfigCustomUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "applicationId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "providerApprovalRequired": {
+          "type": "boolean"
+        },
+        "productTerms": {
+          "type": "string"
+        },
+        "visibility": {
+          "type": "string",
+          "enum": [
+            "Public",
+            "Private"
+          ]
+        },
+        "apiIds": {
+          "type": "array",
+          "items": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "providerId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "logoUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "documentationUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "synchronization": {
+          "type": "string",
+          "enum": [
+            "Pending",
+            "Active",
+            "Faulted"
+          ]
+        }
+      }
+    },
+    "CreateProductResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        }
+      }
+    },
+    "ProcessingStatusLog": {
+      "type": "object",
+      "properties": {
+        "createDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "sequenceId": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "level": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "RateLimitPolicyResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "productId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "Product",
+            "Api"
+          ]
+        },
+        "policyType": {
+          "type": "string",
+          "enum": [
+            "RateLimit",
+            "SetHeader",
+            "Custom"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "calls": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "renewalPeriod": {
+          "format": "int32",
+          "type": "integer"
+        }
+      }
+    },
+    "RateLimitPolicyRequest": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "entityType": {
+          "type": "string",
+          "enum": [
+            "Product",
+            "Api"
+          ]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "calls": {
+          "format": "int32",
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 1
+        },
+        "renewalPeriod": {
+          "format": "int32",
+          "type": "integer",
+          "maximum": 300,
+          "minimum": 1
+        }
+      }
+    },
+    "RevisionResponseModel": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "apiId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "revisionNumber": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "revisionDescription": {
+          "type": "string"
+        },
+        "openApiSpecUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "isCurrent": {
+          "type": "boolean"
+        }
+      }
+    },
+    "RevisionUpdateRequestModel": {
+      "type": "object",
+      "properties": {
+        "revisionDescription": {
+          "type": "string"
+        },
+        "isCurrent": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "name": "Authorization",
+      "in": "header",
+      "type": "apiKey",
+      "description": "Standard Authorization header using the Bearer scheme. <b>Example: \"bearer {token}\".</b> You can obtain that value from your browser Developer tools"
+    }
+  }
+}
