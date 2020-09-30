@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace Kmd.Logic.Cpr.Client.Sample
+namespace Kmd.Logic.Gateway.Automation.Sample
 {
     internal class ConfigurationValidator
     {

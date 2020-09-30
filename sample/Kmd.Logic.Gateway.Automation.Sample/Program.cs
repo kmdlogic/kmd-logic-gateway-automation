@@ -6,7 +6,7 @@ using Kmd.Logic.Identity.Authorization;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 
-namespace Kmd.Logic.Cpr.Client.Sample
+namespace Kmd.Logic.Gateway.Automation.Sample
 {
     public static class Program
     {

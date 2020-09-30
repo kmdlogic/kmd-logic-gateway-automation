@@ -1,7 +1,6 @@
-﻿using System;
-using Kmd.Logic.Identity.Authorization;
+﻿using Kmd.Logic.Identity.Authorization;
 
-namespace Kmd.Logic.Cpr.Client.Sample
+namespace Kmd.Logic.Gateway.Automation.Sample
 {
     internal class AppConfiguration
     {

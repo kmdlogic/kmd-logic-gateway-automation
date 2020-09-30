@@ -12,7 +12,7 @@
     <VersionPrefix>0.1.0</VersionPrefix>
     <Authors>KMD</Authors>
     <PackageTags>kmd;logic;Gateway</PackageTags>
-    <!--<PackageIconUrl>https://console.kmdlogic.io/favicon-32x32.png</PackageIconUrl>-->
+    <PackageIconUrl>https://console.kmdlogic.io/favicon-32x32.png</PackageIconUrl>
     <PackageProjectUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</RepositoryUrl>
