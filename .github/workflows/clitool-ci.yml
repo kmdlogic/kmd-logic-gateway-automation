@@ -28,4 +28,3 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
     - name: Pack
       run: dotnet pack '$PATH/*.csproj' --output '$PATH/nupgks'
-    
