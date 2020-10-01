@@ -1,7 +1,7 @@
 name: .NET Core
 
 env:
-  PATH: './src/Kmd.Logic.Gateway.Automation.Tool'
+  PROJPATH: './src/Kmd.Logic.Gateway.Automation.Tool'
 
 on:
   push:
@@ -21,10 +21,10 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore '$PATH/*.csproj'
+      run: dotnet restore '$PROJPATH/*.csproj'
     - name: Build
-      run: dotnet build '$PATH/*.csproj' --configuration Release --no-restore
+      run: dotnet build '$PROJPATH/*.csproj' --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Pack
-      run: dotnet pack '$PATH/*.csproj' --output '$PATH/nupgks'
+      run: dotnet pack '$PROJPATH/*.csproj' --output '$PROJPATH/nupgks'
