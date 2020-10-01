@@ -3,12 +3,6 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UserSecretsId>0dcd1a28-b944-481c-9eee-9147987e48e5</UserSecretsId>
-    <LangVersion>latest</LangVersion>
-    <Description>A library for KMD Logic Gateway Automation</Description>
-    <PackageProjectUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</RepositoryUrl>
-    <PackageTags>kmd;logic;gateway</PackageTags>
-    <FileVersion>1.0.0.0</FileVersion>
   </PropertyGroup>
   
   <ItemGroup>
@@ -31,12 +25,5 @@
     <None Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.8">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 </Project>

@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kmd.Logic.Gateway.Automatio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kmd.Logic.Gateway.Automation", "src\Kmd.Logic.Gateway.Automation\Kmd.Logic.Gateway.Automation.csproj", "{EF3782F9-8D96-46DF-959C-04D8185F7193}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kmd.Logic.Gateway.Automation.Tool", "src\Kmd.Logic.Gateway.Automation.Tool\Kmd.Logic.Gateway.Automation.Tool.csproj", "{65FB8D01-70A5-4716-B813-432DF65C58BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{EF3782F9-8D96-46DF-959C-04D8185F7193}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF3782F9-8D96-46DF-959C-04D8185F7193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF3782F9-8D96-46DF-959C-04D8185F7193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65FB8D01-70A5-4716-B813-432DF65C58BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65FB8D01-70A5-4716-B813-432DF65C58BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65FB8D01-70A5-4716-B813-432DF65C58BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65FB8D01-70A5-4716-B813-432DF65C58BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{51AF1437-6B00-4486-B5A3-D6234045426D} = {B3A856D9-AB49-4DAB-8A53-5B4461B2735C}
 		{EF3782F9-8D96-46DF-959C-04D8185F7193} = {F6DAFB03-D211-4EEC-A7E6-0CBF99361FC4}
+		{65FB8D01-70A5-4716-B813-432DF65C58BE} = {F6DAFB03-D211-4EEC-A7E6-0CBF99361FC4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9CC79F7D-6B66-467E-B4C9-939A7D88E2BA}
