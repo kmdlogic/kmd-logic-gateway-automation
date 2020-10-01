@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Description>Dotnet Tool for KMD Logic Gateway Automation</Description>
+		<Description>CLI tool for KMD Logic Gateway Automation</Description>
 		<VersionPrefix>0.1.0</VersionPrefix>
 		<Authors>Logic</Authors>
 		<Company>KMD</Company>
