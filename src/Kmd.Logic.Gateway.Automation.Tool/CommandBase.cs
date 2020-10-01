@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation.Tool
 {
-    internal class CommonOptions
+    internal class CommandBase
     {
         [Option('t', "token", Required = true, HelpText = "Token used for authentication with Logic.")]
         public string AuthToken { get; set; }

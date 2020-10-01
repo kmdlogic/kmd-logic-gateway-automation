@@ -20,9 +20,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                     s.CaseInsensitiveEnumValues = true;
                 });
 
-                var actions = new Actions();
-
-                var result = await commandLineParser.ParseArguments<PublishOptions>(args)
+                var result = await commandLineParser.ParseArguments<PublishCommand>(args)
                     .WithParsed(o =>
                     {
                         InitLogger(o.Verbose);
@@ -30,7 +28,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                         Log.Verbose("Arguments {@Parsed}", o);
                     })
                     .MapResult(
-                        (PublishOptions opts) => actions.Publish(),
+                        (PublishCommand cmd) => new PublishCommandHandler().Handle(cmd),
                         errs =>
                         {
                             Log.Information(helpWriter.ToString());
