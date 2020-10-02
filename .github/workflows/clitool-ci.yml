@@ -29,6 +29,9 @@ jobs:
       if: GITHUB.REF != 'refs/heads/master'
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+    
+    - name: Echo version
+      run: echo ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
 
     - name: Deploy - PRERELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
