@@ -6,6 +6,7 @@
 
 	<PropertyGroup>
 		<Version>0.0.1</Version>
+		<Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
 		<Description>Library for KMD Logic Gateway Automation</Description>
 	</PropertyGroup>
 	
