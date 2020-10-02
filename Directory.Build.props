@@ -8,7 +8,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
 		<Authors>Logic</Authors>
 		<Company>KMD</Company>
 		<Product>Logic</Product>

@@ -40,7 +40,7 @@ jobs:
 
     - name: Pack - PreRelease
       run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore --version-suffix dev-$GITHUB_RUN_NUMBER
-      if: GITHUB.REF == 'refs/heads/develop'
+      if: GITHUB.REF != 'refs/heads/master'
     - name: Pack - Release
       run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore
       if: GITHUB.REF == 'refs/heads/master'
