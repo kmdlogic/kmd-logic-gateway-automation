@@ -3,7 +3,6 @@ using Serilog;
 
 namespace Kmd.Logic.Gateway.Automation.Tool
 {
-
     internal class PublishCommandHandler
     {
         public Task<int> Handle(PublishCommand cmd)
