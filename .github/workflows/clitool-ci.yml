@@ -40,7 +40,7 @@ jobs:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
         VERSION_STATIC: ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
-        NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
+      #  NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
 
     - name: Deploy - RELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
@@ -49,4 +49,4 @@ jobs:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
         VERSION_STATIC: ${{ env.VERSION }}
-        NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
+      #  NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
