@@ -7,8 +7,11 @@ env:
 on:
   push:
     branches: [ master, develop ]
+    paths: 
+    - 'src/**'
   pull_request:
     branches: [ master, develop ]
+    - 'src/**'
 
 jobs:
   build:
