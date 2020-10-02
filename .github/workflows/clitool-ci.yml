@@ -23,7 +23,7 @@ jobs:
     - name: Install dependencies
       run: dotnet restore '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj'
     - name: Build
-      run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
+      run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Pack
