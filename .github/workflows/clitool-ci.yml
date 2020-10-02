@@ -30,7 +30,7 @@ jobs:
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     
-    - name: Echo version
+    - name: Print package version
       run: echo ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
 
     - name: Deploy - PRERELEASE
