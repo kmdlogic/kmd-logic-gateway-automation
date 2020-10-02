@@ -26,13 +26,13 @@ jobs:
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
     - name: Build
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
-      if: GITHUB_RUN_NUMBER.REF != 'refs/heads/master'
+      if: GITHUB.REF != 'refs/heads/master'
     - name: Test
       run: dotnet test --no-restore --verbosity normal
 
     - name: Deploy - PRERELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
-      if: github.ref == 'refs/heads/develop'
+      if: GITHUB.REF == 'refs/heads/develop'
       with:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
@@ -41,7 +41,7 @@ jobs:
 
     - name: Deploy - RELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
-      if: github.ref == 'refs/heads/master'
+      if: GITHUB.REF == 'refs/heads/master'
       with:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
