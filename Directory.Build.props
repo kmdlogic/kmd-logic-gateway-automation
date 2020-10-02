@@ -8,17 +8,23 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<Version>0.0.1</Version>
+		<Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
 		<Authors>Logic</Authors>
 		<Company>KMD</Company>
 		<Product>Logic</Product>
 		<PackageTags>kmd;logic;Gateway</PackageTags>
-		<PackageIconUrl>https://console.kmdlogic.io/favicon-32x32.png</PackageIconUrl>
+		<PackageIcon>favicon-32x32.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\favicon-32x32.png" Pack="true" PackagePath="\"/>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.2">
