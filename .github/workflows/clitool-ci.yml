@@ -2,6 +2,7 @@ name: CLI Tool CI
 
 env:
   PROJPATH: './src/Kmd.Logic.Gateway.Automation.Tool'
+  VERSION: '1.0.0'
 
 on:
   push:
@@ -21,18 +22,38 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj'
+      run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
     - name: Build - DEBUG
-      run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
       if: github.ref != 'refs/heads/master'
     - name: Build - RELEASE
-      run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
       if: github.ref == 'refs/heads/master'
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+
     - name: Deploy - PRERELEASE
-      run: dotnet test --no-restore --verbosity normal
+      uses: brandedoutcast/publish-nuget@v2.5.5
       if: github.ref == 'refs/heads/develop'
+      with:
+        # Filepath of the project to be packaged, relative to root of repository
+        PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
+        # NuGet package id, used for version detection & defaults to project name
+        PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
+        # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
+        VERSION_STATIC: '${{ env. VERSION }}-${{  }}'
+        # API key to authenticate with NuGet server
+        NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
+
     - name: Deploy - RELEASE
-      run: dotnet test --no-restore --verbosity normal
+      uses: brandedoutcast/publish-nuget@v2.5.5
       if: github.ref == 'refs/heads/master'
+      with:
+        # Filepath of the project to be packaged, relative to root of repository
+        PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
+        # NuGet package id, used for version detection & defaults to project name
+        PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
+        # Filepath with version info, relative to root of repository & defaults to PROJECT_FILE_PATH
+        VERSION_STATIC: ${{ env. VERSION }}-GITHUB_RUN_NUMBER
+        # API key to authenticate with NuGet server
+        NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
