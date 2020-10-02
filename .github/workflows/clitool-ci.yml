@@ -39,7 +39,7 @@ jobs:
       with:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
-        VERSION_STATIC: ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
+        VERSION_STATIC: ${{ env.VERSION }}-${{ GITHUB_RUN_NUMBER }}
       #  NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
 
     - name: Deploy - RELEASE
