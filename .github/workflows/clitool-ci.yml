@@ -21,10 +21,10 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore '${{env.PROJPATH}}/*.csproj'
+      run: dotnet restore '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj'
     - name: Build
-      run: dotnet build '${{env.PROJPATH}}/*.csproj' --configuration Release --no-restore
+      run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
     - name: Test
       run: dotnet test --no-restore --verbosity normal
     - name: Pack
-      run: dotnet pack '${{env.PROJPATH}}/*.csproj' --output '${{env.PROJPATH}}/nupgks'
+      run: dotnet pack '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output '${{env.PROJPATH}}/nupgks'
