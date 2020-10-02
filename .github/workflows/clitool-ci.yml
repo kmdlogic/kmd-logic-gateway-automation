@@ -5,9 +5,9 @@ env:
 
 on:
   push:
-    branches: master
+    branches: [ master, develop ]
   pull_request:
-    branches: master
+    branches: [ master, develop ]
 
 jobs:
   build:
@@ -22,17 +22,11 @@ jobs:
         dotnet-version: 3.1.301
     - name: Install dependencies
       run: dotnet restore '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj'
-    - name: Build
+    - name: Build - DEBUG
       run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
+      if: github.ref != 'refs/heads/master'
+    - name: Build - RELEASE
+      run: dotnet build '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
+      if: github.ref == 'refs/heads/master'
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    - name: Pack
-      run: dotnet pack '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output '${{env.PROJPATH}}/nupgks'
-    - name: Upload NuGet package as an artifact
-      uses: actions/upload-artifact@v2.2.0
-      with:
-        # Artifact name
-        name: KmdLogicGatewayAutomationCliTool
-        # A file, directory or wildcard pattern that describes what to upload
-        path: '${{env.PROJPATH}}/nupgks/*'
-        # The desired behavior if no files are found using the provided path.
