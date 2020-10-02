@@ -11,6 +11,7 @@ on:
     - 'src/**'
   pull_request:
     branches: [ master, develop ]
+    paths: 
     - 'src/**'
 
 jobs:
