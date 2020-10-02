@@ -1,8 +1,7 @@
-name: CLI Tool CI
+name: CLI Tool CI/CD
 
 env:
   PROJPATH: './src/Kmd.Logic.Gateway.Automation.Tool'
-  VERSION: '1.0.0'
   DOTNET_VERSION: '3.1.301'
 
 on:
@@ -24,29 +23,24 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Install dependencies
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
-    - name: Build
+
+    - name: Build - PreRelease
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
       if: GITHUB.REF != 'refs/heads/master'
+    - name: Build - Release
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
+      if: GITHUB.REF == 'refs/heads/master'
+
     - name: Test
       run: dotnet test --no-restore --verbosity normal
-    
-    - name: Print package version
-      run: echo ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
 
-    - name: Deploy - PRERELEASE
-      uses: brandedoutcast/publish-nuget@v2.5.5
+    - name: Pack - PreRelease
+      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore --version-suffix ci-$GITHUB_RUN_NUMBER
       if: GITHUB.REF == 'refs/heads/develop'
-      with:
-        PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
-        PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
-        VERSION_STATIC: ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
-        NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
+    - name: Pack - Release
+      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore
+      if: GITHUB.REF == 'refs/heads/develop'
 
-    - name: Deploy - RELEASE
-      uses: brandedoutcast/publish-nuget@v2.5.5
-      if: GITHUB.REF == 'refs/heads/master'
-      with:
-        PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
-        PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
-        VERSION_STATIC: ${{ env.VERSION }}
-        NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
+    - name: Publish NuGet
+      run: dotnet nuget push ${{ env.PROJPATH }}/nupkgs/Kmd.Logic.Gateway.Automation.Tool*.nupkg --api-key ${{ secrets.APIKEYNUGETGALLERY }} --source https://api.nuget.org/v3/index.json
+      if: GITHUB.REF == 'refs/heads/develop' || GITHUB.REF == 'refs/heads/master'
