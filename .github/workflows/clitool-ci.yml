@@ -2,7 +2,8 @@ name: CLI Tool CI
 
 env:
   PROJPATH: './src/Kmd.Logic.Gateway.Automation.Tool'
-  VERSION: '0.0.0'
+  RELEASE_VERSION: '0.0.0'
+  PRERELEASE_VERSION: $RELEASE_VERSION-$GITHUB_RUN_NUMBER
   DOTNET_VERSION: '3.1.301'
 
 on:
@@ -31,7 +32,7 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
     
     - name: Print package version
-      run: echo ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
+      run: echo ${{ env.RELEASE_VERSION }} and ${{ env.PRERELEASE_VERSION }}
 
     - name: Deploy - PRERELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
@@ -39,7 +40,7 @@ jobs:
       with:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
-        VERSION_STATIC: ${{ env.VERSION }}-${{ GITHUB_RUN_NUMBER }}
+        VERSION_STATIC: ${{ env.PRERELEASE_VERSION }}
       #  NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
 
     - name: Deploy - RELEASE
