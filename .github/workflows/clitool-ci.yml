@@ -28,3 +28,11 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
     - name: Pack
       run: dotnet pack '${{env.PROJPATH}}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output '${{env.PROJPATH}}/nupgks'
+    - name: Upload NuGet package as an artifact
+      uses: actions/upload-artifact@v2.2.0
+      with:
+        # Artifact name
+        name: KmdLogicGatewayAutomationCliTool
+        # A file, directory or wildcard pattern that describes what to upload
+        path: '${{env.PROJPATH}}/nupgks/*'
+        # The desired behavior if no files are found using the provided path.
