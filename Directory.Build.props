@@ -8,8 +8,6 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Description>Library for KMD Logic Gateway Automation</Description>
-		<VersionPrefix>0.1.0</VersionPrefix>
 		<Authors>Logic</Authors>
 		<Company>KMD</Company>
 		<Product>Logic</Product>
