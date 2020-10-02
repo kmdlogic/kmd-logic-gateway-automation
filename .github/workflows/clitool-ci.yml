@@ -24,12 +24,9 @@ jobs:
         dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Install dependencies
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
-    - name: Build - DEBUG
+    - name: Build
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
       if: GITHUB_RUN_NUMBER.REF != 'refs/heads/master'
-    - name: Build - RELEASE
-      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
-      if: GITHUB_RUN_NUMBER.REF == 'refs/heads/master'
     - name: Test
       run: dotnet test --no-restore --verbosity normal
 
