@@ -3,6 +3,7 @@ name: CLI Tool CI
 env:
   PROJPATH: './src/Kmd.Logic.Gateway.Automation.Tool'
   VERSION: '1.0.0'
+  DOTNET_VERSION: '3.1.301'
 
 on:
   push:
@@ -20,32 +21,32 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 3.1.301
+        dotnet-version: ${{ env.DOTNET_VERSION }}
     - name: Install dependencies
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
-    - name: Build - DEBUG
+    - name: Build
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
-      if: github.ref != 'refs/heads/master'
-    - name: Build - RELEASE
-      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
-      if: github.ref == 'refs/heads/master'
+      if: GITHUB.REF != 'refs/heads/master'
     - name: Test
       run: dotnet test --no-restore --verbosity normal
+    
+    - name: Print package version
+      run: echo ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
 
     - name: Deploy - PRERELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
-      if: github.ref == 'refs/heads/develop'
+      if: GITHUB.REF == 'refs/heads/develop'
       with:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
-        VERSION_STATIC: ${{ env. VERSION }}-GITHUB_RUN_NUMBER
+        VERSION_STATIC: ${{ env.VERSION }}-$GITHUB_RUN_NUMBER
         NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
 
     - name: Deploy - RELEASE
       uses: brandedoutcast/publish-nuget@v2.5.5
-      if: github.ref == 'refs/heads/master'
+      if: GITHUB.REF == 'refs/heads/master'
       with:
         PROJECT_FILE_PATH: '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
         PACKAGE_NAME: Kmd.Logic.Gateway.Automation.Tool
-        VERSION_STATIC: ${{ env. VERSION }}
+        VERSION_STATIC: ${{ env.VERSION }}
         NUGET_KEY: ${{ secrets.APIKEYNUGETGALLERY }}
