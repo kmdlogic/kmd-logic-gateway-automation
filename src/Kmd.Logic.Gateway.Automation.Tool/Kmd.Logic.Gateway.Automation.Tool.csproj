@@ -6,6 +6,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<Version>0.0.1</Version>
 		<Description>CLI Tool for KMD Logic Gateway Automation</Description>
 	</PropertyGroup>
 

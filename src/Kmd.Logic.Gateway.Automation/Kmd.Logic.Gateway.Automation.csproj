@@ -5,6 +5,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
+		<Version>0.0.1</Version>
 		<Description>Library for KMD Logic Gateway Automation</Description>
 	</PropertyGroup>
 	
