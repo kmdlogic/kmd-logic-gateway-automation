@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution", "Solution", "{B1
 		build.ps1 = build.ps1
 		build.sh = build.sh
 		CHANGES.md = CHANGES.md
+		.github\workflows\cliAuto-ci.yml = .github\workflows\cliAuto-ci.yml
 		.github\workflows\clitool-ci.yml = .github\workflows\clitool-ci.yml
 		Directory.Build.props = Directory.Build.props
 		favicon-32x32.png = favicon-32x32.png
