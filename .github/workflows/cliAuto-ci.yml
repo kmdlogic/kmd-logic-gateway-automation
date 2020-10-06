@@ -1,4 +1,4 @@
-name: CLI Tool CI/CD
+name: Automation Liblibrary CI/CD
 
 env:
   PROJPATH: './src/Kmd.Logic.Gateway.Automation'
