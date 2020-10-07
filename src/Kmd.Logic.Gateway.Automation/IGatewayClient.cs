@@ -17,7 +17,7 @@ namespace Kmd.Logic.Gateway.Automation
 
     /// <summary>
     /// </summary>
-    internal partial interface IInternalClient : System.IDisposable
+    internal partial interface IGatewayClient : System.IDisposable
     {
         /// <summary>
         /// The base URI of the service.

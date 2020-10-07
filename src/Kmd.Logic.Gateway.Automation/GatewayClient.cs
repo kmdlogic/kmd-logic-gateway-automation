@@ -19,7 +19,7 @@ namespace Kmd.Logic.Gateway.Automation
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal partial class InternalClient : ServiceClient<InternalClient>, IInternalClient
+    internal partial class GatewayClient : ServiceClient<GatewayClient>, IGatewayClient
     {
         /// <summary>
         /// The base URI of the service.
@@ -42,31 +42,31 @@ namespace Kmd.Logic.Gateway.Automation
         public ServiceClientCredentials Credentials { get; private set; }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='httpClient'>
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling InternalClient.Dispose(). False: will not dispose provided httpClient</param>
-        protected InternalClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        /// True: will dispose the provided httpClient on calling GatewayClient.Dispose(). False: will not dispose provided httpClient</param>
+        protected GatewayClient(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected InternalClient(params DelegatingHandler[] handlers) : base(handlers)
+        protected GatewayClient(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='rootHandler'>
         /// Optional. The http client handler used to handle http transport.
@@ -74,13 +74,13 @@ namespace Kmd.Logic.Gateway.Automation
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        protected InternalClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected GatewayClient(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -91,7 +91,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected InternalClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected GatewayClient(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -101,7 +101,7 @@ namespace Kmd.Logic.Gateway.Automation
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -115,7 +115,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        protected InternalClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected GatewayClient(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
@@ -125,7 +125,7 @@ namespace Kmd.Logic.Gateway.Automation
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -136,7 +136,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public InternalClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public GatewayClient(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (credentials == null)
             {
@@ -150,7 +150,7 @@ namespace Kmd.Logic.Gateway.Automation
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -159,11 +159,11 @@ namespace Kmd.Logic.Gateway.Automation
         /// HttpClient to be used
         /// </param>
         /// <param name='disposeHttpClient'>
-        /// True: will dispose the provided httpClient on calling InternalClient.Dispose(). False: will not dispose provided httpClient</param>
+        /// True: will dispose the provided httpClient on calling GatewayClient.Dispose(). False: will not dispose provided httpClient</param>
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public InternalClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        public GatewayClient(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
         {
             if (credentials == null)
             {
@@ -177,7 +177,7 @@ namespace Kmd.Logic.Gateway.Automation
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='credentials'>
         /// Required. Subscription credentials which uniquely identify client subscription.
@@ -191,7 +191,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public InternalClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public GatewayClient(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (credentials == null)
             {
@@ -205,7 +205,7 @@ namespace Kmd.Logic.Gateway.Automation
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -219,7 +219,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public InternalClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        public GatewayClient(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -238,7 +238,7 @@ namespace Kmd.Logic.Gateway.Automation
         }
 
         /// <summary>
-        /// Initializes a new instance of the InternalClient class.
+        /// Initializes a new instance of the GatewayClient class.
         /// </summary>
         /// <param name='baseUri'>
         /// Optional. The base URI of the service.
@@ -255,7 +255,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public InternalClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        public GatewayClient(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {

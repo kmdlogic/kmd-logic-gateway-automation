@@ -14,9 +14,9 @@ namespace Kmd.Logic.Gateway.Automation
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Extension methods for InternalClient.
+    /// Extension methods for GatewayClient.
     /// </summary>
-    internal static partial class InternalClientExtensions
+    internal static partial class GatewayClientExtensions
     {
             /// <summary>
             /// Retrieve all gateway apis
@@ -30,7 +30,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='provider'>
             /// Limit to APIs for this provider
             /// </param>
-            public static IList<ApiListModel> GetAllApis(this IInternalClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?))
+            public static IList<ApiListModel> GetAllApis(this IGatewayClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?))
             {
                 return operations.GetAllApisAsync(subscriptionId, provider).GetAwaiter().GetResult();
             }
@@ -50,7 +50,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ApiListModel>> GetAllApisAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ApiListModel>> GetAllApisAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllApisWithHttpMessagesAsync(subscriptionId, provider, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -97,7 +97,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='isCurrent'>
             /// </param>
-            public static object CreateApi(this IInternalClient operations, System.Guid subscriptionId, string name, string path, string apiVersion, Stream openApiSpec, System.Guid? apiVersionSetId = default(System.Guid?), string providerId = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), bool? isCurrent = default(bool?))
+            public static object CreateApi(this IGatewayClient operations, System.Guid subscriptionId, string name, string path, string apiVersion, Stream openApiSpec, System.Guid? apiVersionSetId = default(System.Guid?), string providerId = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), bool? isCurrent = default(bool?))
             {
                 return operations.CreateApiAsync(subscriptionId, name, path, apiVersion, openApiSpec, apiVersionSetId, providerId, visibility, backendServiceUrl, productIds, logo, documentation, status, isCurrent).GetAwaiter().GetResult();
             }
@@ -144,7 +144,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> CreateApiAsync(this IInternalClient operations, System.Guid subscriptionId, string name, string path, string apiVersion, Stream openApiSpec, System.Guid? apiVersionSetId = default(System.Guid?), string providerId = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), bool? isCurrent = default(bool?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> CreateApiAsync(this IGatewayClient operations, System.Guid subscriptionId, string name, string path, string apiVersion, Stream openApiSpec, System.Guid? apiVersionSetId = default(System.Guid?), string providerId = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), bool? isCurrent = default(bool?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateApiWithHttpMessagesAsync(subscriptionId, name, path, apiVersion, openApiSpec, apiVersionSetId, providerId, visibility, backendServiceUrl, productIds, logo, documentation, status, isCurrent, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -164,7 +164,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='apiId'>
             /// The API ID
             /// </param>
-            public static ApiListModel GetApi(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId)
+            public static ApiListModel GetApi(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId)
             {
                 return operations.GetApiAsync(subscriptionId, apiId).GetAwaiter().GetResult();
             }
@@ -184,7 +184,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApiListModel> GetApiAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApiListModel> GetApiAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetApiWithHttpMessagesAsync(subscriptionId, apiId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -217,7 +217,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='status'>
             /// Possible values include: 'Preview', 'Active', 'Deprecated'
             /// </param>
-            public static object UpdateApi(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, string name = default(string), string apiVersion = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string))
+            public static object UpdateApi(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, string name = default(string), string apiVersion = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string))
             {
                 return operations.UpdateApiAsync(subscriptionId, apiId, name, apiVersion, visibility, backendServiceUrl, productIds, logo, documentation, status).GetAwaiter().GetResult();
             }
@@ -250,7 +250,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> UpdateApiAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, string name = default(string), string apiVersion = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> UpdateApiAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, string name = default(string), string apiVersion = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateApiWithHttpMessagesAsync(subscriptionId, apiId, name, apiVersion, visibility, backendServiceUrl, productIds, logo, documentation, status, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -265,7 +265,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='apiId'>
             /// </param>
-            public static void DeleteApi(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId)
+            public static void DeleteApi(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId)
             {
                 operations.DeleteApiAsync(subscriptionId, apiId).GetAwaiter().GetResult();
             }
@@ -280,7 +280,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteApiAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteApiAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteApiWithHttpMessagesAsync(subscriptionId, apiId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -300,7 +300,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='isCurrent'>
             /// IsCurrent status of API
             /// </param>
-            public static object MakeVersionIsCurrent(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, bool isCurrent)
+            public static object MakeVersionIsCurrent(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, bool isCurrent)
             {
                 return operations.MakeVersionIsCurrentAsync(subscriptionId, apiId, isCurrent).GetAwaiter().GetResult();
             }
@@ -323,7 +323,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> MakeVersionIsCurrentAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, bool isCurrent, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> MakeVersionIsCurrentAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, bool isCurrent, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.MakeVersionIsCurrentWithHttpMessagesAsync(subscriptionId, apiId, isCurrent, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -343,7 +343,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='apiId'>
             /// Api ID
             /// </param>
-            public static IList<ProductListModel> GetApiProducts(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId)
+            public static IList<ProductListModel> GetApiProducts(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId)
             {
                 return operations.GetApiProductsAsync(subscriptionId, apiId).GetAwaiter().GetResult();
             }
@@ -363,7 +363,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ProductListModel>> GetApiProductsAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ProductListModel>> GetApiProductsAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetApiProductsWithHttpMessagesAsync(subscriptionId, apiId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -381,7 +381,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='apiKeyId'>
             /// </param>
-            public static ApiKeyListModel GetApiKey(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
+            public static ApiKeyListModel GetApiKey(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
             {
                 return operations.GetApiKeyAsync(subscriptionId, apiKeyId).GetAwaiter().GetResult();
             }
@@ -399,7 +399,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApiKeyListModel> GetApiKeyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApiKeyListModel> GetApiKeyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetApiKeyWithHttpMessagesAsync(subscriptionId, apiKeyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -419,7 +419,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='apiKeyId'>
             /// ApiKeyId
             /// </param>
-            public static void DeleteApiKey(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
+            public static void DeleteApiKey(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
             {
                 operations.DeleteApiKeyAsync(subscriptionId, apiKeyId).GetAwaiter().GetResult();
             }
@@ -439,7 +439,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteApiKeyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteApiKeyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteApiKeyWithHttpMessagesAsync(subscriptionId, apiKeyId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -452,7 +452,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='subscriptionId'>
             /// </param>
-            public static ApiKeyListModel GetAllApiKeys(this IInternalClient operations, System.Guid subscriptionId)
+            public static ApiKeyListModel GetAllApiKeys(this IGatewayClient operations, System.Guid subscriptionId)
             {
                 return operations.GetAllApiKeysAsync(subscriptionId).GetAwaiter().GetResult();
             }
@@ -468,7 +468,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApiKeyListModel> GetAllApiKeysAsync(this IInternalClient operations, System.Guid subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApiKeyListModel> GetAllApiKeysAsync(this IGatewayClient operations, System.Guid subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllApiKeysWithHttpMessagesAsync(subscriptionId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -486,7 +486,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static ApiKeyListModel SaveApiKey(this IInternalClient operations, System.Guid subscriptionId, CreateApiKeyRequest request)
+            public static ApiKeyListModel SaveApiKey(this IGatewayClient operations, System.Guid subscriptionId, CreateApiKeyRequest request)
             {
                 return operations.SaveApiKeyAsync(subscriptionId, request).GetAwaiter().GetResult();
             }
@@ -504,7 +504,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApiKeyListModel> SaveApiKeyAsync(this IInternalClient operations, System.Guid subscriptionId, CreateApiKeyRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApiKeyListModel> SaveApiKeyAsync(this IGatewayClient operations, System.Guid subscriptionId, CreateApiKeyRequest request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SaveApiKeyWithHttpMessagesAsync(subscriptionId, request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -522,7 +522,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='apiKeyId'>
             /// </param>
-            public static UpdatedKeyResponseModel RegeneratePrimaryKey(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
+            public static UpdatedKeyResponseModel RegeneratePrimaryKey(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
             {
                 return operations.RegeneratePrimaryKeyAsync(subscriptionId, apiKeyId).GetAwaiter().GetResult();
             }
@@ -540,7 +540,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<UpdatedKeyResponseModel> RegeneratePrimaryKeyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<UpdatedKeyResponseModel> RegeneratePrimaryKeyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.RegeneratePrimaryKeyWithHttpMessagesAsync(subscriptionId, apiKeyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -558,7 +558,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='apiKeyId'>
             /// </param>
-            public static UpdatedKeyResponseModel RegenerateSecondaryKey(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
+            public static UpdatedKeyResponseModel RegenerateSecondaryKey(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
             {
                 return operations.RegenerateSecondaryKeyAsync(subscriptionId, apiKeyId).GetAwaiter().GetResult();
             }
@@ -576,7 +576,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<UpdatedKeyResponseModel> RegenerateSecondaryKeyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<UpdatedKeyResponseModel> RegenerateSecondaryKeyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.RegenerateSecondaryKeyWithHttpMessagesAsync(subscriptionId, apiKeyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -596,7 +596,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='request'>
             /// </param>
-            public static ApiKeyListModel SaveSubscriptionState(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, ApiKeyStateRequest request)
+            public static ApiKeyListModel SaveSubscriptionState(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, ApiKeyStateRequest request)
             {
                 return operations.SaveSubscriptionStateAsync(subscriptionId, apiKeyId, request).GetAwaiter().GetResult();
             }
@@ -616,7 +616,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApiKeyListModel> SaveSubscriptionStateAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, ApiKeyStateRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApiKeyListModel> SaveSubscriptionStateAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, ApiKeyStateRequest request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.SaveSubscriptionStateWithHttpMessagesAsync(subscriptionId, apiKeyId, request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -631,7 +631,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='apiKeyId'>
             /// </param>
-            public static ReportRecordListModel GetSubscriptionUsageReport(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
+            public static ReportRecordListModel GetSubscriptionUsageReport(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId)
             {
                 return operations.GetSubscriptionUsageReportAsync(subscriptionId, apiKeyId).GetAwaiter().GetResult();
             }
@@ -646,7 +646,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ReportRecordListModel> GetSubscriptionUsageReportAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ReportRecordListModel> GetSubscriptionUsageReportAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiKeyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetSubscriptionUsageReportWithHttpMessagesAsync(subscriptionId, apiKeyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -663,7 +663,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='providerId'>
             /// Limit to APIs for this provider
             /// </param>
-            public static GetApiSetsResponse GetAllApisForAdmin(this IInternalClient operations, System.Guid? providerId = default(System.Guid?))
+            public static GetApiSetsResponse GetAllApisForAdmin(this IGatewayClient operations, System.Guid? providerId = default(System.Guid?))
             {
                 return operations.GetAllApisForAdminAsync(providerId).GetAwaiter().GetResult();
             }
@@ -680,7 +680,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GetApiSetsResponse> GetAllApisForAdminAsync(this IInternalClient operations, System.Guid? providerId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<GetApiSetsResponse> GetAllApisForAdminAsync(this IGatewayClient operations, System.Guid? providerId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllApisForAdminWithHttpMessagesAsync(providerId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -700,7 +700,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='provider'>
             /// Limit to APIs for this provider
             /// </param>
-            public static GetApiSetsResponse GetAllApiSets(this IInternalClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?))
+            public static GetApiSetsResponse GetAllApiSets(this IGatewayClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?))
             {
                 return operations.GetAllApiSetsAsync(subscriptionId, provider).GetAwaiter().GetResult();
             }
@@ -720,7 +720,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GetApiSetsResponse> GetAllApiSetsAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<GetApiSetsResponse> GetAllApiSetsAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllApiSetsWithHttpMessagesAsync(subscriptionId, provider, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -740,7 +740,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='apiVersionSetId'>
             /// VersionSet Id
             /// </param>
-            public static object GetAllVersions(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiVersionSetId)
+            public static object GetAllVersions(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiVersionSetId)
             {
                 return operations.GetAllVersionsAsync(subscriptionId, apiVersionSetId).GetAwaiter().GetResult();
             }
@@ -760,7 +760,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetAllVersionsAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiVersionSetId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> GetAllVersionsAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiVersionSetId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllVersionsWithHttpMessagesAsync(subscriptionId, apiVersionSetId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -786,7 +786,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='dateTo'>
             /// End date of range.
             /// </param>
-            public static ApimConsumptionAggregateModel GetUsageWithinDateRange(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo)
+            public static ApimConsumptionAggregateModel GetUsageWithinDateRange(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo)
             {
                 return operations.GetUsageWithinDateRangeAsync(subscriptionId, productId, dateFrom, dateTo).GetAwaiter().GetResult();
             }
@@ -812,7 +812,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApimConsumptionAggregateModel> GetUsageWithinDateRangeAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApimConsumptionAggregateModel> GetUsageWithinDateRangeAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUsageWithinDateRangeWithHttpMessagesAsync(subscriptionId, productId, dateFrom, dateTo, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -841,7 +841,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='dateTo'>
             /// End date of range.
             /// </param>
-            public static ApimConsumptionAggregateModel GetUsageByApiKeyWithinDateRange(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo)
+            public static ApimConsumptionAggregateModel GetUsageByApiKeyWithinDateRange(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo)
             {
                 return operations.GetUsageByApiKeyWithinDateRangeAsync(subscriptionId, productId, apiKeyId, dateFrom, dateTo).GetAwaiter().GetResult();
             }
@@ -870,7 +870,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApimConsumptionAggregateModel> GetUsageByApiKeyWithinDateRangeAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApimConsumptionAggregateModel> GetUsageByApiKeyWithinDateRangeAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUsageByApiKeyWithinDateRangeWithHttpMessagesAsync(subscriptionId, productId, apiKeyId, dateFrom, dateTo, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -890,7 +890,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='policyId'>
             /// The Custom Policy ID
             /// </param>
-            public static CustomPolicyResponse GetCustomPolicy(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId)
+            public static CustomPolicyResponse GetCustomPolicy(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId)
             {
                 return operations.GetCustomPolicyAsync(subscriptionId, policyId).GetAwaiter().GetResult();
             }
@@ -910,7 +910,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CustomPolicyResponse> GetCustomPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CustomPolicyResponse> GetCustomPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetCustomPolicyWithHttpMessagesAsync(subscriptionId, policyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -933,7 +933,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='request'>
             /// The Custom Policy Request
             /// </param>
-            public static CustomPolicyResponse UpdateCustomPolicy(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, CustomPolicyRequest request)
+            public static CustomPolicyResponse UpdateCustomPolicy(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, CustomPolicyRequest request)
             {
                 return operations.UpdateCustomPolicyAsync(subscriptionId, policyId, request).GetAwaiter().GetResult();
             }
@@ -956,7 +956,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CustomPolicyResponse> UpdateCustomPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, CustomPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CustomPolicyResponse> UpdateCustomPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, CustomPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateCustomPolicyWithHttpMessagesAsync(subscriptionId, policyId, request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -976,7 +976,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='request'>
             /// The Custom Policy Request
             /// </param>
-            public static CustomPolicyResponse CreateCustomPolicy(this IInternalClient operations, System.Guid subscriptionId, CustomPolicyRequest request)
+            public static CustomPolicyResponse CreateCustomPolicy(this IGatewayClient operations, System.Guid subscriptionId, CustomPolicyRequest request)
             {
                 return operations.CreateCustomPolicyAsync(subscriptionId, request).GetAwaiter().GetResult();
             }
@@ -996,7 +996,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CustomPolicyResponse> CreateCustomPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, CustomPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CustomPolicyResponse> CreateCustomPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, CustomPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateCustomPolicyWithHttpMessagesAsync(subscriptionId, request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1009,7 +1009,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='subscriptionId'>
             /// </param>
-            public static IList<ProviderDetails> GetGatewayProviders(this IInternalClient operations, string subscriptionId)
+            public static IList<ProviderDetails> GetGatewayProviders(this IGatewayClient operations, string subscriptionId)
             {
                 return operations.GetGatewayProvidersAsync(subscriptionId).GetAwaiter().GetResult();
             }
@@ -1022,7 +1022,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ProviderDetails>> GetGatewayProvidersAsync(this IInternalClient operations, string subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ProviderDetails>> GetGatewayProvidersAsync(this IGatewayClient operations, string subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetGatewayProvidersWithHttpMessagesAsync(subscriptionId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1046,7 +1046,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// Entity type for either product / api. Possible values include: 'Product',
             /// 'Api'
             /// </param>
-            public static IList<PolicyModel> GetAllPolicies(this IInternalClient operations, System.Guid subscriptionId, System.Guid entityId, string entityType)
+            public static IList<PolicyModel> GetAllPolicies(this IGatewayClient operations, System.Guid subscriptionId, System.Guid entityId, string entityType)
             {
                 return operations.GetAllPoliciesAsync(subscriptionId, entityId, entityType).GetAwaiter().GetResult();
             }
@@ -1070,7 +1070,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<PolicyModel>> GetAllPoliciesAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid entityId, string entityType, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<PolicyModel>> GetAllPoliciesAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid entityId, string entityType, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllPoliciesWithHttpMessagesAsync(subscriptionId, entityId, entityType, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1090,7 +1090,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='policyId'>
             /// The policy Id
             /// </param>
-            public static PolicyModel GetPolicy(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId)
+            public static PolicyModel GetPolicy(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId)
             {
                 return operations.GetPolicyAsync(subscriptionId, policyId).GetAwaiter().GetResult();
             }
@@ -1110,7 +1110,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<PolicyModel> GetPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<PolicyModel> GetPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetPolicyWithHttpMessagesAsync(subscriptionId, policyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1130,7 +1130,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='policyId'>
             /// Apim policy document id
             /// </param>
-            public static bool? DeletePolicy(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId)
+            public static bool? DeletePolicy(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId)
             {
                 return operations.DeletePolicyAsync(subscriptionId, policyId).GetAwaiter().GetResult();
             }
@@ -1150,7 +1150,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<bool?> DeletePolicyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<bool?> DeletePolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.DeletePolicyWithHttpMessagesAsync(subscriptionId, policyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1170,7 +1170,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='productId'>
             /// Product ID
             /// </param>
-            public static ProductListModel GetProduct(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId)
+            public static ProductListModel GetProduct(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId)
             {
                 return operations.GetProductAsync(subscriptionId, productId).GetAwaiter().GetResult();
             }
@@ -1190,7 +1190,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProductListModel> GetProductAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProductListModel> GetProductAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetProductWithHttpMessagesAsync(subscriptionId, productId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1241,7 +1241,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='documentation'>
             /// </param>
-            public static ProductListModel UpdateProduct(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream))
+            public static ProductListModel UpdateProduct(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream))
             {
                 return operations.UpdateProductAsync(subscriptionId, productId, name, description, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation).GetAwaiter().GetResult();
             }
@@ -1292,7 +1292,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProductListModel> UpdateProductAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProductListModel> UpdateProductAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateProductWithHttpMessagesAsync(subscriptionId, productId, name, description, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1312,7 +1312,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='productId'>
             /// The product to delete
             /// </param>
-            public static void DeleteProduct(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId)
+            public static void DeleteProduct(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId)
             {
                 operations.DeleteProductAsync(subscriptionId, productId).GetAwaiter().GetResult();
             }
@@ -1332,7 +1332,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteProductAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteProductAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteProductWithHttpMessagesAsync(subscriptionId, productId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -1349,7 +1349,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='provider'>
             /// Limit to products for this provider
             /// </param>
-            public static IList<GetProductListModel> GetAllProducts(this IInternalClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?))
+            public static IList<GetProductListModel> GetAllProducts(this IGatewayClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?))
             {
                 return operations.GetAllProductsAsync(subscriptionId, provider).GetAwaiter().GetResult();
             }
@@ -1369,7 +1369,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<GetProductListModel>> GetAllProductsAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<GetProductListModel>> GetAllProductsAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllProductsWithHttpMessagesAsync(subscriptionId, provider, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1417,7 +1417,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='applicationId'>
             /// </param>
-            public static ProductListModel CreateProduct(this IInternalClient operations, System.Guid subscriptionId, string name, string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string))
+            public static ProductListModel CreateProduct(this IGatewayClient operations, System.Guid subscriptionId, string name, string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string))
             {
                 return operations.CreateProductAsync(subscriptionId, name, description, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId).GetAwaiter().GetResult();
             }
@@ -1465,7 +1465,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProductListModel> CreateProductAsync(this IInternalClient operations, System.Guid subscriptionId, string name, string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProductListModel> CreateProductAsync(this IGatewayClient operations, System.Guid subscriptionId, string name, string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateProductWithHttpMessagesAsync(subscriptionId, name, description, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1481,7 +1481,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='provider'>
             /// </param>
-            public static IList<GetProductListModel> GetAllProductsForAdmin(this IInternalClient operations, System.Guid? provider = default(System.Guid?))
+            public static IList<GetProductListModel> GetAllProductsForAdmin(this IGatewayClient operations, System.Guid? provider = default(System.Guid?))
             {
                 return operations.GetAllProductsForAdminAsync(provider).GetAwaiter().GetResult();
             }
@@ -1497,7 +1497,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<GetProductListModel>> GetAllProductsForAdminAsync(this IInternalClient operations, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<GetProductListModel>> GetAllProductsForAdminAsync(this IGatewayClient operations, System.Guid? provider = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllProductsForAdminWithHttpMessagesAsync(provider, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1517,7 +1517,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='productId'>
             /// Product ID
             /// </param>
-            public static IList<ApiKeyListModel> GetApiKeys(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId)
+            public static IList<ApiKeyListModel> GetApiKeys(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId)
             {
                 return operations.GetApiKeysAsync(subscriptionId, productId).GetAwaiter().GetResult();
             }
@@ -1537,7 +1537,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ApiKeyListModel>> GetApiKeysAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ApiKeyListModel>> GetApiKeysAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetApiKeysWithHttpMessagesAsync(subscriptionId, productId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1557,7 +1557,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='productId'>
             /// Product ID
             /// </param>
-            public static IList<ApiListModel> GetProductApis(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId)
+            public static IList<ApiListModel> GetProductApis(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId)
             {
                 return operations.GetProductApisAsync(subscriptionId, productId).GetAwaiter().GetResult();
             }
@@ -1577,7 +1577,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ApiListModel>> GetProductApisAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ApiListModel>> GetProductApisAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetProductApisWithHttpMessagesAsync(subscriptionId, productId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1603,7 +1603,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='dateTo'>
             /// End date of range.
             /// </param>
-            public static ApimConsumptionAggregateModel GetUsageWithinDateRange1(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo)
+            public static ApimConsumptionAggregateModel GetUsageWithinDateRange1(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo)
             {
                 return operations.GetUsageWithinDateRange1Async(subscriptionId, productId, dateFrom, dateTo).GetAwaiter().GetResult();
             }
@@ -1629,7 +1629,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApimConsumptionAggregateModel> GetUsageWithinDateRange1Async(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApimConsumptionAggregateModel> GetUsageWithinDateRange1Async(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUsageWithinDateRange1WithHttpMessagesAsync(subscriptionId, productId, dateFrom, dateTo, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1658,7 +1658,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='dateTo'>
             /// End date of range.
             /// </param>
-            public static ApimConsumptionAggregateModel GetUsageByApiKeyWithinDateRange1(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo)
+            public static ApimConsumptionAggregateModel GetUsageByApiKeyWithinDateRange1(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo)
             {
                 return operations.GetUsageByApiKeyWithinDateRange1Async(subscriptionId, productId, apiKeyId, dateFrom, dateTo).GetAwaiter().GetResult();
             }
@@ -1687,7 +1687,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ApimConsumptionAggregateModel> GetUsageByApiKeyWithinDateRange1Async(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ApimConsumptionAggregateModel> GetUsageByApiKeyWithinDateRange1Async(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.Guid apiKeyId, System.DateTime dateFrom, System.DateTime dateTo, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetUsageByApiKeyWithinDateRange1WithHttpMessagesAsync(subscriptionId, productId, apiKeyId, dateFrom, dateTo, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1719,7 +1719,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='includeServerErrors'>
             /// Usually 5xx errors are not included.
             /// </param>
-            public static void DownloadSubscriptionUsageReport(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, string downloadReportFormat, bool? includeServerErrors = false)
+            public static void DownloadSubscriptionUsageReport(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, string downloadReportFormat, bool? includeServerErrors = false)
             {
                 operations.DownloadSubscriptionUsageReportAsync(subscriptionId, productId, dateFrom, dateTo, downloadReportFormat, includeServerErrors).GetAwaiter().GetResult();
             }
@@ -1751,7 +1751,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DownloadSubscriptionUsageReportAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, string downloadReportFormat, bool? includeServerErrors = false, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DownloadSubscriptionUsageReportAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, System.DateTime dateFrom, System.DateTime dateTo, string downloadReportFormat, bool? includeServerErrors = false, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DownloadSubscriptionUsageReportWithHttpMessagesAsync(subscriptionId, productId, dateFrom, dateTo, downloadReportFormat, includeServerErrors, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -1768,7 +1768,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='file'>
             /// ZIP file
             /// </param>
-            public static CreateProductResponse Publish(this IInternalClient operations, System.Guid subscriptionId, Stream file)
+            public static CreateProductResponse Publish(this IGatewayClient operations, System.Guid subscriptionId, Stream file)
             {
                 return operations.PublishAsync(subscriptionId, file).GetAwaiter().GetResult();
             }
@@ -1788,7 +1788,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<CreateProductResponse> PublishAsync(this IInternalClient operations, System.Guid subscriptionId, Stream file, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<CreateProductResponse> PublishAsync(this IGatewayClient operations, System.Guid subscriptionId, Stream file, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.PublishWithHttpMessagesAsync(subscriptionId, file, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1811,7 +1811,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='sequenceFrom'>
             /// Sequence number to get data from (0 for all)
             /// </param>
-            public static IList<ProcessingStatusLog> GetPublishStatus(this IInternalClient operations, System.Guid subscriptionId, string requestId, int? sequenceFrom = default(int?))
+            public static IList<ProcessingStatusLog> GetPublishStatus(this IGatewayClient operations, System.Guid subscriptionId, string requestId, int? sequenceFrom = default(int?))
             {
                 return operations.GetPublishStatusAsync(subscriptionId, requestId, sequenceFrom).GetAwaiter().GetResult();
             }
@@ -1834,7 +1834,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<IList<ProcessingStatusLog>> GetPublishStatusAsync(this IInternalClient operations, System.Guid subscriptionId, string requestId, int? sequenceFrom = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<IList<ProcessingStatusLog>> GetPublishStatusAsync(this IGatewayClient operations, System.Guid subscriptionId, string requestId, int? sequenceFrom = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetPublishStatusWithHttpMessagesAsync(subscriptionId, requestId, sequenceFrom, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1854,7 +1854,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='policyId'>
             /// The Rate Limit Policy ID
             /// </param>
-            public static RateLimitPolicyResponse GetRateLimitPolicy(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId)
+            public static RateLimitPolicyResponse GetRateLimitPolicy(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId)
             {
                 return operations.GetRateLimitPolicyAsync(subscriptionId, policyId).GetAwaiter().GetResult();
             }
@@ -1874,7 +1874,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<RateLimitPolicyResponse> GetRateLimitPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<RateLimitPolicyResponse> GetRateLimitPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetRateLimitPolicyWithHttpMessagesAsync(subscriptionId, policyId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1897,7 +1897,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='request'>
             /// The Rate Limit Policy Request
             /// </param>
-            public static RateLimitPolicyResponse UpdateRateLimitPolicy(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, RateLimitPolicyRequest request)
+            public static RateLimitPolicyResponse UpdateRateLimitPolicy(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, RateLimitPolicyRequest request)
             {
                 return operations.UpdateRateLimitPolicyAsync(subscriptionId, policyId, request).GetAwaiter().GetResult();
             }
@@ -1920,7 +1920,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<RateLimitPolicyResponse> UpdateRateLimitPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid policyId, RateLimitPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<RateLimitPolicyResponse> UpdateRateLimitPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid policyId, RateLimitPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateRateLimitPolicyWithHttpMessagesAsync(subscriptionId, policyId, request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1940,7 +1940,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='request'>
             /// The Rate Limit Policy Request
             /// </param>
-            public static RateLimitPolicyResponse CreateRateLimitPolicy(this IInternalClient operations, System.Guid subscriptionId, RateLimitPolicyRequest request)
+            public static RateLimitPolicyResponse CreateRateLimitPolicy(this IGatewayClient operations, System.Guid subscriptionId, RateLimitPolicyRequest request)
             {
                 return operations.CreateRateLimitPolicyAsync(subscriptionId, request).GetAwaiter().GetResult();
             }
@@ -1960,7 +1960,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<RateLimitPolicyResponse> CreateRateLimitPolicyAsync(this IInternalClient operations, System.Guid subscriptionId, RateLimitPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<RateLimitPolicyResponse> CreateRateLimitPolicyAsync(this IGatewayClient operations, System.Guid subscriptionId, RateLimitPolicyRequest request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateRateLimitPolicyWithHttpMessagesAsync(subscriptionId, request, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1980,7 +1980,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='apiId'>
             /// Api Id
             /// </param>
-            public static object GetAllRevisions(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId)
+            public static object GetAllRevisions(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId)
             {
                 return operations.GetAllRevisionsAsync(subscriptionId, apiId).GetAwaiter().GetResult();
             }
@@ -2000,7 +2000,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetAllRevisionsAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> GetAllRevisionsAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAllRevisionsWithHttpMessagesAsync(subscriptionId, apiId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2024,7 +2024,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// </param>
             /// <param name='revisionDescription'>
             /// </param>
-            public static object CreateRevision(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, Stream openApiSpec, string revisionDescription = default(string))
+            public static object CreateRevision(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, Stream openApiSpec, string revisionDescription = default(string))
             {
                 return operations.CreateRevisionAsync(subscriptionId, apiId, openApiSpec, revisionDescription).GetAwaiter().GetResult();
             }
@@ -2048,7 +2048,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> CreateRevisionAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, Stream openApiSpec, string revisionDescription = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> CreateRevisionAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, Stream openApiSpec, string revisionDescription = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.CreateRevisionWithHttpMessagesAsync(subscriptionId, apiId, openApiSpec, revisionDescription, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2071,7 +2071,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='apiRevisionId'>
             /// RevisionId
             /// </param>
-            public static object GetRevision(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId)
+            public static object GetRevision(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId)
             {
                 return operations.GetRevisionAsync(subscriptionId, apiId, apiRevisionId).GetAwaiter().GetResult();
             }
@@ -2094,7 +2094,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<object> GetRevisionAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> GetRevisionAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetRevisionWithHttpMessagesAsync(subscriptionId, apiId, apiRevisionId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -2120,7 +2120,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='request'>
             /// The revision details to update
             /// </param>
-            public static string UpdateRevision(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request)
+            public static string UpdateRevision(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request)
             {
                 return operations.UpdateRevisionAsync(subscriptionId, apiId, apiRevisionId, request).GetAwaiter().GetResult();
             }
@@ -2146,7 +2146,7 @@ namespace Kmd.Logic.Gateway.Automation
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<string> UpdateRevisionAsync(this IInternalClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<string> UpdateRevisionAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateRevisionWithHttpMessagesAsync(subscriptionId, apiId, apiRevisionId, request, null, cancellationToken).ConfigureAwait(false))
                 {
