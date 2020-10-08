@@ -1,13 +1,13 @@
-autorest --input-file=gateway.swagger.json --output-folder=. --namespace=Kmd.Logic.Gateway.Automation --csharp --override-client-name=InternalClient --add-credentials
+autorest --input-file=gateway.swagger.json --output-folder=. --namespace=Kmd.Logic.Gateway.Automation --csharp --override-client-name=GatewayClient --add-credentials
 
-(Get-Content "InternalClient.cs") |
-	Foreach-Object {$_ -replace 'public partial class InternalClient', 'internal partial class InternalClient'} | 
-	Set-Content "InternalClient.cs"
+(Get-Content "GatewayClient.cs") |
+	Foreach-Object {$_ -replace 'public partial class GatewayClient', 'internal partial class GatewayClient'} | 
+	Set-Content "GatewayClient.cs"
 
-(Get-Content "IInternalClient.cs") | 
-	Foreach-Object {$_ -replace 'public partial interface IInternalClient', 'internal partial interface IInternalClient'} |
-	Set-Content "IInternalClient.cs"
+(Get-Content "IGatewayClient.cs") | 
+	Foreach-Object {$_ -replace 'public partial interface IGatewayClient', 'internal partial interface IGatewayClient'} |
+	Set-Content "IGatewayClient.cs"
 
-(Get-Content "InternalClientExtensions.cs") | 
-	Foreach-Object {$_ -replace 'public static partial class InternalClientExtensions', 'internal static partial class InternalClientExtensions'} |
-	Set-Content "InternalClientExtensions.cs"
+(Get-Content "GatewayClientExtensions.cs") | 
+	Foreach-Object {$_ -replace 'public static partial class GatewayClientExtensions', 'internal static partial class GatewayClientExtensions'} |
+	Set-Content "GatewayClientExtensions.cs"
