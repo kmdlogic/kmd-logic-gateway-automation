@@ -19,7 +19,7 @@ namespace Kmd.Logic.Gateway.Automation
     using System.Threading;
     using System.Threading.Tasks;
 
-    internal partial class GatewayClient : ServiceClient<GatewayClient>, IGatewayClient
+    public partial class GatewayClient : ServiceClient<GatewayClient>, IGatewayClient
     {
         /// <summary>
         /// The base URI of the service.
