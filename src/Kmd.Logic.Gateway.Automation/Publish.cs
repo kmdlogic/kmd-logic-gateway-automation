@@ -65,26 +65,49 @@ namespace Kmd.Logic.Gateway.Automation
         {
             foreach (var product in products)
             {
-                var response = await client.CreateProductAsync(
-                subscriptionId: subscriptionId,
-                name: product.Name,
-                description: product.Description,
-                providerId: providerId.ToString(),
-                apiKeyRequired: product.ApiKeyRequired,
-                providerApprovalRequired: product.ProviderApprovalRequired,
-                productTerms: product.LegalTerms,
-                visibility: product.Visibility,
-                logo: null,
-                documentation: null,
-                clientCredentialRequired: product.ClientCredentialRequired,
-                openidConfigIssuer: product.OpenidConfigIssuer,
-                openidConfigCustomUrl: product.OpenidConfigCustomUrl,
-                applicationId: product.ApplicationId).ConfigureAwait(false);
+
+                var response = await client.CreateProductAsync(subscriptionId: subscriptionId,
+                                                               name: product.Name,
+                                                               description: product.Description,
+                                                               providerId: providerId.ToString(),
+                                                               apiKeyRequired: product.ApiKeyRequired,
+                                                               providerApprovalRequired: product.ProviderApprovalRequired,
+                                                               productTerms: product.LegalTerms,
+                                                               visibility: product.Visibility,
+                                                               logo: this.GetStream(folderPath, product.Logo),
+                                                               documentation: null,
+                                                               clientCredentialRequired: product.ClientCredentialRequired,
+                                                               openidConfigIssuer: product.OpenidConfigIssuer,
+                                                               openidConfigCustomUrl: product.OpenidConfigCustomUrl,
+                                                               applicationId: product.ApplicationId).ConfigureAwait(false);
 
                 if (response != null)
                 {
                     this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
                 }
+            }
+        }
+
+        private Stream GetStream(string folderPath, string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+            {
+                return null;
+            }
+
+            //Stream imageStreamSource = new FileStream(Path.Combine(folderPath, fileName), FileMode.Open, FileAccess.Read, FileShare.Read);
+            //return imageStreamSource;
+            FileStream fs = new FileStream(path: Path.Combine(folderPath, fileName), FileMode.Open);
+            return fs;
+            //return File.OpenRead(Path.Combine(folderPath, fileName));
+            var fileBytes = File.ReadAllBytes(Path.Combine(folderPath, fileName));           
+            using (var fileStream = File.OpenRead(Path.Combine(folderPath, fileName)))
+            {
+                //return fileStream;
+                var ms = new MemoryStream(fileBytes);
+                
+                //fileStream.re(ms);
+                return ms;
             }
         }
 
