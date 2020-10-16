@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
-using System.Text;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
-using Kmd.Logic.Gateway.Automation.Models;
 using Kmd.Logic.Identity.Authorization;
 using Microsoft.Rest;
 using YamlDotNet.Serialization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
+    [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "HttpClient is not owned by this class.")]
     public class Publish : IPublish
     {
         private readonly HttpClient httpClient;
@@ -47,16 +48,20 @@ namespace Kmd.Logic.Gateway.Automation
         /// </summary>
         /// <param name="folderPath">Folder path provider all gateway entries details.</param>
         /// <returns>Error details on failure, gateway entities name on success.</returns>
-        public async Task<IList<PublishResult>> Process(string folderPath)
+        public async Task<IList<PublishResult>> ProcessAsync(string folderPath)
         {
+            this.publishResults.Clear();
             if (!this.IsValidInput(folderPath))
             {
                 return this.publishResults;
             }
 
-            var yaml = new Deserializer().Deserialize<GatewayDetails>(File.OpenText(Path.Combine(folderPath, @"publish.yml")));
-            var client = this.CreateClient();
-            await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);// yaml.Products.Select(product => CreateProduct(client, subscriptionId, providerId, product)).ToList();
+            using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
+            {
+                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                var client = this.CreateClient();
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
+            }
 
             return this.publishResults;
         }
@@ -65,49 +70,30 @@ namespace Kmd.Logic.Gateway.Automation
         {
             foreach (var product in products)
             {
-
-                var response = await client.CreateProductAsync(subscriptionId: subscriptionId,
-                                                               name: product.Name,
-                                                               description: product.Description,
-                                                               providerId: providerId.ToString(),
-                                                               apiKeyRequired: product.ApiKeyRequired,
-                                                               providerApprovalRequired: product.ProviderApprovalRequired,
-                                                               productTerms: product.LegalTerms,
-                                                               visibility: product.Visibility,
-                                                               logo: this.GetStream(folderPath, product.Logo),
-                                                               documentation: null,
-                                                               clientCredentialRequired: product.ClientCredentialRequired,
-                                                               openidConfigIssuer: product.OpenidConfigIssuer,
-                                                               openidConfigCustomUrl: product.OpenidConfigCustomUrl,
-                                                               applicationId: product.ApplicationId).ConfigureAwait(false);
-
-                if (response != null)
+                using (var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open))
+                using (var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open))
                 {
-                    this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                    var response = await client.CreateProductAsync(
+                                                                   subscriptionId: subscriptionId,
+                                                                   name: product.Name,
+                                                                   description: product.Description,
+                                                                   providerId: providerId.ToString(),
+                                                                   apiKeyRequired: product.ApiKeyRequired,
+                                                                   providerApprovalRequired: product.ProviderApprovalRequired,
+                                                                   productTerms: product.LegalTerms,
+                                                                   visibility: product.Visibility,
+                                                                   logo: logo,
+                                                                   documentation: document,
+                                                                   clientCredentialRequired: product.ClientCredentialRequired,
+                                                                   openidConfigIssuer: product.OpenidConfigIssuer,
+                                                                   openidConfigCustomUrl: product.OpenidConfigCustomUrl,
+                                                                   applicationId: product.ApplicationId).ConfigureAwait(false);
+
+                    if (response != null)
+                    {
+                        this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                    }
                 }
-            }
-        }
-
-        private Stream GetStream(string folderPath, string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-            {
-                return null;
-            }
-
-            //Stream imageStreamSource = new FileStream(Path.Combine(folderPath, fileName), FileMode.Open, FileAccess.Read, FileShare.Read);
-            //return imageStreamSource;
-            FileStream fs = new FileStream(path: Path.Combine(folderPath, fileName), FileMode.Open);
-            return fs;
-            //return File.OpenRead(Path.Combine(folderPath, fileName));
-            var fileBytes = File.ReadAllBytes(Path.Combine(folderPath, fileName));           
-            using (var fileStream = File.OpenRead(Path.Combine(folderPath, fileName)))
-            {
-                //return fileStream;
-                var ms = new MemoryStream(fileBytes);
-                
-                //fileStream.re(ms);
-                return ms;
             }
         }
 
@@ -136,7 +122,6 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             var tokenProvider = this.tokenProviderFactory.GetProvider(this.httpClient);
-
             this.gatewayClient = new GatewayClient(new TokenCredentials(tokenProvider))
             {
                 BaseUri = this.options.GatewayServiceUri,

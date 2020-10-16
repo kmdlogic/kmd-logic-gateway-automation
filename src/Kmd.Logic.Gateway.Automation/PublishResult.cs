@@ -18,8 +18,8 @@ namespace Kmd.Logic.Gateway.Automation
         {
             var entityMessage = this.EntityId.HasValue ? $", Entity Id : {this.EntityId.Value}" : string.Empty;
             return this.IsError
-                ? $"Error Code : {this.ResultCode} , Message : {this.Message} {entityMessage}"
-                : $"Result Code : {this.ResultCode} , Message : {this.Message} {entityMessage}";
+                ? $"Error Code : {this.ResultCode}, Message : {this.Message}{entityMessage}"
+                : $"Result Code : {this.ResultCode}{entityMessage}";
         }
     }
 }

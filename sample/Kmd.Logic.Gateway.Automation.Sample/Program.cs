@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation;
 using Kmd.Logic.Identity.Authorization;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Rest;
 using Serilog;
 
 namespace Kmd.Logic.Gateway.Automation.Sample
@@ -61,21 +59,12 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             using (var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider))
             {
                 var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
-                var results = await publish.Process(configuration.FolderPath).ConfigureAwait(false);
+                var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
 
                 foreach (var result in results)
                 {
                     Console.WriteLine(result.ToString());
                 }
-
-                //var tokenProvider = tokenProviderFactory.GetProvider(httpClient);
-
-                //IGatewayClient gatewayClient = new GatewayClient(new TokenCredentials(tokenProvider))
-                //{
-                //    BaseUri = configuration.GatewayApiBaseUri,
-                //};
-
-                //var result = await gatewayClient.GetAllProductsWithHttpMessagesAsync(subscriptionId: configuration.Gateway.SubscriptionId).ConfigureAwait(false);
             }
 
             Console.WriteLine("WIP");
