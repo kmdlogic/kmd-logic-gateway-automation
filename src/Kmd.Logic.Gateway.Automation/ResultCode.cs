@@ -6,10 +6,14 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public enum ResultCode
     {
-#pragma warning disable SA1602 // Enumeration items should be documented
+        /// <summary>
+        /// Invalid input data.
+        /// </summary>
         InvalidInput,
 
+        /// <summary>
+        /// Product created successfully.
+        /// </summary>
         ProductCreated,
-#pragma warning restore SA1602 // Enumeration items should be documented
     }
 }
