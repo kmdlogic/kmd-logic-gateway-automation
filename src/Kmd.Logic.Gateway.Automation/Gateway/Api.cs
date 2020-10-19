@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Kmd.Logic.Gateway.Automation.Gateway
 {
@@ -8,9 +6,7 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
     {
         public string Name { get; set; }
 
-#pragma warning disable CA2227 // Collection properties should be read only
-        public IList<ApiVersion> ApiVersions { get; set; }
-#pragma warning restore CA2227 // Collection properties should be read only
+        public IEnumerable<ApiVersion> ApiVersions { get; set; }
 
         public string Path { get; set; }
     }

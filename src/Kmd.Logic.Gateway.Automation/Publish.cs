@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
 using Kmd.Logic.Identity.Authorization;
@@ -66,7 +65,7 @@ namespace Kmd.Logic.Gateway.Automation
             return this.publishResults;
         }
 
-        private async Task CreateProductsAsync(IGatewayClient client, Guid subscriptionId, Guid providerId, IList<Product> products, string folderPath)
+        private async Task CreateProductsAsync(IGatewayClient client, Guid subscriptionId, Guid providerId, IEnumerable<Product> products, string folderPath)
         {
             foreach (var product in products)
             {
