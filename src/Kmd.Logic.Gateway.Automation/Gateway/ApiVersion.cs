@@ -16,14 +16,10 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
 
         public string Published { get; set; }
 
-#pragma warning disable CA1819 // Properties should not return arrays
-        public string[] ProductNames { get; set; }
-#pragma warning restore CA1819 // Properties should not return arrays
+        public IEnumerable<string> ProductNames { get; set; }
 
         public string PoliciesXmlFile { get; set; }
 
-#pragma warning disable CA2227 // Collection properties should be read only
-        public IList<Revision> Revisions { get; set; }
-#pragma warning restore CA2227 // Collection properties should be read only
+        public IEnumerable<Revision> Revisions { get; set; }
     }
 }
