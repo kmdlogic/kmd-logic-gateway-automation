@@ -27,7 +27,7 @@ jobs:
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj'
 
     - name: Build - PreRelease
-      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj' --configuration Debug --no-restore
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj' --configuration Debug --no-restore -p:VersionSuffix dev-$GITHUB_RUN_NUMBER
       if: GITHUB.REF != 'refs/heads/master'
     - name: Build - Release
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj' --configuration Release --no-restore
@@ -37,7 +37,7 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
 
     - name: Pack - PreRelease
-      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore --version-suffix dev-$GITHUB_RUN_NUMBER
+      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore -p:VersionSuffix dev-$GITHUB_RUN_NUMBER
       if: GITHUB.REF != 'refs/heads/master'
     - name: Pack - Release
       run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore
