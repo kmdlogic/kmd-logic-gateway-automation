@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Identity.Authorization;
@@ -54,6 +53,18 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             if (!validator.Validate())
             {
                 return;
+            }
+
+            using (var httpClient = new HttpClient())
+            using (var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider))
+            {
+                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
+                var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
+
+                foreach (var result in results)
+                {
+                    Console.WriteLine(result.ToString());
+                }
             }
 
             Console.WriteLine("WIP");
