@@ -2,4 +2,4 @@
 ![CLI Tool CI/CD](https://github.com/kmdlogic/kmd-logic-gateway-automation/workflows/CLI%20Tool%20CI/CD/badge.svg?branch=master)
 
 # kmd-logic-gateway-automation
-Kmd Logic gateway automation
+Kmd Logic Gateway Automation
