@@ -47,7 +47,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// </summary>
         /// <param name="folderPath">Folder path provider all gateway entries details.</param>
         /// <returns>Error details on failure, gateway entities name on success.</returns>
-        public async Task<IList<PublishResult>> ProcessAsync(string folderPath)
+        public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
         {
             this.publishResults.Clear();
             if (!this.IsValidInput(folderPath))
