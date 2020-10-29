@@ -7,27 +7,27 @@ namespace Kmd.Logic.Gateway.Automation.Models
     {
         public ApiValidationModel(
             string name,
-            Stream openApiSpec,
             string path,
             string version,
+            Stream openApiSpec,
             IEnumerable<string> productNames,
             IEnumerable<ApiRevisionValidationModel> revisions)
         {
             this.Name = name;
-            this.OpenApiSpec = openApiSpec;
             this.Path = path;
             this.Version = version;
+            this.OpenApiSpec = openApiSpec;
             this.ProductNames = productNames;
             this.Revisions = revisions;
         }
 
         public string Name { get; }
 
-        public Stream OpenApiSpec { get; }
-
         public string Path { get; }
 
         public string Version { get; }
+
+        public Stream OpenApiSpec { get; }
 
         public IEnumerable<string> ProductNames { get; }
 

@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
-    internal class ValidatePublishingResponse
+    public class ValidatePublishingResponse
     {
         public IEnumerable<string> Errors { get; set; }
 
