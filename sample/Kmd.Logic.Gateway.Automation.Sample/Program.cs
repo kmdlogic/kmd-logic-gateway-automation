@@ -50,6 +50,8 @@ namespace Kmd.Logic.Gateway.Automation.Sample
         private static async Task Run(AppConfiguration configuration)
         {
             var validator = new ConfigurationValidator(configuration);
+            var productValidate = new ValidateProduct();
+          
             if (!validator.Validate())
             {
                 return;
@@ -58,7 +60,7 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             using (var httpClient = new HttpClient())
             using (var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider))
             {
-                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
+                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway, productValidate);
                 var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
 
                 foreach (var result in results)

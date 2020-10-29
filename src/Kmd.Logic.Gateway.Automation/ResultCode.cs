@@ -15,5 +15,10 @@ namespace Kmd.Logic.Gateway.Automation
         /// Product created successfully.
         /// </summary>
         ProductCreated,
+
+        /// <summary>
+        /// Product validated successfully.
+        /// </summary>
+        ProductValidated,
     }
 }

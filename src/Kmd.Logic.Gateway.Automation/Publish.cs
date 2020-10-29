@@ -19,6 +19,7 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly LogicTokenProviderFactory tokenProviderFactory;
         private IGatewayClient gatewayClient;
         private IList<PublishResult> publishResults;
+        private readonly ValidateProduct _validateProduct;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
@@ -26,11 +27,12 @@ namespace Kmd.Logic.Gateway.Automation
         /// <param name="httpClient">The HTTP client to use. The caller is expected to manage this resource and it will not be disposed.</param>
         /// <param name="tokenProviderFactory">The Logic access token provider factory.</param>
         /// <param name="options">The required configuration options.</param>
-        public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
+        public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options, ValidateProduct validateProduct)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.tokenProviderFactory = tokenProviderFactory ?? throw new ArgumentNullException(nameof(tokenProviderFactory));
+            this._validateProduct = validateProduct;
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (string.IsNullOrEmpty(this.tokenProviderFactory.DefaultAuthorizationScope))
@@ -50,8 +52,10 @@ namespace Kmd.Logic.Gateway.Automation
         public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
         {
             this.publishResults.Clear();
-            if (!this.IsValidInput(folderPath))
+            var result = this._validateProduct.IsProductAndFolderValid(folderPath);
+            if (result[0].IsError)
             {
+                this.publishResults = result;
                 return this.publishResults;
             }
 
@@ -94,23 +98,6 @@ namespace Kmd.Logic.Gateway.Automation
                     }
                 }
             }
-        }
-
-        private bool IsValidInput(string folderPath)
-        {
-            if (!Directory.Exists(folderPath))
-            {
-                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Specified folder doesn’t exist" });
-                return false;
-            }
-
-            if (!File.Exists(Path.Combine(folderPath, @"publish.yml")))
-            {
-                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Publish yml not found" });
-                return false;
-            }
-
-            return true;
         }
 
         private IGatewayClient CreateClient()
