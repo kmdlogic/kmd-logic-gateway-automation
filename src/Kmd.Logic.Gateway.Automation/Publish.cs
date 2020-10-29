@@ -69,29 +69,27 @@ namespace Kmd.Logic.Gateway.Automation
         {
             foreach (var product in products)
             {
-                using (var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open))
-                using (var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open))
-                {
-                    var response = await client.CreateProductAsync(
-                                                                   subscriptionId: subscriptionId,
-                                                                   name: product.Name,
-                                                                   description: product.Description,
-                                                                   providerId: providerId.ToString(),
-                                                                   apiKeyRequired: product.ApiKeyRequired,
-                                                                   providerApprovalRequired: product.ProviderApprovalRequired,
-                                                                   productTerms: product.LegalTerms,
-                                                                   visibility: product.Visibility,
-                                                                   logo: logo,
-                                                                   documentation: document,
-                                                                   clientCredentialRequired: product.ClientCredentialRequired,
-                                                                   openidConfigIssuer: product.OpenidConfigIssuer,
-                                                                   openidConfigCustomUrl: product.OpenidConfigCustomUrl,
-                                                                   applicationId: product.ApplicationId).ConfigureAwait(false);
+                using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
+                using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
+                var response = await client.CreateProductAsync(
+                    subscriptionId: subscriptionId,
+                    name: product.Name,
+                    description: product.Description,
+                    providerId: providerId.ToString(),
+                    apiKeyRequired: product.ApiKeyRequired,
+                    providerApprovalRequired: product.ProviderApprovalRequired,
+                    productTerms: product.LegalTerms,
+                    visibility: product.Visibility,
+                    logo: logo,
+                    documentation: document,
+                    clientCredentialRequired: product.ClientCredentialRequired,
+                    openidConfigIssuer: product.OpenidConfigIssuer,
+                    openidConfigCustomUrl: product.OpenidConfigCustomUrl,
+                    applicationId: product.ApplicationId).ConfigureAwait(false);
 
-                    if (response != null)
-                    {
-                        this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
-                    }
+                if (response != null)
+                {
+                    this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
                 }
             }
         }
