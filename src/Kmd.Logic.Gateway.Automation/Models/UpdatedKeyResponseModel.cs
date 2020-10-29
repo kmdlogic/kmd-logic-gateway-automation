@@ -46,3 +46,4 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
     }
 }
+
