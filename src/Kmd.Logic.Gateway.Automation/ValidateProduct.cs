@@ -37,55 +37,57 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
-            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
-
-            foreach (var product in yaml.Products)
+            using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
             {
+                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+
+                foreach (var product in yaml.Products)
+                {
 #pragma warning disable CA1307 // Folder path remains the same always
-                var logoPath = product.Logo.Replace(@"\", "/");
-                var markdownPath = product.Documentation.Replace(@"\", "/");
+                    var logoPath = product.Logo.Replace(@"\", "/");
+                    var markdownPath = product.Documentation.Replace(@"\", "/");
 #pragma warning restore CA1307 // Folder path remains the same always
 
-                if (!File.Exists(Path.Combine(folderPath, logoPath)))
-                {
-                    this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo not found" });
-                    return this.publishResults;
-                }
-                else if (File.Exists(Path.Combine(folderPath, logoPath)))
-                {
-                    FileInfo productImage = new FileInfo(Path.Combine(folderPath, logoPath));
-
-                    if (productImage.Length > this._mediaConfiguration.MaxLogoSizeBytes)
+                    if (!File.Exists(Path.Combine(folderPath, logoPath)))
                     {
-                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo size exceeds the limit" });
+                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo not found" });
                         return this.publishResults;
                     }
-                    else if (!this._mediaConfiguration.AllowedLogoMimeTypes.Contains(productImage.Extension))
+                    else if (File.Exists(Path.Combine(folderPath, logoPath)))
                     {
-                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo format is not supported" });
+                        FileInfo productImage = new FileInfo(Path.Combine(folderPath, logoPath));
+
+                        if (productImage.Length > this._mediaConfiguration.MaxLogoSizeBytes)
+                        {
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo size exceeds the limit" });
+                            return this.publishResults;
+                        }
+                        else if (!this._mediaConfiguration.AllowedLogoMimeTypes.Contains(productImage.Extension))
+                        {
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo format is not supported" });
+                            return this.publishResults;
+                        }
+                    }
+
+                    if (!File.Exists(Path.Combine(folderPath, markdownPath)))
+                    {
+                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Markdown document not found" });
                         return this.publishResults;
                     }
-                }
-
-                if (!File.Exists(Path.Combine(folderPath, markdownPath)))
-                {
-                    this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Markdown document not found" });
-                    return this.publishResults;
-                }
-                else if (File.Exists(Path.Combine(folderPath, markdownPath)))
-                {
-                    FileInfo productMdFile = new FileInfo(Path.Combine(folderPath, markdownPath));
-
-                    if (productMdFile.Length > this._mediaConfiguration.MaxMarkDownDocumentSizeBytes)
+                    else if (File.Exists(Path.Combine(folderPath, markdownPath)))
                     {
-                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "MarkDown file size exceeds the limit" });
-                        return this.publishResults;
-                    }
-                    else if (!(this._mediaConfiguration.AllowedMarkdownDocumentExtension == productMdFile.Extension))
-                    {
-                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "MarkDown file is not supported" });
-                        return this.publishResults;
+                        FileInfo productMdFile = new FileInfo(Path.Combine(folderPath, markdownPath));
+
+                        if (productMdFile.Length > this._mediaConfiguration.MaxMarkDownDocumentSizeBytes)
+                        {
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "MarkDown file size exceeds the limit" });
+                            return this.publishResults;
+                        }
+                        else if (!(this._mediaConfiguration.AllowedMarkdownDocumentExtension == productMdFile.Extension))
+                        {
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "MarkDown file is not supported" });
+                            return this.publishResults;
+                        }
                     }
                 }
             }
