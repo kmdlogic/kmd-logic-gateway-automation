@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using ConsoleTables;
 using Kmd.Logic.Identity.Authorization;
 using Microsoft.Extensions.Configuration;
 using Serilog;
