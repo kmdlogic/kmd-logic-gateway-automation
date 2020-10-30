@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
@@ -19,7 +20,7 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly LogicTokenProviderFactory tokenProviderFactory;
         private IGatewayClient gatewayClient;
         private IList<PublishResult> publishResults;
-        private readonly ValidateProduct _validateProduct;
+        private readonly ValidateProduct validateProduct;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
@@ -32,7 +33,7 @@ namespace Kmd.Logic.Gateway.Automation
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.tokenProviderFactory = tokenProviderFactory ?? throw new ArgumentNullException(nameof(tokenProviderFactory));
-            this._validateProduct = validateProduct;
+            this.validateProduct = validateProduct;
 
 #pragma warning disable CS0618 // Type or member is obsolete
             if (string.IsNullOrEmpty(this.tokenProviderFactory.DefaultAuthorizationScope))
@@ -52,12 +53,14 @@ namespace Kmd.Logic.Gateway.Automation
         public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
         {
             this.publishResults.Clear();
-            var result = this._validateProduct.IsProductAndFolderValid(folderPath);
-            if (result[0].IsError)
+            var result = this.validateProduct.IsProductAndFolderValid(folderPath);
+            if (result.FirstOrDefault().IsError)
             {
                 this.publishResults = result;
                 return this.publishResults;
             }
+
+            this.publishResults.Add(result.FirstOrDefault());
 
             using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
             {

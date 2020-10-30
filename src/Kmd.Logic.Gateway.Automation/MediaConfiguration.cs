@@ -14,8 +14,6 @@ namespace Kmd.Logic.Gateway.Automation
 
         public string AllowedMarkdownDocumentExtension { get; set; }
 
-        public IEnumerable<string> AllowedMarkdownDocumentMimeTypes { get; set; }
-
         public long MaxOpenApiSpecSizeBytes { get; set; }
     }
 }
