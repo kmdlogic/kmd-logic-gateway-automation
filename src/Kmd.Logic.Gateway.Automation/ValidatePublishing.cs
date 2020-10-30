@@ -18,7 +18,7 @@ namespace Kmd.Logic.Gateway.Automation
 
         public ValidatePublishing(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions gatewayOptions)
         {
-            this.gatewayOptions = gatewayOptions ?? throw new ArgumentNullException(nameof(gatewayOptions));
+            this.gatewayOptions = gatewayOptions;
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, gatewayOptions);
         }
 
