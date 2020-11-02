@@ -11,9 +11,6 @@ namespace Kmd.Logic.Gateway.Automation.Tool
         [Option("authorizationScope", Required = true, HelpText = "Authorization scope in Logic Subscription Client Credentials.")]
         public string AuthorizationScope { get; set; }
 
-        [Option("authorizationTokenIssuer", Required = true, HelpText = "Authorization token issuer in Logic Subscription Client Credentials.")]
-        public Uri AuthorizationTokenIssuer { get; set; }
-
         [Option("clientId", Required = true, HelpText = "Client ID in Logic Subscription Client Credentials.")]
         public string ClientId { get; set; }
 

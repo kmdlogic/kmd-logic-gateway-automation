@@ -23,54 +23,64 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
         private static void PrintPublishingValidationResult(ValidatePublishingResponse result)
         {
-            Console.WriteLine("***** APIS *****");
-            foreach (var api in result.Apis)
+            if (result.IsSuccess)
             {
-                Console.WriteLine($"* API {api.Name} ({api.Path}/{api.Version}) - {api.Status}");
-                if (api.Errors.Any())
+                Console.WriteLine("***** APIS *****");
+                foreach (var api in result.Apis)
                 {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(string.Join(string.Empty, api.Errors.Select(e => "\t" + e + "\n")));
-                }
-                else
-                {
-                    Console.WriteLine("No errors");
-                }
-
-                Console.WriteLine();
-                foreach (var rev in api.Revisions)
-                {
-                    Console.WriteLine($"Revision ({rev.ApiRevisionId}) - {rev.Status}");
-                    if (rev.Errors.Any())
+                    Console.WriteLine($"* API {api.Name} ({api.Path}/{api.Version}) - {api.Status}");
+                    if (api.Errors.Any())
                     {
                         Console.WriteLine("Errors:");
-                        Console.WriteLine(string.Join(string.Empty, rev.Errors.Select(e => "\t" + e + "\n")));
+                        Console.WriteLine(string.Join(string.Empty, api.Errors.Select(e => "\t" + e + "\n")));
                     }
                     else
                     {
                         Console.WriteLine("No errors");
                     }
+
+                    Console.WriteLine();
+                    foreach (var rev in api.Revisions)
+                    {
+                        Console.WriteLine($"Revision ({rev.ApiRevisionId}) - {rev.Status}");
+                        if (rev.Errors.Any())
+                        {
+                            Console.WriteLine("Errors:");
+                            Console.WriteLine(string.Join(string.Empty, rev.Errors.Select(e => "\t" + e + "\n")));
+                        }
+                        else
+                        {
+                            Console.WriteLine("No errors");
+                        }
+                    }
+
+                    Console.WriteLine();
                 }
 
                 Console.WriteLine();
+                Console.WriteLine("***** PRODUCTS *****");
+                foreach (var product in result.Products)
+                {
+                    Console.WriteLine($"* {product.Name} - {product.Status}");
+                    if (product.Errors.Any())
+                    {
+                        Console.WriteLine("Errors:");
+                        Console.WriteLine(string.Join(string.Empty, product.Errors.Select(e => "\t" + e + "\n")));
+                    }
+                    else
+                    {
+                        Console.WriteLine("No errors");
+                    }
+
+                    Console.WriteLine();
+                }
             }
-
-            Console.WriteLine();
-            Console.WriteLine("***** PRODUCTS *****");
-            foreach (var product in result.Products)
+            else
             {
-                Console.WriteLine($"* {product.Name} - {product.Status}");
-                if (product.Errors.Any())
+                foreach (var error in result.Errors)
                 {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(string.Join(string.Empty, product.Errors.Select(e => "\t" + e + "\n")));
+                    Console.WriteLine(error);
                 }
-                else
-                {
-                    Console.WriteLine("No errors");
-                }
-
-                Console.WriteLine();
             }
         }
     }

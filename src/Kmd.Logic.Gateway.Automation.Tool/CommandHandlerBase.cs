@@ -7,17 +7,17 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
     internal abstract class CommandHandlerBase : IDisposable
     {
+#pragma warning disable SA1401 // Fields should be private
         protected LogicTokenProviderFactory logicTokenProviderFactory;
         protected GatewayOptions gatewayOptions;
+#pragma warning restore SA1401 // Fields should be private
 
         protected void Initialize(CommandBase cmd)
         {
-            Console.WriteLine("Initialize");
             this.logicTokenProviderFactory = new LogicTokenProviderFactory(
                 new LogicTokenProviderOptions
                 {
                     AuthorizationScope = cmd.AuthorizationScope,
-                    AuthorizationTokenIssuer = cmd.AuthorizationTokenIssuer,
                     ClientId = cmd.ClientId,
                     ClientSecret = cmd.ClientSecret,
                 });
