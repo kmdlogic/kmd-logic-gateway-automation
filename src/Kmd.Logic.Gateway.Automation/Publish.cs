@@ -57,9 +57,19 @@ namespace Kmd.Logic.Gateway.Automation
 
             using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
             {
-                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                GatewayDetails gatewayDetails = null;
+                try
+                {
+                    gatewayDetails = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                }
+                catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
+                {
+                    this.publishResults.Add(new PublishResult() { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
+                    return this.publishResults;
+                }
+
                 var client = this.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, gatewayDetails.Products, folderPath).ConfigureAwait(false);
             }
 
             return this.publishResults;
