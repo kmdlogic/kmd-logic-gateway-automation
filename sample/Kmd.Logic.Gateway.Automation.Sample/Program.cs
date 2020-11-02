@@ -51,7 +51,7 @@ namespace Kmd.Logic.Gateway.Automation.Sample
         {
             var validator = new ConfigurationValidator(configuration);
             var productValidate = new ValidateProduct();
-          
+
             if (!validator.Validate())
             {
                 return;

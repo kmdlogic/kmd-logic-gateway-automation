@@ -18,9 +18,9 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly HttpClient httpClient;
         private readonly GatewayOptions options;
         private readonly LogicTokenProviderFactory tokenProviderFactory;
+        private readonly ValidateProduct validateProduct;
         private IGatewayClient gatewayClient;
         private IList<PublishResult> publishResults;
-        private readonly ValidateProduct validateProduct;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.

@@ -10,8 +10,6 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public class ValidateProduct
     {
-        private IList<PublishResult> publishResults;
-
         private readonly MediaConfiguration _mediaConfiguration = new MediaConfiguration()
         {
             MaxLogoSizeBytes = 1000000,
@@ -20,6 +18,8 @@ namespace Kmd.Logic.Gateway.Automation
             AllowedLogoMimeTypes = new[] { ".png", ".jpeg" },
             AllowedMarkdownDocumentExtension = ".md",
         };
+
+        private IList<PublishResult> publishResults;
 
         public IList<PublishResult> IsProductAndFolderValid(string folderPath)
         {
@@ -38,7 +38,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                     if (!File.Exists(Path.Combine(folderPath, logoPath)))
                     {
-                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo not found" });
+                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Logo not found for product {product.Name}" });
                         return this.publishResults;
                     }
                     else if (File.Exists(Path.Combine(folderPath, logoPath)))
@@ -47,19 +47,19 @@ namespace Kmd.Logic.Gateway.Automation
 
                         if (productImage.Length > this._mediaConfiguration.MaxLogoSizeBytes)
                         {
-                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo size exceeds the limit" });
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Logo size exceeds the limit for product {product.Name}" });
                             return this.publishResults;
                         }
                         else if (!this._mediaConfiguration.AllowedLogoMimeTypes.Contains(productImage.Extension))
                         {
-                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Logo format is not supported" });
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Logo format is not supported for product {product.Name}" });
                             return this.publishResults;
                         }
                     }
 
                     if (!File.Exists(Path.Combine(folderPath, markdownPath)))
                     {
-                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Markdown document not found" });
+                        this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Markdown document not found for product {product.Name}" });
                         return this.publishResults;
                     }
                     else if (File.Exists(Path.Combine(folderPath, markdownPath)))
@@ -68,12 +68,12 @@ namespace Kmd.Logic.Gateway.Automation
 
                         if (productMdFile.Length > this._mediaConfiguration.MaxMarkDownDocumentSizeBytes)
                         {
-                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "MarkDown file size exceeds the limit" });
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"MarkDown file size exceeds the limit for product {product.Name}" });
                             return this.publishResults;
                         }
                         else if (!(this._mediaConfiguration.AllowedMarkdownDocumentExtension == productMdFile.Extension))
                         {
-                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "MarkDown file is not supported" });
+                            this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"MarkDown file is not supported for product {product.Name}" });
                             return this.publishResults;
                         }
                     }
