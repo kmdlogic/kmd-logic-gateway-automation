@@ -53,6 +53,12 @@ namespace Kmd.Logic.Gateway.Automation
         public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
         {
             this.publishResults.Clear();
+
+            if (!this.IsValidInput(folderPath))
+            {
+                return this.publishResults;
+            }
+
             var result = this.validateProduct.IsProductAndFolderValid(folderPath);
             if (result.FirstOrDefault().IsError)
             {
@@ -102,6 +108,24 @@ namespace Kmd.Logic.Gateway.Automation
                 }
             }
         }
+
+        private bool IsValidInput(string folderPath)
+        {
+            if (!Directory.Exists(folderPath))
+            {
+                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Specified folder doesn’t exist" });
+                return false;
+            }
+
+            if (!File.Exists(Path.Combine(folderPath, @"publish.yml")))
+            {
+                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Publish yml not found" });
+                return false;
+            }
+
+            return true;
+        }
+
 
         private IGatewayClient CreateClient()
         {

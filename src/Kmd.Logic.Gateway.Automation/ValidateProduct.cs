@@ -25,18 +25,6 @@ namespace Kmd.Logic.Gateway.Automation
         {
             this.publishResults = new List<PublishResult>();
 
-            if (!Directory.Exists(folderPath))
-            {
-                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Specified folder doesn’t exist" });
-                return this.publishResults;
-            }
-
-            if (!File.Exists(Path.Combine(folderPath, @"publish.yml")))
-            {
-                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Publish yml not found" });
-                return this.publishResults;
-            }
-
             using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
             {
                 var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
