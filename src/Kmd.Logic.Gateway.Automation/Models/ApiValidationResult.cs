@@ -13,6 +13,8 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public Guid? ApiId { get; set; }
 
+        public Guid? ApiVersionSetId { get; set; }
+
         public IEnumerable<ApiRevisionValidationResult> Revisions { get; set; }
     }
 }
