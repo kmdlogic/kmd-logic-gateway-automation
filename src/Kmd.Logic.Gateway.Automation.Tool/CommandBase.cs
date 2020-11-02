@@ -8,7 +8,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
         [Option('f', "folderPath", Required = true, HelpText = "Path of the root folder with 'publish.yml' file.")]
         public string FolderPath { get; set; }
 
-        [Option("authorizationScope", Required = true, HelpText = "Authorization scope in Logic Subscription Client Credentials.")]
+        [Option("authorizationScope", HelpText = "Authorization scope in Logic Subscription Client Credentials.")]
         public string AuthorizationScope { get; set; }
 
         [Option("clientId", Required = true, HelpText = "Client ID in Logic Subscription Client Credentials.")]

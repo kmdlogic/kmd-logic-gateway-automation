@@ -13,12 +13,20 @@ namespace Kmd.Logic.Gateway.Automation.Tool
         {
             this.Initialize(cmd);
 
-            using var httpClient = new HttpClient();
-            var validatePublishing = new ValidatePublishing(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
-            var result = await validatePublishing.Validate(cmd.FolderPath).ConfigureAwait(false);
-            PrintPublishingValidationResult(result);
+            try
+            {
+                using var httpClient = new HttpClient();
+                var validatePublishing = new ValidatePublishing(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
+                var result = await validatePublishing.Validate(cmd.FolderPath).ConfigureAwait(false);
+                PrintPublishingValidationResult(result);
 
-            return result.IsSuccess ? 0 : 2;
+                return result.IsSuccess ? 0 : 2;
+            }
+            catch (RestException re)
+            {
+                Console.WriteLine(re.Message);
+                return 1;
+            }
         }
 
         private static void PrintPublishingValidationResult(ValidatePublishingResponse result)
