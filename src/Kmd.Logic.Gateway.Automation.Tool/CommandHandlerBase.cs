@@ -1,5 +1,4 @@
 ﻿using System;
-using CommandLine;
 using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation.Tool
