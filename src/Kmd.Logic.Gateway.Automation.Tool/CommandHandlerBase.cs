@@ -22,10 +22,10 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
             this.gatewayOptions = new GatewayOptions
             {
-                GatewayServiceUri = cmd.GatewayUrl,
                 SubscriptionId = cmd.SubscriptionId,
                 ProviderId = cmd.ProviderId,
             };
+            this.gatewayOptions.GatewayServiceUri = cmd.GatewayUrl ?? this.gatewayOptions.GatewayServiceUri;
         }
 
         public void Dispose()

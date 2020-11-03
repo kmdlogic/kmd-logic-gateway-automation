@@ -6,7 +6,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
     internal class CommandBase
     {
         [Option('g', "gatewayUrl", HelpText = "Gateway URL.")]
-        public Uri GatewayUrl { get; set; } = new Uri("https://gateway.kmdlogic.io/gateway/v1");
+        public Uri GatewayUrl { get; set; }
 
         [Option('f', "folderPath", Required = true, HelpText = "Path of the root folder with 'publish.yml' file.")]
         public string FolderPath { get; set; }
