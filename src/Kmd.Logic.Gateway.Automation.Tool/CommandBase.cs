@@ -9,7 +9,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
         public string FolderPath { get; set; }
 
         [Option("scope", HelpText = "Authorization scope in Logic Subscription Client Credentials.")]
-        public string AuthorizationScope { get; set; } = "https://logicidentityprod.onmicrosoft.com/bb159109-0ccd-4b08-8d0d-80370cedda84/.default";
+        public string AuthorizationScope { get; set; } = "https://logicidentityprod.onmicrosoft.com/LogicAPI/user_impersonation";
 
         [Option("clientId", Required = true, HelpText = "Client ID in Logic Subscription Client Credentials.")]
         public string ClientId { get; set; }
