@@ -57,11 +57,30 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
+            var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);
+
+            if (validationResult.IsSuccess)
             {
+                this.publishResults.Add(new PublishResult
+                {
+                    IsError = false,
+                    ResultCode = ResultCode.PublishingValidationSuccess,
+                    Message = validationResult.ToString(),
+                });
+
+                using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
                 var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
                 using var client = this.gatewayClientFactory.CreateClient();
                 await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
+            }
+            else
+            {
+                this.publishResults.Add(new PublishResult
+                {
+                    IsError = true,
+                    ResultCode = ResultCode.PublishingValidationFailed,
+                    Message = validationResult.ToString(),
+                });
             }
 
             return this.publishResults;
