@@ -59,15 +59,18 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var result = this.validateProduct.IsProductAndFolderValid(folderPath);
-            if (result.FirstOrDefault().IsError)
+            var errors = this.validateProduct.IsProductValid(folderPath);
+            foreach (var error in errors)
             {
-                this.publishResults = result;
+                this.publishResults.Add(error);
+            }
+
+            if (errors.Any(r => r.IsError))
+            {
                 return this.publishResults;
             }
 
-            this.publishResults.Add(result.FirstOrDefault());
-
+            this.publishResults.Add(new PublishResult { IsError = false, ResultCode = ResultCode.ProductValidated, Message = "Product documents validated" });
             using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
             {
                 var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
