@@ -50,7 +50,6 @@ namespace Kmd.Logic.Gateway.Automation.Sample
 #pragma warning disable CS1998
         private static async Task Run(AppConfiguration configuration)
         {
-            configuration.FolderPath = @".\..\..\..\..\..\..\Publish";
             var validator = new ConfigurationValidator(configuration);
             if (!validator.Validate())
             {
