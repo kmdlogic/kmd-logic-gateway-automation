@@ -6,7 +6,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
 using Kmd.Logic.Identity.Authorization;
-using Microsoft.Rest;
 using YamlDotNet.Serialization;
 
 namespace Kmd.Logic.Gateway.Automation
@@ -14,10 +13,8 @@ namespace Kmd.Logic.Gateway.Automation
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "HttpClient is not owned by this class.")]
     public class Publish : IPublish
     {
-        private readonly HttpClient httpClient;
+        private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
-        private readonly LogicTokenProviderFactory tokenProviderFactory;
-        private IGatewayClient gatewayClient;
         private IList<PublishResult> publishResults;
 
         /// <summary>
@@ -28,18 +25,20 @@ namespace Kmd.Logic.Gateway.Automation
         /// <param name="options">The required configuration options.</param>
         public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
         {
-            this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
-            this.tokenProviderFactory = tokenProviderFactory ?? throw new ArgumentNullException(nameof(tokenProviderFactory));
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (string.IsNullOrEmpty(this.tokenProviderFactory.DefaultAuthorizationScope))
+            if (tokenProviderFactory == null)
             {
-                this.tokenProviderFactory.DefaultAuthorizationScope = "https://logicidentityprod.onmicrosoft.com/bb159109-0ccd-4b08-8d0d-80370cedda84/.default";
+                throw new ArgumentNullException(nameof(tokenProviderFactory));
             }
 
+            if (httpClient == null)
+            {
+                throw new ArgumentNullException(nameof(httpClient));
+            }
+
+            this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
+
             this.publishResults = new List<PublishResult>();
-#pragma warning restore CS0618 // Type or member is obsolete
         }
 
         /// <summary>
@@ -57,19 +56,9 @@ namespace Kmd.Logic.Gateway.Automation
 
             using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
             {
-                GatewayDetails gatewayDetails = null;
-                try
-                {
-                    gatewayDetails = new Deserializer().Deserialize<GatewayDetails>(publishYml);
-                }
-                catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
-                {
-                    this.publishResults.Add(new PublishResult() { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
-                    return this.publishResults;
-                }
-
-                var client = this.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, gatewayDetails.Products, folderPath).ConfigureAwait(false);
+                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                using var client = this.gatewayClientFactory.CreateClient();
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
             }
 
             return this.publishResults;
@@ -79,29 +68,27 @@ namespace Kmd.Logic.Gateway.Automation
         {
             foreach (var product in products)
             {
-                using (var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open))
-                using (var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open))
-                {
-                    var response = await client.CreateProductAsync(
-                                                                   subscriptionId: subscriptionId,
-                                                                   name: product.Name,
-                                                                   description: product.Description,
-                                                                   providerId: providerId.ToString(),
-                                                                   apiKeyRequired: product.ApiKeyRequired,
-                                                                   providerApprovalRequired: product.ProviderApprovalRequired,
-                                                                   productTerms: product.LegalTerms,
-                                                                   visibility: product.Visibility,
-                                                                   logo: logo,
-                                                                   documentation: document,
-                                                                   clientCredentialRequired: product.ClientCredentialRequired,
-                                                                   openidConfigIssuer: product.OpenidConfigIssuer,
-                                                                   openidConfigCustomUrl: product.OpenidConfigCustomUrl,
-                                                                   applicationId: product.ApplicationId).ConfigureAwait(false);
+                using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
+                using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
+                var response = await client.CreateProductAsync(
+                    subscriptionId: subscriptionId,
+                    name: product.Name,
+                    description: product.Description,
+                    providerId: providerId.ToString(),
+                    apiKeyRequired: product.ApiKeyRequired,
+                    providerApprovalRequired: product.ProviderApprovalRequired,
+                    productTerms: product.LegalTerms,
+                    visibility: product.Visibility,
+                    logo: logo,
+                    documentation: document,
+                    clientCredentialRequired: product.ClientCredentialRequired,
+                    openidConfigIssuer: product.OpenidConfigIssuer,
+                    openidConfigCustomUrl: product.OpenidConfigCustomUrl,
+                    applicationId: product.ApplicationId).ConfigureAwait(false);
 
-                    if (response != null)
-                    {
-                        this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
-                    }
+                if (response != null)
+                {
+                    this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
                 }
             }
         }
@@ -121,22 +108,6 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             return true;
-        }
-
-        private IGatewayClient CreateClient()
-        {
-            if (this.gatewayClient != null)
-            {
-                return this.gatewayClient;
-            }
-
-            var tokenProvider = this.tokenProviderFactory.GetProvider(this.httpClient);
-            this.gatewayClient = new GatewayClient(new TokenCredentials(tokenProvider))
-            {
-                BaseUri = this.options.GatewayServiceUri,
-            };
-
-            return this.gatewayClient;
         }
     }
 }
