@@ -3,7 +3,6 @@ using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation.Tool
 {
-
     internal abstract class CommandHandlerBase : IDisposable
     {
 #pragma warning disable SA1401 // Fields should be private
@@ -23,7 +22,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
             this.gatewayOptions = new GatewayOptions
             {
-                GatewayServiceUri = new Uri("https://kmd-logic-services-prod.azurefd.net"),
+                GatewayServiceUri = cmd.GatewayUrl,
                 SubscriptionId = cmd.SubscriptionId,
                 ProviderId = cmd.ProviderId,
             };
