@@ -74,6 +74,11 @@ namespace Kmd.Logic.Gateway.Automation
                 return await response.Content.ReadAsAsync<ValidatePublishingResponse>(cancellationToken).ConfigureAwait(false);
             }
 
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized || response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                throw new HttpOperationException($"Operation finished with status code {response.StatusCode}");
+            }
+
             var responseMessage = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             throw new HttpOperationException($"Operation finished with status code {response.StatusCode}: {responseMessage}");
         }

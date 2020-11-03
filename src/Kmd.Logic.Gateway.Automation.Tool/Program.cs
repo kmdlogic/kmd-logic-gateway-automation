@@ -20,19 +20,28 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                     s.CaseInsensitiveEnumValues = true;
                 });
 
-                var result = await commandLineParser.ParseArguments<PublishCommand>(args)
-                    .WithParsed(o =>
+                var result = await commandLineParser.ParseArguments<PublishCommand, ValidateCommand>(args)
+                    .WithParsed((CommandBase o) =>
                     {
                         InitLogger(o.Verbose);
-                        Log.Information("Started KMD Logic Gateway Automation Tool");
+                        Log.Verbose("Started KMD Logic Gateway Automation Tool");
                         Log.Verbose("Arguments {@Parsed}", o);
                     })
                     .MapResult(
-                        (PublishCommand cmd) => new PublishCommandHandler().Handle(cmd),
+                        (PublishCommand cmd) =>
+                        {
+                            using var handler = new PublishCommandHandler();
+                            return handler.Handle(cmd);
+                        },
+                        (ValidateCommand cmd) =>
+                        {
+                            using var handler = new ValidateCommandHandler();
+                            return handler.Handle(cmd);
+                        },
                         errs =>
                         {
-                            Log.Information(helpWriter.ToString());
-                            return Task.FromResult(2);
+                            Console.WriteLine(helpWriter.ToString());
+                            return Task.FromResult(1);
                         })
                     .ConfigureAwait(false);
 
