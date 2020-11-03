@@ -59,8 +59,7 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             using (var httpClient = new HttpClient())
             using (var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider))
             {
-                var productValidate = new ValidateProduct();
-                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway, productValidate);
+                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
                 var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
 
                 foreach (var result in results)

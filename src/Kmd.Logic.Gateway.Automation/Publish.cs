@@ -18,7 +18,6 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly HttpClient httpClient;
         private readonly GatewayOptions options;
         private readonly LogicTokenProviderFactory tokenProviderFactory;
-        private readonly ValidateProduct validateProduct;
         private IGatewayClient gatewayClient;
         private IList<PublishResult> publishResults;
 
@@ -28,14 +27,13 @@ namespace Kmd.Logic.Gateway.Automation
         /// <param name="httpClient">The HTTP client to use. The caller is expected to manage this resource and it will not be disposed.</param>
         /// <param name="tokenProviderFactory">The Logic access token provider factory.</param>
         /// <param name="options">The required configuration options.</param>
-        public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options, ValidateProduct validateProduct)
+        public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
         {
             this.httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.tokenProviderFactory = tokenProviderFactory ?? throw new ArgumentNullException(nameof(tokenProviderFactory));
-            this.validateProduct = validateProduct;
 
-#pragma warning disable CS0618 // Type or member is obsolete
+            #pragma warning disable CS0618 // Type or member is obsolete
             if (string.IsNullOrEmpty(this.tokenProviderFactory.DefaultAuthorizationScope))
             {
                 this.tokenProviderFactory.DefaultAuthorizationScope = "https://logicidentityprod.onmicrosoft.com/bb159109-0ccd-4b08-8d0d-80370cedda84/.default";
@@ -59,7 +57,8 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var errors = this.validateProduct.IsProductValid(folderPath);
+            var productValidate = new ValidateProduct();
+            var errors = productValidate.IsProductValid(folderPath);
             foreach (var error in errors)
             {
                 this.publishResults.Add(error);
