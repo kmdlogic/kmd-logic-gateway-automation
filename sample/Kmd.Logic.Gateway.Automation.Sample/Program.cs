@@ -50,6 +50,7 @@ namespace Kmd.Logic.Gateway.Automation.Sample
 #pragma warning disable CS1998
         private static async Task Run(AppConfiguration configuration)
         {
+            configuration.FolderPath = @".\..\..\..\..\..\..\Publish";
             var validator = new ConfigurationValidator(configuration);
             if (!validator.Validate())
             {
@@ -59,22 +60,12 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             using var httpClient = new HttpClient();
             using var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider);
 
-            Console.Write("Publishing validation... ");
-            var validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, configuration.Gateway);
-            var publishingValidationResult = await validatePublishing.Validate(configuration.FolderPath).ConfigureAwait(false);
-            Console.WriteLine(publishingValidationResult.IsSuccess ? "Success" : "Failure");
-            Console.WriteLine(publishingValidationResult.ToString());
+            var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
+            var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
 
-            if (publishingValidationResult.IsSuccess)
+            foreach (var result in results)
             {
-                Console.WriteLine("Publishing...");
-                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
-                var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
-
-                foreach (var result in results)
-                {
-                    Console.WriteLine(result.ToString());
-                }
+                Console.WriteLine(result.ToString());
             }
 
             Console.WriteLine("WIP");
