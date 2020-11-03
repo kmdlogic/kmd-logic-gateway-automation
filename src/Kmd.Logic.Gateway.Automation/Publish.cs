@@ -15,6 +15,7 @@ namespace Kmd.Logic.Gateway.Automation
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
+        private readonly ValidatePublishing validatePublishing;
         private IList<PublishResult> publishResults;
 
         /// <summary>
@@ -39,6 +40,8 @@ namespace Kmd.Logic.Gateway.Automation
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
 
             this.publishResults = new List<PublishResult>();
+
+            this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
         }
 
         /// <summary>

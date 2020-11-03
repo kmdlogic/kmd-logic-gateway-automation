@@ -33,11 +33,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                             using var handler = new PublishCommandHandler();
                             return handler.Handle(cmd);
                         },
-                        (ValidateCommand cmd) =>
-                        {
-                            using var handler = new ValidateCommandHandler();
-                            return handler.Handle(cmd);
-                        },
+                        (ValidateCommand cmd) => new ValidateCommandHandler().Handle(cmd),
                         errs =>
                         {
                             Console.WriteLine(helpWriter.ToString());
