@@ -24,9 +24,9 @@ namespace Kmd.Logic.Gateway.Automation
                         isValidationSuccess = false;
                     }
 
-                    if (string.IsNullOrEmpty(api.Path) || !Uri.IsWellFormedUriString(api.Path, UriKind.Absolute))
+                    if (string.IsNullOrEmpty(api.Path))
                     {
-                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Path not exist or not valid uri format for {api.Name}" });
+                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Path not exist for {api.Name}" });
                         isValidationSuccess = false;
                     }
 
@@ -35,6 +35,12 @@ namespace Kmd.Logic.Gateway.Automation
                         if (string.IsNullOrEmpty(version.VersionName))
                         {
                             this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api version name not exist" });
+                            isValidationSuccess = false;
+                        }
+
+                        if (string.IsNullOrEmpty(version.BackendLocation) || !Uri.IsWellFormedUriString(version.BackendLocation, UriKind.Absolute))
+                        {
+                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName }" });
                             isValidationSuccess = false;
                         }
 

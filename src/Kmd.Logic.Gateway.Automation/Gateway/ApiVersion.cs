@@ -22,6 +22,8 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
 
         public string PolicyXmlFile { get; set; }
 
+        public string BackendLocation { get; set; }
+
         public IEnumerable<Revision> Revisions { get; set; }
     }
 }

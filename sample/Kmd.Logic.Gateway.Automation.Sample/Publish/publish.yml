@@ -30,6 +30,7 @@ Apis:
       Published: true
       ProductNames: [nexus-1]
       PolicyXmlFile: ./apis/nexus/policies.xml
+      BackendLocation: http://nexus
       Revisions:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus/v1/nexus-r2.json
@@ -42,11 +43,12 @@ Apis:
       Published: true
       ProductNames: [nexus-1]
       PolicyXmlFile: ./apis/nexus/policies.xml
+      BackendLocation: http://nexus
       Revisions:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus/v2/nexus-r2.json
          IsCurrent: true
-   Path: http://nexus/
+   Path: nexus
  - Name: nexus2
    ApiVersions:
     - PathIdentifier: v1
@@ -57,11 +59,12 @@ Apis:
       Published: true
       ProductNames: [nexus-2]
       PolicyXmlFile: ./apis/nexus2/policies.xml
+      BackendLocation: http://nexus2
       Revisions:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus2/v1/nexus-r2.json
          IsCurrent: true
-   Path: http://nexus2/
+   Path: nexus2
  - Name: nexus3
    ApiVersions:
     - PathIdentifier: v1
@@ -72,4 +75,5 @@ Apis:
       Published: true
       ProductNames: [nexus-2]
       PolicyXmlFile: ./apis/nexus3/policies.xml
-   Path: http://nexus3/
+      BackendLocation: http://nexus3
+   Path: nexus3
