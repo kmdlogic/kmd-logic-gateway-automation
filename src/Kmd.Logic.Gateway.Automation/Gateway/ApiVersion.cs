@@ -6,6 +6,8 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
 {
     public class ApiVersion
     {
+        public string VersionName { get; set; }
+
         public string PathIdentifier { get; set; }
 
         public string ApiLogoFile { get; set; }
