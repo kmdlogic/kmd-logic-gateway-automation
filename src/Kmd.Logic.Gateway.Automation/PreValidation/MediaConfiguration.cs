@@ -27,7 +27,7 @@
         Logo,
 
         /// <summary>
-        /// File type for markdown document 
+        /// File type for markdown document
         /// </summary>
         Document,
 
