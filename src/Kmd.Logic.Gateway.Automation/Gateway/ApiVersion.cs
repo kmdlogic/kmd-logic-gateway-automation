@@ -20,7 +20,7 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
 
         public IEnumerable<string> ProductNames { get; set; }
 
-        public string PoliciesXmlFile { get; set; }
+        public string PolicyXmlFile { get; set; }
 
         public IEnumerable<Revision> Revisions { get; set; }
     }

@@ -40,19 +40,18 @@ namespace Kmd.Logic.Gateway.Automation
                 foreach (var apiVersion in api.ApiVersions)
                 {
                     var fs = new FileStream(Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+                    var revisions = apiVersion.Revisions?.Select(r =>
+                    {
+                        var fsRev = new FileStream(Path.Combine(folderPath, r.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+                        return new ApiRevisionValidationModel(fsRev, r.RevisionDescription);
+                    });
                     apis.Add(new ApiValidationModel(
                         api.Name,
                         api.Path,
                         apiVersion.PathIdentifier,
                         fs,
                         apiVersion.ProductNames,
-#pragma warning disable SA1118 // Parameter should not span multiple lines
-                        apiVersion.Revisions?.Select(r =>
-                        {
-                            var fsRev = new FileStream(Path.Combine(folderPath, r.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
-                            return new ApiRevisionValidationModel(fsRev, r.RevisionDescription);
-                        })));
-#pragma warning restore SA1118 // Parameter should not span multiple lines
+                        revisions));
                 }
             }
 
