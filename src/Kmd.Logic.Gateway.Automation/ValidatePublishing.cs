@@ -46,11 +46,13 @@ namespace Kmd.Logic.Gateway.Automation
                         apiVersion.PathIdentifier,
                         fs,
                         apiVersion.ProductNames,
-                        apiVersion.Revisions.Select(r =>
+#pragma warning disable SA1118 // Parameter should not span multiple lines
+                        apiVersion.Revisions?.Select(r =>
                         {
                             var fsRev = new FileStream(Path.Combine(folderPath, r.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
                             return new ApiRevisionValidationModel(fsRev, r.RevisionDescription);
                         })));
+#pragma warning restore SA1118 // Parameter should not span multiple lines
                 }
             }
 

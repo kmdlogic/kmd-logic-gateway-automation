@@ -1,6 +1,4 @@
-﻿using FileTypeChecker;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -15,7 +13,7 @@ namespace Kmd.Logic.Gateway.Automation
             MaxMarkDownDocumentSizeBytes = 1000000,
             MaxOpenApiSpecSizeBytes = 20971520,
             MaxPolicyXmlSizeBytes = 10240,
-            AllowedLogoFileExtensions = new[] { "png", "jpeg", "jpg" },
+            AllowedLogoFileExtensions = new[] { ".png", ".jpeg", ".jpg" },
             AllowedMarkdownDocumentExtension = ".md",
             AllowedOpenApiSpecExtension = ".json",
             AllowedPolicyXmlExtension = ".xml",
@@ -58,9 +56,8 @@ namespace Kmd.Logic.Gateway.Automation
 
         private bool ValidatePolicyXmlType(string path, string enityName)
         {
-            using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
-            var fileType = FileTypeValidator.GetFileType(file).Extension;
-            if (!FileTypeValidator.IsTypeRecognizable(file) || this._mediaConfiguration.AllowedPolicyXmlExtension != fileType)
+            var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
+            if (this._mediaConfiguration.AllowedPolicyXmlExtension != fileType)
             {
                 this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid PolicyXml file type: unable to recognize type for {enityName}" });
                 return false;
@@ -83,9 +80,8 @@ namespace Kmd.Logic.Gateway.Automation
 
         private bool ValidateOpenApiSpecType(string path, string enityName)
         {
-            using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
-            var fileType = FileTypeValidator.GetFileType(file).Extension;
-            if (!FileTypeValidator.IsTypeRecognizable(file) || this._mediaConfiguration.AllowedOpenApiSpecExtension != fileType)
+            var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
+            if (this._mediaConfiguration.AllowedOpenApiSpecExtension != fileType)
             {
                 this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid OpenApiSpec file type: unable to recognize type for {enityName}" });
                 return false;
@@ -108,9 +104,8 @@ namespace Kmd.Logic.Gateway.Automation
 
         private bool ValidateDocumentType(string path, string enityName)
         {
-            using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
-            var fileType = FileTypeValidator.GetFileType(file).Extension;
-            if (!FileTypeValidator.IsTypeRecognizable(file) || this._mediaConfiguration.AllowedMarkdownDocumentExtension != fileType)
+            var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
+            if (this._mediaConfiguration.AllowedMarkdownDocumentExtension != fileType)
             {
                 this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid Document file type: unable to recognize type for {enityName}" });
                 return false;
@@ -163,9 +158,8 @@ namespace Kmd.Logic.Gateway.Automation
 
         private bool ValidateLogoType(string path, string enityName)
         {
-            using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
-            var fileType = FileTypeValidator.GetFileType(file).Extension;
-            if (!FileTypeValidator.IsTypeRecognizable(file) || !this._mediaConfiguration.AllowedLogoFileExtensions.Any(ext => ext == fileType))
+            var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
+            if (!this._mediaConfiguration.AllowedLogoFileExtensions.Any(ext => ext == fileType))
             {
                 this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid logo file type: unable to recognize type for {enityName}" });
                 return false;

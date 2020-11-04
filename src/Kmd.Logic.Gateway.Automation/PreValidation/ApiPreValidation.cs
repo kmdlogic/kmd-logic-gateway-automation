@@ -1,10 +1,6 @@
-﻿using Kmd.Logic.Gateway.Automation.Gateway;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Reflection.Metadata;
-using System.Text;
+﻿using System;
 using System.Threading.Tasks;
+using Kmd.Logic.Gateway.Automation.Gateway;
 
 namespace Kmd.Logic.Gateway.Automation
 {
@@ -30,7 +26,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                     if (string.IsNullOrEmpty(api.Path) || !Uri.IsWellFormedUriString(api.Path, UriKind.Absolute))
                     {
-                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Path not exist or not valid uri format" });
+                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Path not exist or not valid uri format for {api.Name}" });
                         isValidationSuccess = false;
                     }
 
@@ -38,13 +34,13 @@ namespace Kmd.Logic.Gateway.Automation
                     {
                         if (string.IsNullOrEmpty(version.VersionName))
                         {
-                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Name not exist" });
+                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api version name not exist" });
                             isValidationSuccess = false;
                         }
 
-                        if (!string.IsNullOrEmpty(version.PoliciesXmlFile))
+                        if (!string.IsNullOrEmpty(version.PoliciesXmlFile)
+                            && !this.ValidateFile(version.PoliciesXmlFile, $"{api.Name} - {version.VersionName}", "PolicyXmlFile", GatewayFileType.PolicyXml))
                         {
-                            this.ValidateFile(version.PoliciesXmlFile, $"{api.Name} - {version.VersionName}", "PolicyXmlFile", GatewayFileType.PolicyXml);
                             isValidationSuccess = false;
                         }
 
