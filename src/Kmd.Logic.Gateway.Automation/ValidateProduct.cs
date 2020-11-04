@@ -21,15 +21,15 @@ namespace Kmd.Logic.Gateway.Automation
 
         private IList<PublishResult> publishResults;
 
-        public IList<PublishResult> IsProductValid(string folderPath)
+        public IList<PublishResult> ValidateProducts(string folderPath)
         {
             this.publishResults = new List<PublishResult>();
 
-            using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
-            {
-                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+            using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
 
-                foreach (var product in yaml.Products)
+            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+
+            foreach (var product in yaml.Products)
                 {
 #pragma warning disable CA1307 // Folder path remains the same always
                     var logoPath = product.Logo.Replace(@"\", "/");
@@ -72,7 +72,6 @@ namespace Kmd.Logic.Gateway.Automation
                         }
                     }
                 }
-            }
 
             return this.publishResults;
         }

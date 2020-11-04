@@ -37,12 +37,6 @@ namespace Kmd.Logic.Gateway.Automation
                 throw new ArgumentNullException(nameof(httpClient));
             }
 
-            #pragma warning disable CS0618 // Type or member is obsolete
-            if (string.IsNullOrEmpty(this.tokenProviderFactory.DefaultAuthorizationScope))
-            {
-                this.tokenProviderFactory.DefaultAuthorizationScope = "https://logicidentityprod.onmicrosoft.com/bb159109-0ccd-4b08-8d0d-80370cedda84/.default";
-            }
-
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
 
             this.publishResults = new List<PublishResult>();
@@ -63,7 +57,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             var productValidate = new ValidateProduct();
-            var errors = productValidate.IsProductValid(folderPath);
+            var errors = productValidate.ValidateProducts(folderPath);
             foreach (var error in errors)
             {
                 this.publishResults.Add(error);
@@ -75,12 +69,12 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             this.publishResults.Add(new PublishResult { IsError = false, ResultCode = ResultCode.ProductValidated, Message = "Product documents validated" });
-            using (var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml")))
-            {
-                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
-                using var client = this.gatewayClientFactory.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
-            }
+
+            using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
+
+            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+            using var client = this.gatewayClientFactory.CreateClient();
+            await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
 
             return this.publishResults;
         }
@@ -129,23 +123,6 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             return true;
-        }
-
-
-        private IGatewayClient CreateClient()
-        {
-            if (this.gatewayClient != null)
-            {
-                return this.gatewayClient;
-            }
-
-            var tokenProvider = this.tokenProviderFactory.GetProvider(this.httpClient);
-            this.gatewayClient = new GatewayClient(new TokenCredentials(tokenProvider))
-            {
-                BaseUri = this.options.GatewayServiceUri,
-            };
-
-            return this.gatewayClient;
         }
     }
 }
