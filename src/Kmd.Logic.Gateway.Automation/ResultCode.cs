@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kmd.Logic.Gateway.Automation
+﻿namespace Kmd.Logic.Gateway.Automation
 {
     public enum ResultCode
     {
@@ -15,6 +11,16 @@ namespace Kmd.Logic.Gateway.Automation
         /// Product created successfully.
         /// </summary>
         ProductCreated,
+
+        /// <summary>
+        /// Input validation succeeded.
+        /// </summary>
+        PublishingValidationSuccess,
+
+        /// <summary>
+        /// Input validation failed.
+        /// </summary>
+        PublishingValidationFailed,
 
         /// <summary>
         /// Product validated successfully.

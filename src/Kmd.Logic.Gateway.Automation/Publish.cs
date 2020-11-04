@@ -16,6 +16,7 @@ namespace Kmd.Logic.Gateway.Automation
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
+        private readonly ValidatePublishing validatePublishing;
         private IList<PublishResult> publishResults;
 
         /// <summary>
@@ -40,6 +41,8 @@ namespace Kmd.Logic.Gateway.Automation
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
 
             this.publishResults = new List<PublishResult>();
+
+            this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
         }
 
         /// <summary>
@@ -56,25 +59,31 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var productValidate = new ValidateProduct();
-            var errors = productValidate.ValidateProducts(folderPath);
-            foreach (var error in errors)
+            var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);
+
+            if (validationResult.IsSuccess)
             {
-                this.publishResults.Add(error);
-            }
+                this.publishResults.Add(new PublishResult
+                {
+                    IsError = false,
+                    ResultCode = ResultCode.PublishingValidationSuccess,
+                    Message = validationResult.ToString(),
+                });
 
-            if (errors.Any(r => r.IsError))
+                using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
+                var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                using var client = this.gatewayClientFactory.CreateClient();
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
+            }
+            else
             {
-                return this.publishResults;
+                this.publishResults.Add(new PublishResult
+                {
+                    IsError = true,
+                    ResultCode = ResultCode.PublishingValidationFailed,
+                    Message = validationResult.ToString(),
+                });
             }
-
-            this.publishResults.Add(new PublishResult { IsError = false, ResultCode = ResultCode.ProductValidated, Message = "Product documents validated" });
-
-            using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
-
-            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
-            using var client = this.gatewayClientFactory.CreateClient();
-            await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
 
             return this.publishResults;
         }

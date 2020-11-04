@@ -60,79 +60,16 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             using var httpClient = new HttpClient();
             using var tokenProviderFactory = new LogicTokenProviderFactory(configuration.TokenProvider);
 
-            Console.Write("Publishing validation... ");
-            var validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, configuration.Gateway);
-            var publishingValidationResult = await validatePublishing.Validate(configuration.FolderPath).ConfigureAwait(false);
-            Console.WriteLine(publishingValidationResult.IsSuccess ? "Success" : "Failure");
-            PrintPublishingValidationResult(publishingValidationResult);
+            var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
+            var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
 
-            if (publishingValidationResult.IsSuccess)
+            foreach (var result in results)
             {
-                Console.WriteLine("Publishing...");
-                var publish = new Publish(httpClient, tokenProviderFactory, configuration.Gateway);
-                var results = await publish.ProcessAsync(configuration.FolderPath).ConfigureAwait(false);
-
-                foreach (var result in results)
-                {
-                    Console.WriteLine(result.ToString());
-                }
+                Console.WriteLine(result.ToString());
             }
 
             Console.WriteLine("WIP");
         }
 #pragma warning restore CA1031
-
-        private static void PrintPublishingValidationResult(Models.ValidatePublishingResponse result)
-        {
-            Console.WriteLine("***** APIS *****");
-            foreach (var api in result.Apis)
-            {
-                Console.WriteLine($"* API {api.Name} ({api.Path}/{api.Version}) - {api.Status}");
-                if (api.Errors.Any())
-                {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(string.Join(string.Empty, api.Errors.Select(e => "\t" + e + "\n")));
-                }
-                else
-                {
-                    Console.WriteLine("No errors");
-                }
-
-                Console.WriteLine();
-                foreach (var rev in api.Revisions)
-                {
-                    Console.WriteLine($"Revision ({rev.ApiRevisionId}) - {rev.Status}");
-                    if (rev.Errors.Any())
-                    {
-                        Console.WriteLine("Errors:");
-                        Console.WriteLine(string.Join(string.Empty, rev.Errors.Select(e => "\t" + e + "\n")));
-                    }
-                    else
-                    {
-                        Console.WriteLine("No errors");
-                    }
-                }
-
-                Console.WriteLine();
-            }
-
-            Console.WriteLine();
-            Console.WriteLine("***** PRODUCTS *****");
-            foreach (var product in result.Products)
-            {
-                Console.WriteLine($"* {product.Name} - {product.Status}");
-                if (product.Errors.Any())
-                {
-                    Console.WriteLine("Errors:");
-                    Console.WriteLine(string.Join(string.Empty, product.Errors.Select(e => "\t" + e + "\n")));
-                }
-                else
-                {
-                    Console.WriteLine("No errors");
-                }
-
-                Console.WriteLine();
-            }
-        }
     }
 }
