@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
@@ -9,22 +10,23 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public IEnumerable<string> Errors { get; set; }
 
-        public virtual string ToString(string name)
+        public override string ToString()
         {
-            var result = string.Empty;
+            var sb = new StringBuilder();
             if (this.Errors.Any())
             {
+                sb.AppendLine("Errors:");
                 foreach (var error in this.Errors)
                 {
-                    result += $"[{name} | Error] {error}\n";
+                    sb.AppendLine($"\t- {error}");
                 }
             }
             else
             {
-                result = $"[{name}] {this.Status}\n";
+                sb.AppendLine($"* Status: {this.Status}");
             }
 
-            return result;
+            return sb.ToString();
         }
     }
 }
