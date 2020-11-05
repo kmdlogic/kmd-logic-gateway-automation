@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
@@ -6,12 +7,13 @@ namespace Kmd.Logic.Gateway.Automation.Models
     {
         public Guid? ApiRevisionId { get; set; }
 
-        public override string ToString(string name)
+        public override string ToString()
         {
-            name += this.ApiRevisionId.HasValue
-                ? $"Revision: {this.ApiRevisionId.Value}"
-                : "Revision";
-            return base.ToString(name);
+            var sb = new StringBuilder();
+            sb.AppendLine("* Revision");
+            sb.Append(this.ApiRevisionId.HasValue ? $"\t* Revision ID: {this.ApiRevisionId.Value}\n" : string.Empty);
+            sb.Append(base.ToString());
+            return sb.ToString();
         }
     }
 }

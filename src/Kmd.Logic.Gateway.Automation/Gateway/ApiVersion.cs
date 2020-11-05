@@ -6,6 +6,8 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
 {
     public class ApiVersion
     {
+        public string VersionName { get; set; }
+
         public string PathIdentifier { get; set; }
 
         public string ApiLogoFile { get; set; }
@@ -18,7 +20,9 @@ namespace Kmd.Logic.Gateway.Automation.Gateway
 
         public IEnumerable<string> ProductNames { get; set; }
 
-        public string PoliciesXmlFile { get; set; }
+        public string PolicyXmlFile { get; set; }
+
+        public string BackendLocation { get; set; }
 
         public IEnumerable<Revision> Revisions { get; set; }
     }

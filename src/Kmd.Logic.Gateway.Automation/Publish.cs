@@ -62,8 +62,23 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
+            GatewayDetails gatewayDetails = null;
             using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
-            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+            try
+            {
+                gatewayDetails = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+            }
+            catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
+            {
+                this.publishResults.Add(new PublishResult() { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
+                return this.publishResults;
+            }
+
+            var apiPreValidation = new ApiPreValidation(folderPath);
+            if (!(await apiPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+            {
+                return apiPreValidation.ValidationResults;
+            }
 
             var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);
 
@@ -75,21 +90,9 @@ namespace Kmd.Logic.Gateway.Automation
                     ResultCode = ResultCode.PublishingValidationSuccess,
                     Message = validationResult.ToString(),
                 });
-
-                var errors = this.validateProduct.ValidateProducts(folderPath, yaml);
-                foreach (var error in errors)
-                {
-                    this.publishResults.Add(error);
-                }
-
-                if (errors.Any(r => r.IsError))
-                {
-                    return this.publishResults;
-                }
-
-                this.publishResults.Add(new PublishResult { IsError = false, ResultCode = ResultCode.ProductValidated, Message = "Product documents validated" });               
+                
                 using var client = this.gatewayClientFactory.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, yaml.Products, folderPath).ConfigureAwait(false);
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, gatewayDetails.Products, folderPath).ConfigureAwait(false);
             }
             else
             {
