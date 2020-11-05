@@ -21,15 +21,11 @@ namespace Kmd.Logic.Gateway.Automation
 
         private IList<PublishResult> publishResults;
 
-        public IList<PublishResult> ValidateProducts(string folderPath)
+        public IList<PublishResult> ValidateProducts(string folderPath, GatewayDetails gatewayYaml)
         {
             this.publishResults = new List<PublishResult>();
 
-            using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
-
-            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
-
-            foreach (var product in yaml.Products)
+            foreach (var product in gatewayYaml?.Products)
                 {
 #pragma warning disable CA1307 // Folder path remains the same always
                     var logoPath = product.Logo.Replace(@"\", "/");
