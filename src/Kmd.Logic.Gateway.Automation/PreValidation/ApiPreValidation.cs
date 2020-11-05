@@ -40,7 +40,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                         if (string.IsNullOrEmpty(version.BackendLocation) || !Uri.IsWellFormedUriString(version.BackendLocation, UriKind.Absolute))
                         {
-                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName }" });
+                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName}" });
                             isValidationSuccess = false;
                         }
 
@@ -63,6 +63,23 @@ namespace Kmd.Logic.Gateway.Automation
                         if (!this.ValidateFile(GatewayFileType.OpenApiSpec, version.OpenApiSpecFile, $"{api.Name} - {version.VersionName}", nameof(version.OpenApiSpecFile)))
                         {
                             isValidationSuccess = false;
+                        }
+
+                        if (version.Revisions != null)
+                        {
+                            foreach (var revision in version.Revisions)
+                            {
+                                if (string.IsNullOrEmpty(revision.RevisionDescription))
+                                {
+                                    this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Revision Description not exist for {api.Name} - {version.VersionName}" });
+                                    isValidationSuccess = false;
+                                }
+
+                                if (!this.ValidateFile(GatewayFileType.OpenApiSpec, revision.OpenApiSpecFile, $"{api.Name} - {version.VersionName} - {revision.RevisionDescription}", nameof(revision.OpenApiSpecFile)))
+                                {
+                                    isValidationSuccess = false;
+                                }
+                            }
                         }
                     }
                 }
