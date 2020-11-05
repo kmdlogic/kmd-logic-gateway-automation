@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class EntityPreValidationBase
+    internal class EntityPreValidationBase
     {
         private readonly MediaConfiguration _mediaConfiguration = new MediaConfiguration()
         {
@@ -134,7 +133,7 @@ namespace Kmd.Logic.Gateway.Automation
                 return false;
             }
 
-            path = path.Replace(@"\", "/", true, CultureInfo.InvariantCulture);
+            path = path.Replace(@"\", "/");
             if (!File.Exists(Path.Combine(this.FolderPath, path)))
             {
                 this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"{path} not found for {entityName}" });

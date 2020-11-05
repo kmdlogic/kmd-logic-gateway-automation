@@ -14,7 +14,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
             using var httpClient = new HttpClient();
             var publish = new Publish(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
-            var results = await publish.ProcessAsync(cmd.FolderPath).ConfigureAwait(false);
+            var results = await publish.PublishAsync(cmd.FolderPath).ConfigureAwait(false);
 
             foreach (var result in results)
             {

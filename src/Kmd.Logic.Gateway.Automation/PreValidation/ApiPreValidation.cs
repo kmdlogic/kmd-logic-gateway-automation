@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation.Gateway;
+using Kmd.Logic.Gateway.Automation.PublishFile;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class ApiPreValidation : EntityPreValidationBase, IValidation
+    internal class ApiPreValidation : EntityPreValidationBase, IValidation
     {
         public ApiPreValidation(string folderPath)
             : base(folderPath)
         {
         }
 
-        public Task<bool> ValidateAsync(GatewayDetails gatewayDetails)
+        public Task<bool> ValidateAsync(PublishFileModel gatewayDetails)
         {
             var isValidationSuccess = true;
             if (gatewayDetails != null)

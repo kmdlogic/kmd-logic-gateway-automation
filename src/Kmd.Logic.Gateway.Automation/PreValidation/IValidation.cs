@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation.Gateway;
+﻿using System.Threading.Tasks;
+using Kmd.Logic.Gateway.Automation.PublishFile;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public interface IValidation
+    internal interface IValidation
     {
-        Task<bool> ValidateAsync(GatewayDetails gatewayDetails);
+        Task<bool> ValidateAsync(PublishFileModel gatewayDetails);
     }
 }

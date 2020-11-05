@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation.Gateway;
-using Kmd.Logic.Gateway.Automation.Models;
+using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
 
@@ -22,17 +22,17 @@ namespace Kmd.Logic.Gateway.Automation
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, gatewayOptions);
         }
 
-        public async Task<ValidatePublishingResponse> Validate(string folderPath)
+        public async Task<ValidatePublishingResult> Validate(string folderPath)
         {
-            var publishYml = await File.ReadAllTextAsync(Path.Combine(folderPath, "publish.yml")).ConfigureAwait(false);
-            var yaml = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+            var publishYml = File.ReadAllText(Path.Combine(folderPath, "publish.yml"));
+            var yaml = new Deserializer().Deserialize<PublishFileModel>(publishYml);
             using var client = this.gatewayClientFactory.CreateClient();
             return await client.ValidatePublishingAsync(
                 this.gatewayOptions.SubscriptionId,
                 GetValidatePublishingRequest(folderPath, this.gatewayOptions.ProviderId, yaml)).ConfigureAwait(false);
         }
 
-        private static ValidatePublishingRequest GetValidatePublishingRequest(string folderPath, Guid providerId, GatewayDetails input)
+        private static ValidatePublishingRequest GetValidatePublishingRequest(string folderPath, Guid providerId, PublishFileModel input)
         {
             var apis = new List<ApiValidationModel>();
             foreach (var api in input.Apis)

@@ -4,14 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation.Gateway;
+using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
     [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "HttpClient is not owned by this class.")]
-    public class Publish : IPublish
+    public class Publish
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
@@ -49,7 +50,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// </summary>
         /// <param name="folderPath">Folder path provider all gateway entries details.</param>
         /// <returns>Error details on failure, gateway entities name on success.</returns>
-        public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
+        public async Task<IEnumerable<PublishResult>> PublishAsync(string folderPath)
         {
             this.publishResults.Clear();
             if (!this.IsValidInput(folderPath))
@@ -57,11 +58,11 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            GatewayDetails gatewayDetails = null;
+            PublishFileModel gatewayDetails;
             using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
             try
             {
-                gatewayDetails = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                gatewayDetails = new Deserializer().Deserialize<PublishFileModel>(publishYml);
             }
             catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
             {
