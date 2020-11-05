@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
+using Kmd.Logic.Gateway.Automation.PreValidation;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
 
@@ -16,7 +17,6 @@ namespace Kmd.Logic.Gateway.Automation
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
-        private readonly ValidateProduct validateProduct;
         private readonly ValidatePublishing validatePublishing;
         private IList<PublishResult> publishResults;
 
@@ -44,8 +44,6 @@ namespace Kmd.Logic.Gateway.Automation
             this.publishResults = new List<PublishResult>();
 
             this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
-
-            this.validateProduct = new ValidateProduct();
         }
 
         /// <summary>
@@ -74,10 +72,16 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var apiPreValidation = new ApiPreValidation(folderPath);
-            if (!(await apiPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+            //var apiPreValidation = new ApiPreValidation(folderPath);
+            //if (!(await apiPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+            //{
+            //    return apiPreValidation.ValidationResults;
+            //}
+
+            var productPreValidation = new ProductPreValidation(folderPath);
+            if (!(await productPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
             {
-                return apiPreValidation.ValidationResults;
+                return productPreValidation.ValidationResults;
             }
 
             var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);
@@ -91,18 +95,6 @@ namespace Kmd.Logic.Gateway.Automation
                     Message = validationResult.ToString(),
                 });
 
-                var errors = this.validateProduct.ValidateProducts(folderPath, yaml);
-                foreach (var error in errors)
-                {
-                    this.publishResults.Add(error);
-                }
-
-                if (errors.Any(r => r.IsError))
-                {
-                    return this.publishResults;
-                }
-
-                this.publishResults.Add(new PublishResult { IsError = false, ResultCode = ResultCode.ProductValidated, Message = "Product documents validated" });               
                 using var client = this.gatewayClientFactory.CreateClient();
                 await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, gatewayDetails.Products, folderPath).ConfigureAwait(false);
             }
