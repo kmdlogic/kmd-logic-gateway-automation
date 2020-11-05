@@ -40,7 +40,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                         if (string.IsNullOrEmpty(version.BackendLocation) || !Uri.IsWellFormedUriString(version.BackendLocation, UriKind.Absolute))
                         {
-                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName }" });
+                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName}" });
                             isValidationSuccess = false;
                         }
 
