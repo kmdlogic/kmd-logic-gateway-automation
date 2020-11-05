@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -11,8 +10,7 @@ using YamlDotNet.Serialization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "HttpClient is not owned by this class.")]
-    public class Publish
+    internal class Publish
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
@@ -39,10 +37,9 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
+            this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
 
             this.publishResults = new List<PublishResult>();
-
-            this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
         }
 
         /// <summary>
@@ -58,11 +55,11 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            PublishFileModel gatewayDetails;
+            PublishFileModel publishFileModel;
             using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
             try
             {
-                gatewayDetails = new Deserializer().Deserialize<PublishFileModel>(publishYml);
+                publishFileModel = new Deserializer().Deserialize<PublishFileModel>(publishYml);
             }
             catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
             {
@@ -71,12 +68,12 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             var apiPreValidation = new ApiPreValidation(folderPath);
-            if (!(await apiPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+            if (!(await apiPreValidation.ValidateAsync(publishFileModel).ConfigureAwait(false)))
             {
                 return apiPreValidation.ValidationResults;
             }
 
-            var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);
+            var validationResult = await this.validatePublishing.ValidateAsync(folderPath).ConfigureAwait(false);
 
             if (validationResult.IsSuccess)
             {
@@ -88,7 +85,7 @@ namespace Kmd.Logic.Gateway.Automation
                 });
 
                 using var client = this.gatewayClientFactory.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, gatewayDetails.Products, folderPath).ConfigureAwait(false);
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, publishFileModel.Products, folderPath).ConfigureAwait(false);
             }
             else
             {

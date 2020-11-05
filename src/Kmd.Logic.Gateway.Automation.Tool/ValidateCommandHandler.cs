@@ -14,8 +14,8 @@ namespace Kmd.Logic.Gateway.Automation.Tool
             try
             {
                 using var httpClient = new HttpClient();
-                var validatePublishing = new ValidatePublishing(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
-                var result = await validatePublishing.Validate(cmd.FolderPath).ConfigureAwait(false);
+                var gatewayAutomation = new GatewayAutomation(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
+                var result = await gatewayAutomation.ValidateAsync(cmd.FolderPath).ConfigureAwait(false);
                 Console.WriteLine(result.ToString());
 
                 return result.IsSuccess ? 0 : 2;

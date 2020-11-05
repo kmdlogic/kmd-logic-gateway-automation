@@ -11,25 +11,25 @@ using YamlDotNet.Serialization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class ValidatePublishing
+    internal class ValidatePublishing
     {
         private readonly GatewayClientFactory gatewayClientFactory;
-        private readonly GatewayOptions gatewayOptions;
+        private readonly GatewayOptions options;
 
-        public ValidatePublishing(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions gatewayOptions)
+        public ValidatePublishing(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
         {
-            this.gatewayOptions = gatewayOptions;
-            this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, gatewayOptions);
+            this.options = options;
+            this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
         }
 
-        public async Task<ValidatePublishingResult> Validate(string folderPath)
+        public async Task<ValidatePublishingResult> ValidateAsync(string folderPath)
         {
             var publishYml = File.ReadAllText(Path.Combine(folderPath, "publish.yml"));
             var yaml = new Deserializer().Deserialize<PublishFileModel>(publishYml);
             using var client = this.gatewayClientFactory.CreateClient();
             return await client.ValidatePublishingAsync(
-                this.gatewayOptions.SubscriptionId,
-                GetValidatePublishingRequest(folderPath, this.gatewayOptions.ProviderId, yaml)).ConfigureAwait(false);
+                this.options.SubscriptionId,
+                GetValidatePublishingRequest(folderPath, this.options.ProviderId, yaml)).ConfigureAwait(false);
         }
 
         private static ValidatePublishingRequest GetValidatePublishingRequest(string folderPath, Guid providerId, PublishFileModel input)

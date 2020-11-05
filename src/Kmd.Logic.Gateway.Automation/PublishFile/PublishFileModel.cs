@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    public class PublishFileModel
+    internal class PublishFileModel
     {
         public IEnumerable<Product> Products { get; set; }
 

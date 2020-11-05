@@ -11,12 +11,12 @@ namespace Kmd.Logic.Gateway.Automation
         {
         }
 
-        public Task<bool> ValidateAsync(PublishFileModel gatewayDetails)
+        public Task<bool> ValidateAsync(PublishFileModel publishFileModel)
         {
             var isValidationSuccess = true;
-            if (gatewayDetails != null)
+            if (publishFileModel != null)
             {
-                foreach (var api in gatewayDetails.Apis)
+                foreach (var api in publishFileModel.Apis)
                 {
                     if (string.IsNullOrEmpty(api.Name))
                     {

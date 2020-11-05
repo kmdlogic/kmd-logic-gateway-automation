@@ -19,7 +19,7 @@
         public string AllowedPolicyXmlExtension { get; set; }
     }
 
-    public enum GatewayFileType
+    internal enum GatewayFileType
     {
         /// <summary>
         /// File type logo

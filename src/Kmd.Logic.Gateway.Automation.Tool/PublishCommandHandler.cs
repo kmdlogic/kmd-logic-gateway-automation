@@ -13,8 +13,8 @@ namespace Kmd.Logic.Gateway.Automation.Tool
             this.Initialize(cmd);
 
             using var httpClient = new HttpClient();
-            var publish = new Publish(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
-            var results = await publish.PublishAsync(cmd.FolderPath).ConfigureAwait(false);
+            var gatewayAutomation = new GatewayAutomation(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
+            var results = await gatewayAutomation.PublishAsync(cmd.FolderPath).ConfigureAwait(false);
 
             foreach (var result in results)
             {

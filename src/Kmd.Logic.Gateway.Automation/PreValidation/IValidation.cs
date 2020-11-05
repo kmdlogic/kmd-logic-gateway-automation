@@ -5,6 +5,6 @@ namespace Kmd.Logic.Gateway.Automation
 {
     internal interface IValidation
     {
-        Task<bool> ValidateAsync(PublishFileModel gatewayDetails);
+        Task<bool> ValidateAsync(PublishFileModel publishFileModel);
     }
 }
