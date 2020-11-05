@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
@@ -15,31 +16,28 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public override string ToString()
         {
-            var result = string.Empty;
-
+            var sb = new StringBuilder();
             if (this.Errors.Any())
             {
                 foreach (var error in this.Errors)
                 {
-                    result += $"[Validate publishing error] {error}\n";
+                    sb.AppendLine($"[Validate publishing error] {error}");
                 }
-
-                result += "\n";
             }
 
             foreach (var api in this.Apis)
             {
-                result += api.ToString();
-                result += "\n";
+                sb.AppendLine(api.ToString());
+                sb.AppendLine();
             }
 
             foreach (var product in this.Products)
             {
-                result += product.ToString();
-                result += "\n";
+                sb.AppendLine(product.ToString());
+                sb.AppendLine();
             }
 
-            return result;
+            return sb.ToString();
         }
     }
 }
