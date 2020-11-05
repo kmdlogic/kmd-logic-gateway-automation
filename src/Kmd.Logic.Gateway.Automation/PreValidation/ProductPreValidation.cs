@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
@@ -39,6 +40,11 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
             }
 
             return Task.FromResult<bool>(isValidationSuccess);
+        }
+
+        public List<PublishResult> PublishResults
+        {
+            get { return this.ValidationResults; }
         }
     }
 }

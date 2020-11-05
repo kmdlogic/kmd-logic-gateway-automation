@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
 
@@ -40,7 +41,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                         if (string.IsNullOrEmpty(version.BackendLocation) || !Uri.IsWellFormedUriString(version.BackendLocation, UriKind.Absolute))
                         {
-                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName }" });
+                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName}" });
                             isValidationSuccess = false;
                         }
 
@@ -69,6 +70,11 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             return Task.FromResult<bool>(isValidationSuccess);
+        }
+
+        public List<PublishResult> PublishResults
+        {
+            get { return this.ValidationResults; }
         }
     }
 }

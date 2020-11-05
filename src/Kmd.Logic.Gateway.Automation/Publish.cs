@@ -72,16 +72,24 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            //var apiPreValidation = new ApiPreValidation(folderPath);
-            //if (!(await apiPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
-            //{
-            //    return apiPreValidation.ValidationResults;
-            //}
-
+            var apiPreValidation = new ApiPreValidation(folderPath);
             var productPreValidation = new ProductPreValidation(folderPath);
-            if (!(await productPreValidation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+            var validations = new List<IValidation>();
+            validations.Add(new ProductPreValidation(folderPath));
+            validations.Add(new ApiPreValidation(folderPath));
+            bool isValidationSuccess = true;
+            foreach (IValidation valdiation in validations)
             {
-                return productPreValidation.ValidationResults;
+                if (!(await valdiation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+                {
+                   (this.publishResults as List<PublishResult>).AddRange(valdiation.PublishResults);
+                   isValidationSuccess = false;
+                }
+            }
+
+            if (!isValidationSuccess)
+            {
+                return this.publishResults;
             }
 
             var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);

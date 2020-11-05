@@ -7,5 +7,7 @@ namespace Kmd.Logic.Gateway.Automation
     public interface IValidation
     {
         Task<bool> ValidateAsync(GatewayDetails gatewayDetails);
+
+        public List<PublishResult> PublishResults { get; }
     }
 }
