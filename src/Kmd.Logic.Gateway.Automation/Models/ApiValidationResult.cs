@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
@@ -19,21 +20,21 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public override string ToString()
         {
-            var result = $"* API Name: {this.Name}\n";
-            result += $"* Path: {this.Path}\n";
-            result += $"* Version: {this.Version}\n";
-            result += this.ApiId.HasValue ? $"* Api ID: {this.ApiId.Value}\n" : string.Empty;
-            result += this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiVersionSetId.Value}\n" : string.Empty;
-            result += base.ToString();
-            result += "\n";
+            var sb = new StringBuilder();
+            sb.AppendLine($"* API Name: {this.Name}");
+            sb.AppendLine($"* Path: {this.Path}");
+            sb.AppendLine($"* Version: {this.Version}");
+            sb.Append(this.ApiId.HasValue ? $"* Api ID: {this.ApiId.Value}\n" : string.Empty);
+            sb.Append(this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiVersionSetId.Value}\n" : string.Empty);
+            sb.Append(base.ToString());
 
             foreach (var rev in this.Revisions)
             {
-                result += rev.ToString();
-                result += "\n";
+                sb.AppendLine();
+                sb.Append(rev.ToString());
             }
 
-            return result;
+            return sb.ToString();
         }
     }
 }

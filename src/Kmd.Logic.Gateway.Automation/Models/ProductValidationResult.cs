@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
@@ -10,11 +11,11 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public override string ToString()
         {
-            var result = $"* Product Name: {this.Name}\n";
-            result += this.ProductId.HasValue ? $"* Product ID: {this.ProductId.Value}\n" : string.Empty;
-            result += base.ToString();
-            result += "\n";
-            return result;
+            var sb = new StringBuilder();
+            sb.AppendLine($"* Product Name: {this.Name}");
+            sb.Append(this.ProductId.HasValue ? $"* Product ID: {this.ProductId.Value}\n" : string.Empty);
+            sb.Append(base.ToString());
+            return sb.ToString();
         }
     }
 }

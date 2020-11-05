@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation.Models
 {
@@ -11,21 +12,21 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public override string ToString()
         {
-            var result = string.Empty;
+            var sb = new StringBuilder();
             if (this.Errors.Any())
             {
-                result += "Errors:\n";
+                sb.AppendLine("Errors:");
                 foreach (var error in this.Errors)
                 {
-                    result += $"\t- {error}\n";
+                    sb.AppendLine($"\t- {error}");
                 }
             }
             else
             {
-                result = $"* Status: {this.Status}\n";
+                sb.AppendLine($"* Status: {this.Status}");
             }
 
-            return result;
+            return sb.ToString();
         }
     }
 }
