@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.PublishFile;
 
-namespace Kmd.Logic.Gateway.Automation
+namespace Kmd.Logic.Gateway.Automation.PreValidation
 {
     internal class ApiPreValidation : EntityPreValidationBase, IValidation
     {
@@ -45,22 +45,22 @@ namespace Kmd.Logic.Gateway.Automation
                         }
 
                         if (!string.IsNullOrEmpty(version.PolicyXmlFile)
-                            && !this.ValidateFile(GatewayFileType.PolicyXml, version.PolicyXmlFile, $"{api.Name} - {version.VersionName}", nameof(version.PolicyXmlFile)))
+                            && !this.ValidateFile(FileType.PolicyXml, version.PolicyXmlFile, $"{api.Name} - {version.VersionName}", nameof(version.PolicyXmlFile)))
                         {
                             isValidationSuccess = false;
                         }
 
-                        if (!this.ValidateFile(GatewayFileType.Logo, version.ApiLogoFile, $"{api.Name} - {version.VersionName}", nameof(version.ApiLogoFile)))
+                        if (!this.ValidateFile(FileType.Logo, version.ApiLogoFile, $"{api.Name} - {version.VersionName}", nameof(version.ApiLogoFile)))
                         {
                             isValidationSuccess = false;
                         }
 
-                        if (!this.ValidateFile(GatewayFileType.Document, version.ApiDocumentation, $"{api.Name} - {version.VersionName}", nameof(version.ApiDocumentation)))
+                        if (!this.ValidateFile(FileType.Document, version.ApiDocumentation, $"{api.Name} - {version.VersionName}", nameof(version.ApiDocumentation)))
                         {
                             isValidationSuccess = false;
                         }
 
-                        if (!this.ValidateFile(GatewayFileType.OpenApiSpec, version.OpenApiSpecFile, $"{api.Name} - {version.VersionName}", nameof(version.OpenApiSpecFile)))
+                        if (!this.ValidateFile(FileType.OpenApiSpec, version.OpenApiSpecFile, $"{api.Name} - {version.VersionName}", nameof(version.OpenApiSpecFile)))
                         {
                             isValidationSuccess = false;
                         }
@@ -75,7 +75,7 @@ namespace Kmd.Logic.Gateway.Automation
                                     isValidationSuccess = false;
                                 }
 
-                                if (!this.ValidateFile(GatewayFileType.OpenApiSpec, revision.OpenApiSpecFile, $"{api.Name} - {version.VersionName} - {revision.RevisionDescription}", nameof(revision.OpenApiSpecFile)))
+                                if (!this.ValidateFile(FileType.OpenApiSpec, revision.OpenApiSpecFile, $"{api.Name} - {version.VersionName} - {revision.RevisionDescription}", nameof(revision.OpenApiSpecFile)))
                                 {
                                     isValidationSuccess = false;
                                 }

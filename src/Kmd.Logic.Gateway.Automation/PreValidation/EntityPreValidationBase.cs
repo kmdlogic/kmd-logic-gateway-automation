@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 
-namespace Kmd.Logic.Gateway.Automation
+namespace Kmd.Logic.Gateway.Automation.PreValidation
 {
     internal class EntityPreValidationBase
     {
@@ -28,23 +28,23 @@ namespace Kmd.Logic.Gateway.Automation
 
         public List<PublishResult> ValidationResults { get; }
 
-        protected bool ValidateFile(GatewayFileType fileType, string path, string entityName, string propName)
+        protected bool ValidateFile(FileType fileType, string path, string entityName, string propName)
         {
             switch (fileType)
             {
-                case GatewayFileType.Logo:
+                case FileType.Logo:
                     return this.ValidateFileExist(path, entityName, propName)
                         && this.ValidateLogoSize(path, entityName)
                         && this.ValidateLogoType(path, entityName);
-                case GatewayFileType.Document:
+                case FileType.Document:
                     return this.ValidateFileExist(path, entityName, propName)
                         && this.ValidateDocumentSize(path, entityName)
                         && this.ValidateDocumentType(path, entityName);
-                case GatewayFileType.OpenApiSpec:
+                case FileType.OpenApiSpec:
                     return this.ValidateFileExist(path, entityName, propName)
                         && this.ValidateOpenApiSpecSize(path, entityName)
                          && this.ValidateOpenApiSpecType(path, entityName);
-                case GatewayFileType.PolicyXml:
+                case FileType.PolicyXml:
                     return this.ValidateFileExist(path, entityName, propName)
                         && this.ValidatePolicyXmlSize(path, entityName)
                          && this.ValidatePolicyXmlType(path, entityName);
