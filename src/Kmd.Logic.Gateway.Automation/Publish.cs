@@ -20,7 +20,7 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly ValidatePublishing validatePublishing;
         private IList<PublishResult> publishResults;
 
-       /// <summary>
+        /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
         /// </summary>
         /// <param name="httpClient">The HTTP client to use. The caller is expected to manage this resource and it will not be disposed.</param>
@@ -72,17 +72,15 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var apiPreValidation = new ApiPreValidation(folderPath);
-            var productPreValidation = new ProductPreValidation(folderPath);
             var validations = new List<IValidation>();
             validations.Add(new ProductPreValidation(folderPath));
             validations.Add(new ApiPreValidation(folderPath));
             bool isValidationSuccess = true;
-            foreach (IValidation valdiation in validations)
+            foreach (var validation in validations)
             {
-                if (!(await valdiation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+                if (!(await validation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
                 {
-                   (this.publishResults as List<PublishResult>).AddRange(valdiation.PublishResults);
+                   (this.publishResults as List<PublishResult>).AddRange(validation.PublishResults);
                    isValidationSuccess = false;
                 }
             }

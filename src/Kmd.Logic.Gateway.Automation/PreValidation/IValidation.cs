@@ -8,6 +8,6 @@ namespace Kmd.Logic.Gateway.Automation
     {
         Task<bool> ValidateAsync(GatewayDetails gatewayDetails);
 
-        public List<PublishResult> PublishResults { get; }
+        public IEnumerable<PublishResult> PublishResults { get; }
     }
 }

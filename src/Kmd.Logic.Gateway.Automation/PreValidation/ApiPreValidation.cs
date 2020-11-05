@@ -72,7 +72,7 @@ namespace Kmd.Logic.Gateway.Automation
             return Task.FromResult<bool>(isValidationSuccess);
         }
 
-        public List<PublishResult> PublishResults
+        public IEnumerable<PublishResult> PublishResults
         {
             get { return this.ValidationResults; }
         }

@@ -23,16 +23,16 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                 {
                     if (string.IsNullOrEmpty(product.Name))
                     {
-                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Product Name not exist" });
+                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Product name does not exist" });
                         isValidationSuccess = false;
                     }
 
-                    if (!this.ValidateFile(GatewayFileType.Logo, product.Logo, $"{product.Name} ", nameof(product.Logo)))
+                    if (!this.ValidateFile(GatewayFileType.Logo, product.Logo, product.Name, nameof(product.Logo)))
                     {
                         isValidationSuccess = false;
                     }
 
-                    if (!this.ValidateFile(GatewayFileType.Document, product.Documentation, $"{product.Name} ", nameof(product.Logo)))
+                    if (!this.ValidateFile(GatewayFileType.Document, product.Documentation, product.Name, nameof(product.Documentation)))
                     {
                         isValidationSuccess = false;
                     }
@@ -42,7 +42,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
             return Task.FromResult<bool>(isValidationSuccess);
         }
 
-        public List<PublishResult> PublishResults
+        public IEnumerable<PublishResult> PublishResults
         {
             get { return this.ValidationResults; }
         }

@@ -21,10 +21,5 @@
         /// Input validation failed.
         /// </summary>
         PublishingValidationFailed,
-
-        /// <summary>
-        /// Product validated successfully.
-        /// </summary>
-        ProductValidated,
     }
 }
