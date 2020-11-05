@@ -23,7 +23,7 @@ namespace Kmd.Logic.Gateway.Automation.Models
             var result = this.ToString(api);
 
             result += this.ApiId.HasValue ? $"* Api ID: {this.ApiId.Value}" : string.Empty;
-            result += this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiId.Value}" : string.Empty;
+            result += this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiVersionSetId.Value}" : string.Empty;
 
             foreach (var rev in this.Revisions)
             {
