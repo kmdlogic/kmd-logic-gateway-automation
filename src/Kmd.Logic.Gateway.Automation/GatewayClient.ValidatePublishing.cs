@@ -187,11 +187,14 @@ namespace Kmd.Logic.Gateway.Automation
                     throw new ValidationException(ValidationRules.CannotBeNull, "Apis.OpenApiSpec");
                 }
 
-                foreach (var rev in api.Revisions)
+                if (api.Revisions != null)
                 {
-                    if (rev.OpenApiSpec == null || rev.OpenApiSpec.Length == 0)
+                    foreach (var rev in api.Revisions)
                     {
-                        throw new ValidationException(ValidationRules.CannotBeNull, "Revisions.OpenApiSpec");
+                        if (rev.OpenApiSpec == null || rev.OpenApiSpec.Length == 0)
+                        {
+                            throw new ValidationException(ValidationRules.CannotBeNull, "Revisions.OpenApiSpec");
+                        }
                     }
                 }
             }
