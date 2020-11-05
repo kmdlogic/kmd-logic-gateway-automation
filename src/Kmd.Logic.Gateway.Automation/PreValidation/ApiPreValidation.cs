@@ -64,6 +64,23 @@ namespace Kmd.Logic.Gateway.Automation
                         {
                             isValidationSuccess = false;
                         }
+
+                        if (version.Revisions != null)
+                        {
+                            foreach (var revision in version.Revisions)
+                            {
+                                if (string.IsNullOrEmpty(revision.RevisionDescription))
+                                {
+                                    this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Revision Description not exist for {api.Name} - {version.VersionName}" });
+                                    isValidationSuccess = false;
+                                }
+
+                                if (!this.ValidateFile(GatewayFileType.OpenApiSpec, revision.OpenApiSpecFile, $"{api.Name} - {version.VersionName} - {revision.RevisionDescription}", nameof(revision.OpenApiSpecFile)))
+                                {
+                                    isValidationSuccess = false;
+                                }
+                            }
+                        }
                     }
                 }
             }
