@@ -10,11 +10,10 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public override string ToString()
         {
-            var product = $"Product: {this.Name}";
-            var result = this.ToString(product);
-
+            var result = $"* Product Name: {this.Name}\n";
             result += this.ProductId.HasValue ? $"* Product ID: {this.ProductId.Value}\n" : string.Empty;
-
+            result += base.ToString();
+            result += "\n";
             return result;
         }
     }

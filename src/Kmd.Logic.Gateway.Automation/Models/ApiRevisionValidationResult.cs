@@ -6,12 +6,13 @@ namespace Kmd.Logic.Gateway.Automation.Models
     {
         public Guid? ApiRevisionId { get; set; }
 
-        public override string ToString(string name)
+        public override string ToString()
         {
-            name += this.ApiRevisionId.HasValue
-                ? $"Revision: {this.ApiRevisionId.Value}"
-                : "Revision";
-            return base.ToString(name);
+            var result = "* Revision\n";
+            result += this.ApiRevisionId.HasValue ? $"\t* Revision ID: {this.ApiRevisionId.Value}\n" : string.Empty;
+            result += base.ToString();
+            result += "\n";
+            return result;
         }
     }
 }

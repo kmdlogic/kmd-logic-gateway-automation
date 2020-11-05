@@ -9,19 +9,20 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public IEnumerable<string> Errors { get; set; }
 
-        public virtual string ToString(string name)
+        public override string ToString()
         {
             var result = string.Empty;
             if (this.Errors.Any())
             {
+                result += "Errors:\n";
                 foreach (var error in this.Errors)
                 {
-                    result += $"[{name} | Error] {error}\n";
+                    result += $"\t- {error}\n";
                 }
             }
             else
             {
-                result = $"[{name}] {this.Status}\n";
+                result = $"* Status: {this.Status}\n";
             }
 
             return result;

@@ -19,15 +19,18 @@ namespace Kmd.Logic.Gateway.Automation.Models
 
         public override string ToString()
         {
-            var api = $"API: '{this.Name}' - {this.Path}/{this.Version}";
-            var result = this.ToString(api);
-
-            result += this.ApiId.HasValue ? $"* Api ID: {this.ApiId.Value}" : string.Empty;
-            result += this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiVersionSetId.Value}" : string.Empty;
+            var result = $"* API Name: {this.Name}\n";
+            result += $"* Path: {this.Path}\n";
+            result += $"* Version: {this.Version}\n";
+            result += this.ApiId.HasValue ? $"* Api ID: {this.ApiId.Value}\n" : string.Empty;
+            result += this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiVersionSetId.Value}\n" : string.Empty;
+            result += base.ToString();
+            result += "\n";
 
             foreach (var rev in this.Revisions)
             {
-                result += rev.ToString(api + ", ");
+                result += rev.ToString();
+                result += "\n";
             }
 
             return result;
