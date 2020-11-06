@@ -1,7 +1,9 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
+using YamlDotNet.Serialization.NodeTypeResolvers;
 
 namespace Kmd.Logic.Gateway.Automation
 {
@@ -12,7 +14,7 @@ namespace Kmd.Logic.Gateway.Automation
         {
         }
 
-        public Task<bool> ValidateAsync(GatewayDetails gatewayDetails)
+        public Task<GatewayValidationResult> ValidateAsync(GatewayDetails gatewayDetails)
         {
             var isValidationSuccess = true;
             if (gatewayDetails != null)
@@ -100,7 +102,12 @@ namespace Kmd.Logic.Gateway.Automation
                 }
             }
 
-            return Task.FromResult<bool>(isValidationSuccess);
+            var publishResult = new GatewayValidationResult()
+            {
+                IsError = isValidationSuccess,
+                ValidationResults = this.ValidationResults,
+            };
+            return Task.FromResult(publishResult);
         }
     }
 }

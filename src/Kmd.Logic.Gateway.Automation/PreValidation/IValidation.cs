@@ -6,6 +6,6 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public interface IValidation
     {
-        Task<bool> ValidateAsync(GatewayDetails gatewayDetails);
+        Task<GatewayValidationResult> ValidateAsync(GatewayDetails gatewayDetails);
     }
 }
