@@ -78,9 +78,10 @@ namespace Kmd.Logic.Gateway.Automation
             bool isValidationSuccess = true;
             foreach (var validation in validations)
             {
-                if (!(await validation.ValidateAsync(gatewayDetails).ConfigureAwait(false)))
+                var result = await validation.ValidateAsync(gatewayDetails).ConfigureAwait(false);
+                if (!result.IsError)
                 {
-                   (this.publishResults as List<PublishResult>).AddRange(validation.PublishResults);
+                   (this.publishResults as List<PublishResult>).AddRange(result.PublishResults);
                    isValidationSuccess = false;
                 }
             }

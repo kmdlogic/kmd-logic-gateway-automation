@@ -14,7 +14,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
         {
         }
 
-        public Task<bool> ValidateAsync(GatewayDetails gatewayDetails)
+        public Task<GatewayValidationResult> ValidateAsync(GatewayDetails gatewayDetails)
         {
             var isValidationSuccess = true;
             if (gatewayDetails != null)
@@ -39,12 +39,10 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                 }
             }
 
-            return Task.FromResult<bool>(isValidationSuccess);
-        }
-
-        public IEnumerable<PublishResult> PublishResults
-        {
-            get { return this.ValidationResults; }
+            var publishResult = new GatewayValidationResult();
+            publishResult.IsError = isValidationSuccess;
+            publishResult.PublishResults = this.ValidationResults;
+            return Task.FromResult<GatewayValidationResult>(publishResult);
         }
     }
 }

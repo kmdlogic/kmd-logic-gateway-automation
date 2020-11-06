@@ -51,7 +51,6 @@ namespace Kmd.Logic.Gateway.Automation.Sample
         private static async Task Run(AppConfiguration configuration)
         {
             var validator = new ConfigurationValidator(configuration);
-
             if (!validator.Validate())
             {
                 return;
