@@ -28,43 +28,28 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
         public List<PublishResult> ValidationResults { get; }
 
-        protected void ValidateFile(FileType fileType, string path, string entityName, string propName)
+        protected bool ValidateFile(FileType fileType, string path, string entityName, string propName)
         {
-            switch (fileType)
+            return fileType switch
             {
-                case FileType.Logo:
-                    if (this.ValidateFileExist(path, entityName, propName))
-                    {
-                        this.ValidateLogoSize(path, entityName);
-                        this.ValidateLogoType(path, entityName);
-                    }
-
-                    break;
-                case FileType.Document:
-                    if (this.ValidateFileExist(path, entityName, propName))
-                    {
-                        this.ValidateDocumentSize(path, entityName);
-                        this.ValidateDocumentType(path, entityName);
-                    }
-
-                    break;
-                case FileType.OpenApiSpec:
-                    if (this.ValidateFileExist(path, entityName, propName))
-                    {
-                        this.ValidateOpenApiSpecSize(path, entityName);
-                        this.ValidateOpenApiSpecType(path, entityName);
-                    }
-
-                    break;
-                case FileType.PolicyXml:
-                    if (!string.IsNullOrEmpty(path) && this.ValidateFileExist(path, entityName, propName))
-                    {
-                        this.ValidatePolicyXmlSize(path, entityName);
-                        this.ValidatePolicyXmlType(path, entityName);
-                    }
-
-                    break;
-            }
+                FileType.Logo =>
+                    this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidateLogoSize(path, entityName) ||
+                    this.ValidateLogoType(path, entityName)),
+                FileType.Document =>
+                    this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidateDocumentSize(path, entityName) ||
+                    this.ValidateDocumentType(path, entityName)),
+                FileType.OpenApiSpec =>
+                    this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidateOpenApiSpecSize(path, entityName) ||
+                    this.ValidateOpenApiSpecType(path, entityName)),
+                FileType.PolicyXml =>
+                    !string.IsNullOrEmpty(path) && this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidatePolicyXmlSize(path, entityName) ||
+                    this.ValidatePolicyXmlType(path, entityName)),
+                _ => true,
+            };
         }
 
         private bool ValidatePolicyXmlType(string path, string entityName)
