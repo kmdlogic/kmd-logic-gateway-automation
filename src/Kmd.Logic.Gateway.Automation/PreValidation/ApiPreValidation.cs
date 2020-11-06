@@ -17,7 +17,7 @@ namespace Kmd.Logic.Gateway.Automation
             var isValidationSuccess = true;
             if (gatewayDetails != null)
             {
-                var duplicateApis = gatewayDetails.Apis.GroupBy(x => x.Name).Any(x => x.Skip(1).Any());
+                var duplicateApis = gatewayDetails.Apis.GroupBy(x => x.Name).Any(x => x.Count() > 1);
                 if (duplicateApis)
                 {
                     this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Duplicate api names exist" });
@@ -26,7 +26,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                 foreach (var api in gatewayDetails.Apis)
                 {
-                    var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Skip(1).Any());
+                    var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Count() > 1);
                     if (duplicateVersions)
                     {
                         this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Duplicate version names exist" });
