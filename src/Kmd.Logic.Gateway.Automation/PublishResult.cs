@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class ValidationResult
+    public class PublishResult
     {
         public ResultCode ResultCode { get; set; }
 

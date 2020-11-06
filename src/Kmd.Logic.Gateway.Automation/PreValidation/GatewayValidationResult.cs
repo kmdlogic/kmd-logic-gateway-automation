@@ -8,6 +8,6 @@ namespace Kmd.Logic.Gateway.Automation
     {
         public bool IsError { get; set; }
 
-        public IEnumerable<ValidationResult> ValidationResults { get; set; }
+        public IEnumerable<PublishResult> ValidationResults { get; set; }
    }
 }

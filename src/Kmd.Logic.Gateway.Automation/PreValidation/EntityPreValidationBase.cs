@@ -22,12 +22,12 @@ namespace Kmd.Logic.Gateway.Automation
         public EntityPreValidationBase(string folderPath)
         {
             this.FolderPath = folderPath;
-            this.ValidationResults = new List<ValidationResult>();
+            this.ValidationResults = new List<PublishResult>();
         }
 
         public string FolderPath { get; }
 
-        public List<ValidationResult> ValidationResults { get; }
+        public List<PublishResult> ValidationResults { get; }
 
         protected bool ValidateFile(GatewayFileType fileType, string path, string entityName, string propName)
         {
@@ -59,7 +59,7 @@ namespace Kmd.Logic.Gateway.Automation
             var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
             if (this._mediaConfiguration.AllowedPolicyXmlExtension != fileType)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid PolicyXml file type: unable to recognize type for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid PolicyXml file type: unable to recognize type for {entityName}" });
                 return false;
             }
 
@@ -71,7 +71,7 @@ namespace Kmd.Logic.Gateway.Automation
             using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
             if (file.Length > this._mediaConfiguration.MaxPolicyXmlSizeBytes)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"PolicyXml size limit ({this._mediaConfiguration.MaxPolicyXmlSizeBytes} bytes) exceeds for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"PolicyXml size limit ({this._mediaConfiguration.MaxPolicyXmlSizeBytes} bytes) exceeds for {entityName}" });
                 return false;
             }
 
@@ -83,7 +83,7 @@ namespace Kmd.Logic.Gateway.Automation
             var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
             if (this._mediaConfiguration.AllowedOpenApiSpecExtension != fileType)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid OpenApiSpec file type: unable to recognize type for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid OpenApiSpec file type: unable to recognize type for {entityName}" });
                 return false;
             }
 
@@ -95,7 +95,7 @@ namespace Kmd.Logic.Gateway.Automation
             using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
             if (file.Length > this._mediaConfiguration.MaxOpenApiSpecSizeBytes)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"OpenApiSpec size limit ({this._mediaConfiguration.MaxOpenApiSpecSizeBytes} bytes) exceeds for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"OpenApiSpec size limit ({this._mediaConfiguration.MaxOpenApiSpecSizeBytes} bytes) exceeds for {entityName}" });
                 return false;
             }
 
@@ -107,7 +107,7 @@ namespace Kmd.Logic.Gateway.Automation
             var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
             if (this._mediaConfiguration.AllowedMarkdownDocumentExtension != fileType)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid Document file type: unable to recognize type for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid Document file type: unable to recognize type for {entityName}" });
                 return false;
             }
 
@@ -119,7 +119,7 @@ namespace Kmd.Logic.Gateway.Automation
             using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
             if (file.Length > this._mediaConfiguration.MaxMarkDownDocumentSizeBytes)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Markdown document size limit ({this._mediaConfiguration.MaxMarkDownDocumentSizeBytes} bytes) exceeds for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Markdown document size limit ({this._mediaConfiguration.MaxMarkDownDocumentSizeBytes} bytes) exceeds for {entityName}" });
                 return false;
             }
 
@@ -130,14 +130,14 @@ namespace Kmd.Logic.Gateway.Automation
         {
             if (string.IsNullOrEmpty(path))
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"{propName} not specified for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"{propName} not specified for {entityName}" });
                 return false;
             }
 
             path = path.Replace(@"\", "/", true, CultureInfo.InvariantCulture);
             if (!File.Exists(Path.Combine(this.FolderPath, path)))
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"{path} not found for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"{path} not found for {entityName}" });
                 return false;
             }
 
@@ -149,7 +149,7 @@ namespace Kmd.Logic.Gateway.Automation
             using var file = File.OpenRead(Path.Combine(this.FolderPath, path));
             if (file.Length > this._mediaConfiguration.MaxLogoSizeBytes)
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Image size limit ({this._mediaConfiguration.MaxLogoSizeBytes} bytes) exceeds for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Image size limit ({this._mediaConfiguration.MaxLogoSizeBytes} bytes) exceeds for {entityName}" });
                 return false;
             }
 
@@ -161,7 +161,7 @@ namespace Kmd.Logic.Gateway.Automation
             var fileType = new FileInfo(Path.Combine(this.FolderPath, path)).Extension;
             if (!this._mediaConfiguration.AllowedLogoFileExtensions.Any(ext => ext == fileType))
             {
-                this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid logo file type: unable to recognize type for {entityName}" });
+                this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Invalid logo file type: unable to recognize type for {entityName}" });
                 return false;
             }
 

@@ -18,7 +18,7 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
         private readonly ValidatePublishing validatePublishing;
-        private IList<ValidationResult> publishResults;
+        private IList<PublishResult> publishResults;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
@@ -41,7 +41,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
 
-            this.publishResults = new List<ValidationResult>();
+            this.publishResults = new List<PublishResult>();
 
             this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
         }
@@ -51,7 +51,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// </summary>
         /// <param name="folderPath">Folder path provider all gateway entries details.</param>
         /// <returns>Error details on failure, gateway entities name on success.</returns>
-        public async Task<IEnumerable<ValidationResult>> ProcessAsync(string folderPath)
+        public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
         {
             this.publishResults.Clear();
 
@@ -68,7 +68,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
             catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
             {
-                this.publishResults.Add(new ValidationResult() { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
+                this.publishResults.Add(new PublishResult() { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
                 return this.publishResults;
             }
 
@@ -81,7 +81,7 @@ namespace Kmd.Logic.Gateway.Automation
                 var result = await validation.ValidateAsync(gatewayDetails).ConfigureAwait(false);
                 if (!result.IsError)
                 {
-                   (this.publishResults as List<ValidationResult>).AddRange(result.ValidationResults);
+                   (this.publishResults as List<PublishResult>).AddRange(result.ValidationResults);
                    isValidationSuccess = false;
                 }
             }
@@ -95,7 +95,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (validationResult.IsSuccess)
             {
-                this.publishResults.Add(new ValidationResult
+                this.publishResults.Add(new PublishResult
                 {
                     IsError = false,
                     ResultCode = ResultCode.PublishingValidationSuccess,
@@ -107,7 +107,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
             else
             {
-                this.publishResults.Add(new ValidationResult
+                this.publishResults.Add(new PublishResult
                 {
                     IsError = true,
                     ResultCode = ResultCode.PublishingValidationFailed,
@@ -142,7 +142,7 @@ namespace Kmd.Logic.Gateway.Automation
 
                 if (response != null)
                 {
-                    this.publishResults.Add(new ValidationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                    this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
                 }
             }
         }
@@ -151,13 +151,13 @@ namespace Kmd.Logic.Gateway.Automation
         {
             if (!Directory.Exists(folderPath))
             {
-                this.publishResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Specified folder doesn’t exist" });
+                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Specified folder doesn’t exist" });
                 return false;
             }
 
             if (!File.Exists(Path.Combine(folderPath, @"publish.yml")))
             {
-                this.publishResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Publish yml not found" });
+                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Publish yml not found" });
                 return false;
             }
 
