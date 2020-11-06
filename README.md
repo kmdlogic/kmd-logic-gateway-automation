@@ -47,7 +47,7 @@ To get started:
 
 1. Create a subscription in [Logic Console](https://console.kmdlogic.io). This will provide you the `SubscriptionId` which will be linked to the client credentials.
 2. Request a client credential. Once issued you can view the `ClientId`, `ClientSecret` and `AuthorizationScope` in Logic Console.
-3. Create provider in [Logic Marketplace](https://console.kmdlogic.io/marketplace). This will provide you the `ProviderId`.
+3. Create provider in [Logic Marketplace](https://console.kmdlogic.io/marketplace). This will provide you the `ProviderId`. Provider must be approved by Logic Admin.
 
 ## How to use Kmd.Logic.Gateway.Automation
 ``` c#
