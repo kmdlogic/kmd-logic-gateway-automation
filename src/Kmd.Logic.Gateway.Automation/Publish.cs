@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.Gateway;
 using Kmd.Logic.Gateway.Automation.PreValidation;
-using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
 
@@ -51,6 +51,7 @@ namespace Kmd.Logic.Gateway.Automation
         public async Task<IEnumerable<PublishResult>> PublishAsync(string folderPath)
         {
             this.publishResults.Clear();
+
             if (!this.IsValidInput(folderPath))
             {
                 return this.publishResults;
@@ -68,10 +69,23 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var apiPreValidation = new ApiPreValidation(folderPath);
-            if (!(await apiPreValidation.ValidateAsync(publishFileModel).ConfigureAwait(false)))
+            var validations = new List<IValidation>();
+            validations.Add(new ProductPreValidation(folderPath));
+            validations.Add(new ApiPreValidation(folderPath));
+            bool isValidationSuccess = true;
+            foreach (var validation in validations)
             {
-                return apiPreValidation.ValidationResults;
+                var result = await validation.ValidateAsync(gatewayDetails).ConfigureAwait(false);
+                if (!result.IsError)
+                {
+                   (this.publishResults as List<PublishResult>).AddRange(result.ValidationResults);
+                   isValidationSuccess = false;
+                }
+            }
+
+            if (!isValidationSuccess)
+            {
+                return this.publishResults;
             }
 
             var validationResult = await this.validatePublishing.ValidateAsync(folderPath).ConfigureAwait(false);
