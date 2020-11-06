@@ -5,6 +5,7 @@
 A dotnet client library for the KMD Logic Gateway service, which helps Logic client applications to automatically manage their APIs and Products published in Logic Marketplace.
 
 ## How to use this client library
+
 ### Reference `Kmd.Logic.Gateway.Automation`
 In your application that handles management of APIs and Products add a NuGet package reference to [Kmd.Logic.Gateway.Automation](https://www.nuget.org/packages/Kmd.Logic.Gateway.Automation).
 
@@ -69,17 +70,20 @@ var publish = await gatewayAutomation.PublishAsync(folderPath).ConfigureAwait(fa
 ## Sample application
 A simple console application is included to demonstrate how to use Logic Gateway Automation. You will need to provide the settings described above in `appsettings.json`.
 
+## 'Publish.yml' file structure
+Logic Gateway Automation requires specific file structure with file in the root folder called `publish.yml`. You can find example file structure in the [sample application source](./sample/Kmd.Logic.Gateway.Automation.Sample/Publish).
+
 ## KMD Logic Gateway Automation CLI
-## Download as dotnet tool
-To use Logic Gateway Automation using CLI you must download it from NuGet.org.
-``` powershell
-dotnet tool install kmd-logic-gateway-automation -g
-```
+### Prerequisites
+1. [.NET Core 3.1 SDK](https://dotnet.microsoft.com/download/dotnet-core/3.1)
+
+### Download as dotnet tool
+To use Logic Gateway Automation using CLI you must download it from NuGet.org - [Kmd.Logic.Gateway.Automation.Tool](https://www.nuget.org/packages/Kmd.Logic.Gateway.Automation.Tool/).
 
 To check if it was properly installed, run below command:
 `kmd-logic-gateway-automation version`
 
-## How to use
+### How to use
 When you install CLI tool, then you can using `kmd-logic-gateway-automation`.
 
 ### Commands:
