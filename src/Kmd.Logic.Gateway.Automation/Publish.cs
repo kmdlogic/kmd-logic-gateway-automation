@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Kmd.Logic.Gateway.Automation.Gateway;
-using Kmd.Logic.Gateway.Automation.PreValidation;
+using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    [SuppressMessage("Design", "CA1001:Types that own disposable fields should be disposable", Justification = "HttpClient is not owned by this class.")]
-    public class Publish : IPublish
+    internal class Publish
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
@@ -40,10 +37,9 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
+            this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
 
             this.publishResults = new List<PublishResult>();
-
-            this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
         }
 
         /// <summary>
@@ -51,7 +47,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// </summary>
         /// <param name="folderPath">Folder path provider all gateway entries details.</param>
         /// <returns>Error details on failure, gateway entities name on success.</returns>
-        public async Task<IEnumerable<PublishResult>> ProcessAsync(string folderPath)
+        public async Task<IEnumerable<PublishResult>> PublishAsync(string folderPath)
         {
             this.publishResults.Clear();
 
@@ -60,11 +56,11 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            GatewayDetails gatewayDetails = null;
+            PublishFileModel publishFileModel;
             using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
             try
             {
-                gatewayDetails = new Deserializer().Deserialize<GatewayDetails>(publishYml);
+                publishFileModel = new Deserializer().Deserialize<PublishFileModel>(publishYml);
             }
             catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
             {
@@ -72,28 +68,8 @@ namespace Kmd.Logic.Gateway.Automation
                 return this.publishResults;
             }
 
-            var validations = new List<IValidation>();
-            validations.Add(new ProductPreValidation(folderPath));
-            validations.Add(new ApiPreValidation(folderPath));
-            bool isValidationSuccess = true;
-            foreach (var validation in validations)
-            {
-                var result = await validation.ValidateAsync(gatewayDetails).ConfigureAwait(false);
-                if (!result.IsError)
-                {
-                   (this.publishResults as List<PublishResult>).AddRange(result.ValidationResults);
-                   isValidationSuccess = false;
-                }
-            }
-
-            if (!isValidationSuccess)
-            {
-                return this.publishResults;
-            }
-
-            var validationResult = await this.validatePublishing.Validate(folderPath).ConfigureAwait(false);
-
-            if (validationResult.IsSuccess)
+            var validationResult = await this.validatePublishing.ValidateAsync(folderPath).ConfigureAwait(false);
+            if (!validationResult.IsError)
             {
                 this.publishResults.Add(new PublishResult
                 {
@@ -103,7 +79,7 @@ namespace Kmd.Logic.Gateway.Automation
                 });
 
                 using var client = this.gatewayClientFactory.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, gatewayDetails.Products, folderPath).ConfigureAwait(false);
+                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, publishFileModel.Products, folderPath).ConfigureAwait(false);
             }
             else
             {

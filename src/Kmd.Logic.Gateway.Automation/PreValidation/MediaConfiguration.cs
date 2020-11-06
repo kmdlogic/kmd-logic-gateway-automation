@@ -1,4 +1,4 @@
-﻿namespace Kmd.Logic.Gateway.Automation
+﻿namespace Kmd.Logic.Gateway.Automation.PreValidation
 {
     internal class MediaConfiguration
     {
@@ -17,28 +17,5 @@
         public string AllowedOpenApiSpecExtension { get; set; }
 
         public string AllowedPolicyXmlExtension { get; set; }
-    }
-
-    public enum GatewayFileType
-    {
-        /// <summary>
-        /// File type logo
-        /// </summary>
-        Logo,
-
-        /// <summary>
-        /// File type for markdown document
-        /// </summary>
-        Document,
-
-        /// <summary>
-        /// Json open api spec for api
-        /// </summary>
-        OpenApiSpec,
-
-        /// <summary>
-        /// Policy xml for api
-        /// </summary>
-        PolicyXml,
     }
 }

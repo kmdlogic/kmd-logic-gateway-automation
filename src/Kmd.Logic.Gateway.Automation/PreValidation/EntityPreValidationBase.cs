@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 
-namespace Kmd.Logic.Gateway.Automation
+namespace Kmd.Logic.Gateway.Automation.PreValidation
 {
-    public class EntityPreValidationBase
+    internal class EntityPreValidationBase
     {
         private readonly MediaConfiguration _mediaConfiguration = new MediaConfiguration()
         {
@@ -29,29 +28,28 @@ namespace Kmd.Logic.Gateway.Automation
 
         public List<PublishResult> ValidationResults { get; }
 
-        protected bool ValidateFile(GatewayFileType fileType, string path, string entityName, string propName)
+        protected bool ValidateFile(FileType fileType, string path, string entityName, string propName)
         {
-            switch (fileType)
+            return fileType switch
             {
-                case GatewayFileType.Logo:
-                    return this.ValidateFileExist(path, entityName, propName)
-                        && this.ValidateLogoSize(path, entityName)
-                        && this.ValidateLogoType(path, entityName);
-                case GatewayFileType.Document:
-                    return this.ValidateFileExist(path, entityName, propName)
-                        && this.ValidateDocumentSize(path, entityName)
-                        && this.ValidateDocumentType(path, entityName);
-                case GatewayFileType.OpenApiSpec:
-                    return this.ValidateFileExist(path, entityName, propName)
-                        && this.ValidateOpenApiSpecSize(path, entityName)
-                         && this.ValidateOpenApiSpecType(path, entityName);
-                case GatewayFileType.PolicyXml:
-                    return this.ValidateFileExist(path, entityName, propName)
-                        && this.ValidatePolicyXmlSize(path, entityName)
-                         && this.ValidatePolicyXmlType(path, entityName);
-            }
-
-            return true;
+                FileType.Logo =>
+                    this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidateLogoSize(path, entityName) ||
+                    this.ValidateLogoType(path, entityName)),
+                FileType.Document =>
+                    this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidateDocumentSize(path, entityName) ||
+                    this.ValidateDocumentType(path, entityName)),
+                FileType.OpenApiSpec =>
+                    this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidateOpenApiSpecSize(path, entityName) ||
+                    this.ValidateOpenApiSpecType(path, entityName)),
+                FileType.PolicyXml =>
+                    !string.IsNullOrEmpty(path) && this.ValidateFileExist(path, entityName, propName) &&
+                    (this.ValidatePolicyXmlSize(path, entityName) ||
+                    this.ValidatePolicyXmlType(path, entityName)),
+                _ => true,
+            };
         }
 
         private bool ValidatePolicyXmlType(string path, string entityName)
@@ -134,7 +132,7 @@ namespace Kmd.Logic.Gateway.Automation
                 return false;
             }
 
-            path = path.Replace(@"\", "/", true, CultureInfo.InvariantCulture);
+            path = path.Replace(@"\", "/");
             if (!File.Exists(Path.Combine(this.FolderPath, path)))
             {
                 this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"{path} not found for {entityName}" });
