@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -28,6 +28,13 @@ namespace Kmd.Logic.Gateway.Automation
 
                 foreach (var api in gatewayDetails.Apis)
                 {
+                    var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Count() > 1);
+                    if (duplicateVersions)
+                    {
+                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Duplicate version names exist" });
+                        isValidationSuccess = false;
+                    }
+
                     if (string.IsNullOrEmpty(api.Name))
                     {
                         this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Name not exist" });
