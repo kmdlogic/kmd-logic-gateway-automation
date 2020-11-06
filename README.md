@@ -20,7 +20,8 @@ Probably the easiest way to configure is
   "Gateway": {
     "SubscriptionId": "",
     "ProviderId": ""
-  }
+  },
+  "FolderPath": ""
 }
 ```
 
