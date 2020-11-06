@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Gateway;
 
@@ -16,8 +17,22 @@ namespace Kmd.Logic.Gateway.Automation
             var isValidationSuccess = true;
             if (gatewayDetails != null)
             {
+                var duplicateApis = gatewayDetails.Apis.GroupBy(x => x.Name).Any(x => x.Skip(1).Any());
+                if (duplicateApis)
+                {
+                    this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Duplicate api names exist" });
+                    isValidationSuccess = false;
+                }
+
                 foreach (var api in gatewayDetails.Apis)
                 {
+                    var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Skip(1).Any());
+                    if (duplicateVersions)
+                    {
+                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Duplicate version names exist" });
+                        isValidationSuccess = false;
+                    }
+
                     if (string.IsNullOrEmpty(api.Name))
                     {
                         this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Name not exist" });
