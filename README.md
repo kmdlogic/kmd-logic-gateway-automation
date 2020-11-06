@@ -11,7 +11,7 @@ In your application that handles management of APIs and Products add a NuGet pac
 
 ## How to configure Kmd.Logic.Gateway.Automation
 Probably the easiest way to configure is 
-``` json
+```json
 {
   "TokenProvider": {
     "ClientId": "",
@@ -27,7 +27,7 @@ Probably the easiest way to configure is
 ```
 
 Then you must create configuration objects.
-``` c#
+```cs
 /// Create LogicTokenProviderFactory from Kmd.Logic.Identity.Authorization
 var logicTokenProviderFactory = new LogicTokenProviderFactory(
   new LogicTokenProviderOptions
@@ -52,7 +52,7 @@ To get started:
 3. Create provider in [Logic Marketplace](https://console.kmdlogic.io/marketplace). This will provide you the `ProviderId`. Provider must be approved by Logic Admin.
 
 ## How to use Kmd.Logic.Gateway.Automation
-``` c#
+```cs
 using var httpClient = new HttpClient();
 
 var gatewayAutomation = new GatewayAutomation(httpClient, logicTokenProviderFactory, gatewayOptions);
@@ -80,11 +80,10 @@ Logic Gateway Automation requires specific file structure with file in the root 
 ### Download as dotnet tool
 To use Logic Gateway Automation using CLI you must download it from NuGet.org - [Kmd.Logic.Gateway.Automation.Tool](https://www.nuget.org/packages/Kmd.Logic.Gateway.Automation.Tool/).
 
-To check if it was properly installed, run below command:
-`kmd-logic-gateway-automation version`
-
-### How to use
-When you install CLI tool, then you can using `kmd-logic-gateway-automation`.
+To check if it was properly installed, run the following command:
+```powershell
+kmd-logic-gateway-automation version
+```
 
 ### Commands:
 * Validate - `kmd-logic-gateway-automation validate`
