@@ -23,7 +23,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                 {
                     if (string.IsNullOrEmpty(product.Name))
                     {
-                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Product name does not exist" });
+                        this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Product name does not exist" });
                         isValidationSuccess = false;
                     }
 
@@ -42,7 +42,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
             var publishResult = new GatewayValidationResult()
             {
                 IsError = isValidationSuccess,
-                PublishResults = this.ValidationResults,
+                ValidationResults = this.ValidationResults,
             };
             return Task.FromResult(publishResult);
         }

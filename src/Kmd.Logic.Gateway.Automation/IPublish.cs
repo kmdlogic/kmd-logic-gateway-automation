@@ -5,6 +5,6 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public interface IPublish
     {
-        Task<IEnumerable<PublishResult>> ProcessAsync(string path);
+        Task<IEnumerable<ValidationResult>> ProcessAsync(string path);
     }
 }

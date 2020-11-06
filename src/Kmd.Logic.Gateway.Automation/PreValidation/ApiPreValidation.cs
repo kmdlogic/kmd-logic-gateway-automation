@@ -22,13 +22,13 @@ namespace Kmd.Logic.Gateway.Automation
                 {
                     if (string.IsNullOrEmpty(api.Name))
                     {
-                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Name not exist" });
+                        this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Name not exist" });
                         isValidationSuccess = false;
                     }
 
                     if (string.IsNullOrEmpty(api.Path))
                     {
-                        this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Path not exist for {api.Name}" });
+                        this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Path not exist for {api.Name}" });
                         isValidationSuccess = false;
                     }
 
@@ -36,13 +36,13 @@ namespace Kmd.Logic.Gateway.Automation
                     {
                         if (string.IsNullOrEmpty(version.VersionName))
                         {
-                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api version name not exist" });
+                            this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api version name not exist" });
                             isValidationSuccess = false;
                         }
 
                         if (string.IsNullOrEmpty(version.BackendLocation) || !Uri.IsWellFormedUriString(version.BackendLocation, UriKind.Absolute))
                         {
-                            this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName}" });
+                            this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Api Backend Location not exist or not valid uri format for {api.Name} - {version.VersionName}" });
                             isValidationSuccess = false;
                         }
 
@@ -73,7 +73,7 @@ namespace Kmd.Logic.Gateway.Automation
                             {
                                 if (string.IsNullOrEmpty(revision.RevisionDescription))
                                 {
-                                    this.ValidationResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Revision Description not exist for {api.Name} - {version.VersionName}" });
+                                    this.ValidationResults.Add(new ValidationResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = $"Revision Description not exist for {api.Name} - {version.VersionName}" });
                                     isValidationSuccess = false;
                                 }
 
@@ -90,7 +90,7 @@ namespace Kmd.Logic.Gateway.Automation
             var publishResult = new GatewayValidationResult()
             {
                 IsError = isValidationSuccess,
-                PublishResults = this.ValidationResults,
+                ValidationResults = this.ValidationResults,
             };
             return Task.FromResult(publishResult);
         }
