@@ -87,10 +87,12 @@ namespace Kmd.Logic.Gateway.Automation
                 }
             }
 
-            var publishResult = new GatewayValidationResult();
-            publishResult.IsError = isValidationSuccess;
-            publishResult.PublishResults = this.ValidationResults;
-            return Task.FromResult<GatewayValidationResult>(publishResult);
+            var publishResult = new GatewayValidationResult()
+            {
+                IsError = isValidationSuccess,
+                PublishResults = this.ValidationResults,
+            };
+            return Task.FromResult(publishResult);
         }
     }
 }
