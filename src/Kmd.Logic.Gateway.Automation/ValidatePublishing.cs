@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.PreValidation;
 using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
@@ -22,14 +23,56 @@ namespace Kmd.Logic.Gateway.Automation
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
         }
 
-        public async Task<ValidatePublishingResult> ValidateAsync(string folderPath)
+        public async Task<ValidationResult> ValidateAsync(string folderPath)
         {
             var publishYml = File.ReadAllText(Path.Combine(folderPath, "publish.yml"));
-            var yaml = new Deserializer().Deserialize<PublishFileModel>(publishYml);
+            var publishFileModel = new Deserializer().Deserialize<PublishFileModel>(publishYml);
+
+            var preValidationsResult = PreValidateEntities(folderPath, publishFileModel);
+            if (preValidationsResult.IsError)
+            {
+                return preValidationsResult;
+            }
+
             using var client = this.gatewayClientFactory.CreateClient();
-            return await client.ValidatePublishingAsync(
+            var validationResult = await client.ValidatePublishingAsync(
                 this.options.SubscriptionId,
-                GetValidatePublishingRequest(folderPath, this.options.ProviderId, yaml)).ConfigureAwait(false);
+                GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel)).ConfigureAwait(false);
+
+            return GetResult(validationResult);
+        }
+
+        private static ValidationResult GetResult(ValidatePublishingResult validationResult)
+        {
+            var result = new[]
+            {
+                new PublishResult
+                {
+                    IsError = !validationResult.IsSuccess,
+                    ResultCode = validationResult.IsSuccess ? ResultCode.PublishingValidationSuccess : ResultCode.PublishingValidationFailed,
+                    Message = validationResult.ToString(),
+                },
+            };
+
+            return new ValidationResult(result);
+        }
+
+        private static ValidationResult PreValidateEntities(string folderPath, PublishFileModel publishFileModel)
+        {
+            var preValidations = new List<IPreValidation>
+            {
+                new ProductsPreValidation(folderPath),
+                new ApisPreValidation(folderPath),
+            };
+
+            var publishResults = new List<PublishResult>();
+            foreach (var validation in preValidations)
+            {
+                var result = validation.ValidateAsync(publishFileModel);
+                publishResults.AddRange(result.ValidationResults);
+            }
+
+            return new ValidationResult(publishResults);
         }
 
         private static ValidatePublishingRequest GetValidatePublishingRequest(string folderPath, Guid providerId, PublishFileModel input)
@@ -48,7 +91,7 @@ namespace Kmd.Logic.Gateway.Automation
                     apis.Add(new ApiValidationModel(
                         api.Name,
                         api.Path,
-                        apiVersion.PathIdentifier,
+                        apiVersion.VersionName,
                         fs,
                         apiVersion.ProductNames,
                         revisions));

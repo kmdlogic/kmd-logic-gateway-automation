@@ -3,8 +3,8 @@ using Kmd.Logic.Gateway.Automation.PublishFile;
 
 namespace Kmd.Logic.Gateway.Automation.PreValidation
 {
-    internal interface IValidation
+    internal interface IPreValidation
     {
-        Task<GatewayValidationResult> ValidateAsync(GatewayDetails gatewayDetails);
+        ValidationResult ValidateAsync(PublishFileModel publishFileModel);
     }
 }

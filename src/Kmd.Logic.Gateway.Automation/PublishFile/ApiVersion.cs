@@ -6,8 +6,6 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
     {
         public string VersionName { get; set; }
 
-        public string PathIdentifier { get; set; }
-
         public string ApiLogoFile { get; set; }
 
         public string ApiDocumentation { get; set; }

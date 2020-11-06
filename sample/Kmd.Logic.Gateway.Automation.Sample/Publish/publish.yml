@@ -22,8 +22,7 @@ Products:
 Apis:
  - Name: nexus
    ApiVersions:
-    - PathIdentifier: v1
-      VersionName: v1
+    - VersionName: v1
       ApiLogoFile: ./apis/nexus/nexus-v1.png
       ApiDocumentation: ./apis/nexus/markdown-sample.md
       OpenApiSpecFile: ./apis/nexus/nexus-v1.json
@@ -35,8 +34,7 @@ Apis:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus/v1/nexus-r2.json
          IsCurrent: true
-    - PathIdentifier: v2
-      VersionName: v2
+    - VersionName: v2
       ApiLogoFile: ./apis/nexus/nexus-v2.png
       ApiDocumentation: ./apis/nexus/markdown-sample.md
       OpenApiSpecFile: ./apis/nexus/nexus-v2.json
@@ -51,8 +49,7 @@ Apis:
    Path: nexus
  - Name: nexus2
    ApiVersions:
-    - PathIdentifier: v1
-      VersionName: v1
+    - VersionName: v1
       ApiLogoFile: ./apis/nexus2/nexus-v1.png
       ApiDocumentation: ./apis/nexus2/markdown-sample.md
       OpenApiSpecFile: ./apis/nexus2/nexus-v1.json
@@ -67,8 +64,7 @@ Apis:
    Path: nexus2
  - Name: nexus3
    ApiVersions:
-    - PathIdentifier: v1
-      VersionName: v1
+    - VersionName: v1
       ApiLogoFile: ./apis/nexus3/nexus-v1.png
       ApiDocumentation: ./apis/nexus3/markdown-sample.md
       OpenApiSpecFile: ./apis/nexus3/nexus-v1.json

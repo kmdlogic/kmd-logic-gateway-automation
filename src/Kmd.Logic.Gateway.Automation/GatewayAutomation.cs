@@ -37,7 +37,7 @@ namespace Kmd.Logic.Gateway.Automation
             return this.publish.PublishAsync(folderPath);
         }
 
-        public Task<ValidatePublishingResult> ValidateAsync(string folderPath)
+        public Task<ValidationResult> ValidateAsync(string folderPath)
         {
             return this.validatePublishing.ValidateAsync(folderPath);
         }
