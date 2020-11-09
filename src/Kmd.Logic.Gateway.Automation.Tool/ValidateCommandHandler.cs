@@ -28,7 +28,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                     Console.WriteLine(validationResult.ValidatePublishingResult.ToString());
                 }
 
-                return !validationResult.IsError ? 0 : 2;
+                return !validationResult.IsError ? 0 : 1;
             }
             catch (RestException re)
             {
