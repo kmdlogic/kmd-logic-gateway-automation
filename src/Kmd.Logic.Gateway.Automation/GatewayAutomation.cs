@@ -32,7 +32,7 @@ namespace Kmd.Logic.Gateway.Automation
             this.publish = new Publish(httpClient, tokenProviderFactory, options);
         }
 
-        public Task<IEnumerable<PublishResult>> PublishAsync(string folderPath)
+        public Task<IEnumerable<GatewayAutomationResult>> PublishAsync(string folderPath)
         {
             return this.publish.PublishAsync(folderPath);
         }

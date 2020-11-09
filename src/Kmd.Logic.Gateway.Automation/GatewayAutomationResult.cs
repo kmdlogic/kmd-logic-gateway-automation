@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class PublishResult
+    public class GatewayAutomationResult
     {
         public ResultCode ResultCode { get; set; }
 
@@ -18,17 +18,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (this.IsError)
             {
-                if (this.ResultCode == ResultCode.PublishingValidationFailed)
-                {
-                    return $"Publishing validation failed\n{this.Message}";
-                }
-
                 return $"Error Code: {this.ResultCode}, Message: {this.Message}{entityMessage}";
-            }
-
-            if (this.ResultCode == ResultCode.PublishingValidationSuccess)
-            {
-                return $"Publishing validation succeeded\n{this.Message}";
             }
 
             return $"Result Code: {this.ResultCode}, Message: {entityMessage}";

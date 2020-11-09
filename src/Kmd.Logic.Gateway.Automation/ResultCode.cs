@@ -3,9 +3,9 @@
     public enum ResultCode
     {
         /// <summary>
-        /// Invalid input data.
+        /// Validation failed.
         /// </summary>
-        InvalidInput,
+        ValidationFailed,
 
         /// <summary>
         /// Product created successfully.
@@ -13,13 +13,8 @@
         ProductCreated,
 
         /// <summary>
-        /// Input validation succeeded.
+        /// Product updated successfully.
         /// </summary>
-        PublishingValidationSuccess,
-
-        /// <summary>
-        /// Input validation failed.
-        /// </summary>
-        PublishingValidationFailed,
+        ProductUpdated,
     }
 }

@@ -15,13 +15,20 @@ namespace Kmd.Logic.Gateway.Automation.Tool
             {
                 using var httpClient = new HttpClient();
                 var gatewayAutomation = new GatewayAutomation(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
-                var result = await gatewayAutomation.ValidateAsync(cmd.FolderPath).ConfigureAwait(false);
-                foreach (var validationResult in result.ValidationResults)
+                var validationResult = await gatewayAutomation.ValidateAsync(cmd.FolderPath).ConfigureAwait(false);
+                if (validationResult.IsError)
                 {
-                    Console.WriteLine(validationResult.ToString());
+                    foreach (var error in validationResult.Errors)
+                    {
+                        Console.WriteLine(error.ToString());
+                    }
+                }
+                else
+                {
+                    Console.WriteLine(validationResult.ValidatePublishingResult.ToString());
                 }
 
-                return !result.IsError ? 0 : 2;
+                return !validationResult.IsError ? 0 : 2;
             }
             catch (RestException re)
             {
