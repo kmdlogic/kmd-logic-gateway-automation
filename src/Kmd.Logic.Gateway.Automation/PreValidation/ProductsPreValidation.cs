@@ -23,9 +23,10 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
                 foreach (var product in publishFileModel.Products)
                 {
+                    var productPrefix = $"Product: {product.Name}";
                     if (string.IsNullOrEmpty(product.Name))
                     {
-                        this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[Product: {product.Name}] Product name does not exist" });
+                        this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{productPrefix}] {nameof(product.Name)} does not exist" });
                     }
 
                     this.ValidateFile(FileType.Logo, product.Logo, product.Name, nameof(product.Logo));
