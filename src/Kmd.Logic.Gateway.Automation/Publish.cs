@@ -202,6 +202,8 @@ namespace Kmd.Logic.Gateway.Automation
 
         private async Task CreateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, IList<GetProductListModel> allProducts, Api api)
         {
+            Guid? apiVersionSetId = default;
+
             foreach (var apiVersion in api.ApiVersions)
             {
                 var productIds = apiVersion.ProductNames.Select(productName => allProducts.SingleOrDefault(product => product.Name == productName).Id).ToList();
@@ -216,7 +218,7 @@ namespace Kmd.Logic.Gateway.Automation
                 path: api.Path,
                 apiVersion: apiVersion.VersionName,
                 openApiSpec: openApiSpec,
-                apiVersionSetId: null,
+                apiVersionSetId: apiVersionSetId,
                 providerId: providerId.ToString(),
                 visibility: apiVersion.Visibility,
                 backendServiceUrl: apiVersion.BackendLocation,
@@ -228,7 +230,23 @@ namespace Kmd.Logic.Gateway.Automation
 
                 if (createdApi != null)
                 {
-                    this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiCreated, EntityId = createdApi.Id });
+                    this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
+                    apiVersionSetId = createdApi.ApiVersionSetId;
+                    foreach (var revision in apiVersion.Revisions)
+                    {
+                        using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open);
+                        var revisionResponse = await client.CreateRevisionAsync(
+                            subscriptionId: subscriptionId,
+                            apiId: createdApi.Id.Value,
+                            openApiSpec: revisionOpenApiSpec,
+                            revisionDescription: revision.RevisionDescription).ConfigureAwait(false);
+
+                        var createdRevision = revisionResponse as RevisionResponseModel;
+                        if (createdRevision != null)
+                        {
+                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RevisionCreated, EntityId = createdApi.Id });
+                        }
+                    }
                 }
             }
         }

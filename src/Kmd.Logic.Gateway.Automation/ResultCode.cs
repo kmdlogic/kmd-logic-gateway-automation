@@ -21,5 +21,15 @@
         /// Api created successfully.
         /// </summary>
         ApiCreated,
+
+        /// <summary>
+        /// Version created successfully.
+        /// </summary>
+        VersionCreated,
+
+        /// <summary>
+        /// Revision created successfully.
+        /// </summary>
+        RevisionCreated,
     }
 }
