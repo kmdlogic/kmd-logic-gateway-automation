@@ -206,7 +206,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             foreach (var apiVersion in api.ApiVersions)
             {
-                var productIds = apiVersion.ProductNames.Select(productName => allProducts.SingleOrDefault(product => product.Name == productName).Id).ToList();
+                var productIds = apiVersion.ProductNames.Select(productName => allProducts.SingleOrDefault(product => string.Compare(product.Name, productName, comparisonType: StringComparison.OrdinalIgnoreCase) == 0).Id).ToList();
 
                 using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open);
                 using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open);
