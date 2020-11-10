@@ -16,5 +16,10 @@
         /// Product updated successfully.
         /// </summary>
         ProductUpdated,
+
+        /// <summary>
+        /// Api created successfully.
+        /// </summary>
+        ApiCreated,
     }
 }
