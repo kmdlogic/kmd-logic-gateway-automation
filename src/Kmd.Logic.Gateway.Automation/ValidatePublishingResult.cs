@@ -6,6 +6,17 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public class ValidatePublishingResult
     {
+        public static ValidatePublishingResult Empty()
+        {
+            return new ValidatePublishingResult
+            {
+                Apis = Enumerable.Empty<ApiValidationResult>(),
+                Products = Enumerable.Empty<ProductValidationResult>(),
+                Errors = Enumerable.Empty<string>(),
+                IsSuccess = true,
+            };
+        }
+
         public IEnumerable<string> Errors { get; set; }
 
         public IEnumerable<ApiValidationResult> Apis { get; set; }

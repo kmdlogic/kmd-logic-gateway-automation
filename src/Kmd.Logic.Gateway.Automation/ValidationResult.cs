@@ -5,19 +5,24 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public class ValidationResult
     {
-        public ValidationResult(IEnumerable<PublishResult> validationResults)
+        public ValidationResult(IEnumerable<GatewayAutomationResult> errors)
         {
-            this.ValidationResults = validationResults;
+            this.IsError = true;
+            this.Errors = errors;
+            this.ValidatePublishingResult = ValidatePublishingResult.Empty();
         }
 
-        public bool IsError
+        public ValidationResult(ValidatePublishingResult validatePublishingResult)
         {
-            get
-            {
-                return this.ValidationResults.Any(r => r.IsError == true);
-            }
+            this.IsError = false;
+            this.Errors = Enumerable.Empty<GatewayAutomationResult>();
+            this.ValidatePublishingResult = validatePublishingResult;
         }
 
-        public IEnumerable<PublishResult> ValidationResults { get; }
+        public bool IsError { get; }
+
+        public IEnumerable<GatewayAutomationResult> Errors { get; }
+
+        public ValidatePublishingResult ValidatePublishingResult { get; }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Client;
@@ -15,7 +16,7 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
         private readonly ValidatePublishing validatePublishing;
-        private IList<PublishResult> publishResults;
+        private List<GatewayAutomationResult> publishResults;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
@@ -39,7 +40,7 @@ namespace Kmd.Logic.Gateway.Automation
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
             this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
 
-            this.publishResults = new List<PublishResult>();
+            this.publishResults = new List<GatewayAutomationResult>();
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Kmd.Logic.Gateway.Automation
         /// </summary>
         /// <param name="folderPath">Folder path provider all gateway entries details.</param>
         /// <returns>Error details on failure, gateway entities name on success.</returns>
-        public async Task<IEnumerable<PublishResult>> PublishAsync(string folderPath)
+        public async Task<IEnumerable<GatewayAutomationResult>> PublishAsync(string folderPath)
         {
             this.publishResults.Clear();
 
@@ -64,62 +65,100 @@ namespace Kmd.Logic.Gateway.Automation
             }
             catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
             {
-                this.publishResults.Add(new PublishResult() { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
+                this.publishResults.Add(new GatewayAutomationResult() { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = "Invalid yaml file, check is publish yaml file is having format and syntax errors" });
                 return this.publishResults;
             }
 
             var validationResult = await this.validatePublishing.ValidateAsync(folderPath).ConfigureAwait(false);
-            if (!validationResult.IsError)
+            if (validationResult.IsError)
             {
-                this.publishResults.Add(new PublishResult
-                {
-                    IsError = false,
-                    ResultCode = ResultCode.PublishingValidationSuccess,
-                    Message = validationResult.ToString(),
-                });
-
-                using var client = this.gatewayClientFactory.CreateClient();
-                await this.CreateProductsAsync(client, this.options.SubscriptionId, this.options.ProviderId, publishFileModel.Products, folderPath).ConfigureAwait(false);
+                this.publishResults.AddRange(validationResult.Errors);
+                return this.publishResults;
             }
             else
             {
-                this.publishResults.Add(new PublishResult
-                {
-                    IsError = true,
-                    ResultCode = ResultCode.PublishingValidationFailed,
-                    Message = validationResult.ToString(),
-                });
+                await this.CreateOrUpdateProducts(
+                    subscriptionId: this.options.SubscriptionId,
+                    providerId: this.options.ProviderId,
+                    products: publishFileModel.Products,
+                    productValidationResults: validationResult.ValidatePublishingResult.Products,
+                    folderPath: folderPath).ConfigureAwait(false);
             }
 
             return this.publishResults;
         }
 
-        private async Task CreateProductsAsync(IGatewayClient client, Guid subscriptionId, Guid providerId, IEnumerable<Product> products, string folderPath)
+        private async Task CreateOrUpdateProducts(Guid subscriptionId, Guid providerId, IEnumerable<Product> products, IEnumerable<ProductValidationResult> productValidationResults, string folderPath)
         {
-            foreach (var product in products)
+            using var client = this.gatewayClientFactory.CreateClient();
+            foreach (var productValidationResult in productValidationResults)
             {
-                using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
-                using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
-                var response = await client.CreateProductAsync(
-                    subscriptionId: subscriptionId,
-                    name: product.Name,
-                    description: product.Description,
-                    providerId: providerId.ToString(),
-                    apiKeyRequired: product.ApiKeyRequired,
-                    providerApprovalRequired: product.ProviderApprovalRequired,
-                    productTerms: product.LegalTerms,
-                    visibility: product.Visibility,
-                    logo: logo,
-                    documentation: document,
-                    clientCredentialRequired: product.ClientCredentialRequired,
-                    openidConfigIssuer: product.OpenidConfigIssuer,
-                    openidConfigCustomUrl: product.OpenidConfigCustomUrl,
-                    applicationId: product.ApplicationId).ConfigureAwait(false);
-
-                if (response != null)
+                var product = products.Single(p => p.Name == productValidationResult.Name);
+                switch (productValidationResult.Status)
                 {
-                    this.publishResults.Add(new PublishResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                    case ValidationStatus.CanBeCreated:
+                        await this.CreateProduct(client, subscriptionId, providerId, folderPath, product).ConfigureAwait(false);
+                        break;
+                    case ValidationStatus.CanBeUpdated:
+                        var productId = productValidationResult.ProductId.Value;
+                        await this.UpdateProduct(client, subscriptionId, providerId, folderPath, product, productId).ConfigureAwait(false);
+                        break;
+                    default:
+                        throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateProducts");
                 }
+            }
+        }
+
+        private async Task CreateProduct(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, Product product)
+        {
+            using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
+            using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
+            var response = await client.CreateProductAsync(
+                subscriptionId: subscriptionId,
+                name: product.Name,
+                description: product.Description,
+                providerId: providerId.ToString(),
+                apiKeyRequired: product.ApiKeyRequired,
+                providerApprovalRequired: product.ProviderApprovalRequired,
+                productTerms: product.LegalTerms,
+                visibility: product.Visibility,
+                logo: logo,
+                documentation: document,
+                clientCredentialRequired: product.ClientCredentialRequired,
+                openidConfigIssuer: product.OpenidConfigIssuer,
+                openidConfigCustomUrl: product.OpenidConfigCustomUrl,
+                applicationId: product.ApplicationId).ConfigureAwait(false);
+
+            if (response != null)
+            {
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+            }
+        }
+
+        private async Task UpdateProduct(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, Product product, Guid productId)
+        {
+            using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
+            using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
+            var response = await client.UpdateProductAsync(
+                subscriptionId: subscriptionId,
+                productId: productId,
+                name: product.Name,
+                description: product.Description,
+                providerId: providerId.ToString(),
+                apiKeyRequired: product.ApiKeyRequired,
+                providerApprovalRequired: product.ProviderApprovalRequired,
+                productTerms: product.LegalTerms,
+                visibility: product.Visibility,
+                logo: logo,
+                documentation: document,
+                clientCredentialRequired: product.ClientCredentialRequired,
+                openidConfigIssuer: product.OpenidConfigIssuer,
+                openidConfigCustomUrl: product.OpenidConfigCustomUrl,
+                applicationId: product.ApplicationId).ConfigureAwait(false);
+
+            if (response != null)
+            {
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id });
             }
         }
 
@@ -127,13 +166,13 @@ namespace Kmd.Logic.Gateway.Automation
         {
             if (!Directory.Exists(folderPath))
             {
-                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Specified folder doesn’t exist" });
+                this.publishResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = "Specified folder doesn’t exist" });
                 return false;
             }
 
             if (!File.Exists(Path.Combine(folderPath, @"publish.yml")))
             {
-                this.publishResults.Add(new PublishResult { IsError = true, ResultCode = ResultCode.InvalidInput, Message = "Publish yml not found" });
+                this.publishResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = "Publish yml not found" });
                 return false;
             }
 

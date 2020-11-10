@@ -5,7 +5,7 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public interface IGatewayAutomation
     {
-        Task<IEnumerable<PublishResult>> PublishAsync(string folderPath);
+        Task<IEnumerable<GatewayAutomationResult>> PublishAsync(string folderPath);
 
         Task<ValidationResult> ValidateAsync(string folderPath);
     }
