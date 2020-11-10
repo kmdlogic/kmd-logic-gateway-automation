@@ -115,19 +115,22 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 foreach (var apiVersion in api.ApiVersions)
                 {
-                    var fs = new FileStream(Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+                    using var fs = new FileStream(Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+                    var fsCopy = new MemoryStream();
+                    fs.CopyTo(fsCopy);
+                    fsCopy.Seek(0, SeekOrigin.Begin);
                     var revisions = apiVersion.Revisions?.Select(r =>
-                    {
-                        var fsRev = new FileStream(Path.Combine(folderPath, r.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
-                        return new ApiRevisionValidationModel(fsRev, r.RevisionDescription);
-                    });
+                      {
+                          var fsRev = new FileStream(Path.Combine(folderPath, r.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+                          return new ApiRevisionValidationModel(fsRev, r.RevisionDescription);
+                      });
                     apis.Add(new ApiValidationModel(
-                        api.Name,
-                        api.Path,
-                        apiVersion.VersionName,
-                        fs,
-                        apiVersion.ProductNames,
-                        revisions));
+                          api.Name,
+                          api.Path,
+                          apiVersion.VersionName,
+                          fsCopy,
+                          apiVersion.ProductNames,
+                          revisions));
                 }
             }
 

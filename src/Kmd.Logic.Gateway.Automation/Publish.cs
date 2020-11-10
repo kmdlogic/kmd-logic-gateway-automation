@@ -208,6 +208,7 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 var productIds = apiVersion.ProductNames.Select(productName => allProducts.SingleOrDefault(product => string.Compare(product.Name, productName, comparisonType: StringComparison.OrdinalIgnoreCase) == 0).Id).ToList();
 
+                var productIds1 = new List<Guid> { Guid.Parse("5892eae3-229c-4555-a063-44fd197d53ad") };
                 using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open);
                 using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open);
                 using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open);
@@ -222,7 +223,7 @@ namespace Kmd.Logic.Gateway.Automation
                 providerId: providerId.ToString(),
                 visibility: apiVersion.Visibility,
                 backendServiceUrl: apiVersion.BackendLocation,
-                productIds: productIds,
+                productIds: productIds1,
                 logo: logo,
                 documentation: document).ConfigureAwait(false);
 

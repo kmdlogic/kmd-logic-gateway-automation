@@ -42,8 +42,8 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                     this.ValidateDocumentType(path, entityName)),
                 FileType.OpenApiSpec =>
                     this.ValidateFileExist(path, entityName, propName) &&
-                    (this.ValidateOpenApiSpecSize(path, entityName) ||
-                    this.ValidateOpenApiSpecType(path, entityName)),
+                  //  (this.ValidateOpenApiSpecSize(path, entityName) ||
+                    this.ValidateOpenApiSpecType(path, entityName),
                 FileType.PolicyXml =>
                     !string.IsNullOrEmpty(path) && this.ValidateFileExist(path, entityName, propName) &&
                     (this.ValidatePolicyXmlSize(path, entityName) ||
