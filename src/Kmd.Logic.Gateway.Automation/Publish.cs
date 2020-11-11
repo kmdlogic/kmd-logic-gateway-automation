@@ -207,8 +207,6 @@ namespace Kmd.Logic.Gateway.Automation
             foreach (var apiVersion in api.ApiVersions)
             {
                 var productIds = apiVersion.ProductNames.Select(productName => allProducts.SingleOrDefault(product => string.Compare(product.Name, productName, comparisonType: StringComparison.OrdinalIgnoreCase) == 0).Id).ToList();
-
-                var productIds1 = new List<Guid> { Guid.Parse("5892eae3-229c-4555-a063-44fd197d53ad") };
                 using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open);
                 using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open);
                 using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open);
@@ -223,7 +221,7 @@ namespace Kmd.Logic.Gateway.Automation
                 providerId: providerId.ToString(),
                 visibility: apiVersion.Visibility,
                 backendServiceUrl: apiVersion.BackendLocation,
-                productIds: productIds1,
+                productIds: null,
                 logo: logo,
                 documentation: document).ConfigureAwait(false);
 
@@ -233,21 +231,6 @@ namespace Kmd.Logic.Gateway.Automation
                 {
                     this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
                     apiVersionSetId = createdApi.ApiVersionSetId;
-                    foreach (var revision in apiVersion.Revisions)
-                    {
-                        using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open);
-                        var revisionResponse = await client.CreateRevisionAsync(
-                            subscriptionId: subscriptionId,
-                            apiId: createdApi.Id.Value,
-                            openApiSpec: revisionOpenApiSpec,
-                            revisionDescription: revision.RevisionDescription).ConfigureAwait(false);
-
-                        var createdRevision = revisionResponse as RevisionResponseModel;
-                        if (createdRevision != null)
-                        {
-                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RevisionCreated, EntityId = createdApi.Id });
-                        }
-                    }
                 }
             }
         }
