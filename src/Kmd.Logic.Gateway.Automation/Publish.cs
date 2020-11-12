@@ -221,7 +221,7 @@ namespace Kmd.Logic.Gateway.Automation
                 providerId: providerId.ToString(),
                 visibility: apiVersion.Visibility,
                 backendServiceUrl: apiVersion.BackendLocation,
-                productIds: null,
+                productIds: productIds,
                 logo: logo,
                 documentation: document).ConfigureAwait(false);
 
