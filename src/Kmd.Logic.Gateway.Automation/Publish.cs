@@ -213,18 +213,18 @@ namespace Kmd.Logic.Gateway.Automation
             using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open);
 
             var response = await client.CustomCreateApiAsync(
-            subscriptionId: subscriptionId,
-            name: api.Name,
-            path: api.Path,
-            apiVersion: apiVersion.VersionName,
-            openApiSpec: openApiSpec,
-            apiVersionSetId: apiVersionSetId,
-            providerId: providerId.ToString(),
-            visibility: apiVersion.Visibility,
-            backendServiceUrl: apiVersion.BackendLocation,
-            productIds: productIds,
-            logo: logo,
-            documentation: document).ConfigureAwait(false);
+                subscriptionId: subscriptionId,
+                name: api.Name,
+                path: api.Path,
+                apiVersion: apiVersion.VersionName,
+                openApiSpec: openApiSpec,
+                apiVersionSetId: apiVersionSetId,
+                providerId: providerId.ToString(),
+                visibility: apiVersion.Visibility,
+                backendServiceUrl: apiVersion.BackendLocation,
+                productIds: productIds,
+                logo: logo,
+                documentation: document).ConfigureAwait(false);
 
             var createdApi = response as ApiListModel;
 
