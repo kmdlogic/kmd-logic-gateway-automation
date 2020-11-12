@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Kmd.Logic.Gateway.Automation.Client
 {
-    internal class ValidatePublishingRequest:IDisposable
+    internal class ValidatePublishingRequest : IDisposable
     {
         public ValidatePublishingRequest(Guid providerId, IEnumerable<ApiValidationModel> apis, IEnumerable<ProductValidationModel> products)
         {
