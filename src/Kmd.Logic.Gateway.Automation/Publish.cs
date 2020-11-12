@@ -211,7 +211,7 @@ namespace Kmd.Logic.Gateway.Automation
                 using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open);
                 using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open);
 
-                var response = await client.CreateApiAsync(
+                var response = await client.CustomCreateApiAsync(
                 subscriptionId: subscriptionId,
                 name: api.Name,
                 path: api.Path,

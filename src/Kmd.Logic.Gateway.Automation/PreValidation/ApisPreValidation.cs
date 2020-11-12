@@ -57,7 +57,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                         this.ValidateFile(FileType.PolicyXml, version.PolicyXmlFile, apiVersionPrefix, nameof(version.PolicyXmlFile));
                         this.ValidateFile(FileType.Logo, version.ApiLogoFile, apiVersionPrefix, nameof(version.ApiLogoFile));
                         this.ValidateFile(FileType.Document, version.ApiDocumentation, apiVersionPrefix, nameof(version.ApiDocumentation));
-                       // this.ValidateFile(FileType.OpenApiSpec, version.OpenApiSpecFile, apiVersionPrefix, nameof(version.OpenApiSpecFile));
+                        this.ValidateFile(FileType.OpenApiSpec, version.OpenApiSpecFile, apiVersionPrefix, nameof(version.OpenApiSpecFile));
 
                         if (version.Revisions != null)
                         {
