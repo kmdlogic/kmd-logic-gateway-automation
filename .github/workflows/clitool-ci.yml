@@ -19,6 +19,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set current date as env variable
+      run: echo "::set-env name=NOW::$(date +'%Y-%m-%dT%H:%M:%S')"
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -27,7 +31,7 @@ jobs:
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
 
     - name: Build - PreRelease
-      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore -p:VersionSuffix=dev-$GITHUB_RUN_NUMBER
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore -p:VersionSuffix=dev-$NOW
       if: GITHUB.REF != 'refs/heads/master'
     - name: Build - Release
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
@@ -37,7 +41,7 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
 
     - name: Pack - PreRelease
-      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore -p:VersionSuffix=dev-$GITHUB_RUN_NUMBER
+      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore -p:VersionSuffix=dev-$NOW
       if: GITHUB.REF != 'refs/heads/master'
     - name: Pack - Release
       run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore
