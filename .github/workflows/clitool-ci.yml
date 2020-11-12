@@ -24,7 +24,7 @@ jobs:
       uses: 1466587594/get-current-time@v2
       id: current-time
       with:
-        format: YYYYMMDD-HH
+        format: YYYYMMDD-HHmm
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
