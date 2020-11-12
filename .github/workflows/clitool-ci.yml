@@ -3,6 +3,7 @@ name: CLI Tool CI/CD
 env:
   PROJPATH: './src/Kmd.Logic.Gateway.Automation.Tool'
   DOTNET_VERSION: '3.1.301'
+  NOW: $(date +'%Y%m%d%H%M%S')
 
 on:
   push:
@@ -19,9 +20,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set current date as env variable
-      run: echo "::set-env name=NOW::$(date +'%Y-%m-%dT%H:%M:%S')"
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
