@@ -191,13 +191,39 @@ namespace Kmd.Logic.Gateway.Automation
                         break;
                     case ValidationStatus.CanBeUpdated:
                         var apiId = apiValidationResult.ApiId.Value;
-
-                        // TO DO:Add the necessary code to update
+                        await this.UpdateApi(client, subscriptionId, providerId, apiId, folderPath, allProducts, api, apiValidationResult).ConfigureAwait(false);
                         break;
                     default:
                         throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateApis");
                 }
             }
+        }
+
+        private Task UpdateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, Guid apiId, string folderPath, IList<GetProductListModel> allProducts, Api api, ApiValidationResult apiValidationResult)
+        {
+            foreach (var apiVersion in api.ApiVersions)
+            {
+                // TODO validate version can be created or updated.
+            }
+
+            throw new NotImplementedException();
+        }
+
+        private async Task CreateOrUpdateRevisions(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, IEnumerable<Revision> revisions, ApiRevisionValidationResult apiRevisionValidationResult)
+        {
+            foreach (var revision in revisions)
+            {
+                //TODO revision has to be created ot updated 
+                await this.CreateRevision(client, subscriptionId, apiVersionId, folderPath, revision).ConfigureAwait(false);
+            }
+
+            throw new NotImplementedException();
+        }
+
+        private async Task UpdateRevision(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, IEnumerable<Revision> revisions, ApiRevisionValidationResult apiRevisionValidationResult)
+        {
+            //TODO revision has to be created ot updated
+            throw new NotImplementedException();
         }
 
         private async Task CreateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, IList<GetProductListModel> allProducts, Api api)
@@ -223,7 +249,7 @@ namespace Kmd.Logic.Gateway.Automation
                 providerId: providerId.ToString(),
                 visibility: apiVersion.Visibility,
                 backendServiceUrl: apiVersion.BackendLocation,
-                productIds: productIds1,
+                productIds: null,
                 logo: logo,
                 documentation: document).ConfigureAwait(false);
 
@@ -233,24 +259,40 @@ namespace Kmd.Logic.Gateway.Automation
                 {
                     this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
                     apiVersionSetId = createdApi.ApiVersionSetId;
-                    foreach (var revision in apiVersion.Revisions)
-                    {
-                        using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open);
-                        var revisionResponse = await client.CreateRevisionAsync(
-                            subscriptionId: subscriptionId,
-                            apiId: createdApi.Id.Value,
-                            openApiSpec: revisionOpenApiSpec,
-                            revisionDescription: revision.RevisionDescription).ConfigureAwait(false);
-
-                        var createdRevision = revisionResponse as RevisionResponseModel;
-                        if (createdRevision != null)
-                        {
-                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RevisionCreated, EntityId = createdApi.Id });
-                        }
-                    }
+                    await this.CreateRevisions(client, subscriptionId, createdApi.Id.Value, folderPath, apiVersion.Revisions).ConfigureAwait(false);
                 }
             }
         }
+
+        private async Task CreateRevisions(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, IEnumerable<Revision> revisions)
+        {
+            if (revisions == null)
+            {
+                return;
+            }
+
+            foreach (var revision in revisions)
+            {
+                await this.CreateRevision(client, subscriptionId, apiVersionId, folderPath, revision).ConfigureAwait(false);
+            }
+        }
+
+        private async Task CreateRevision(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, Revision revision)
+        {
+            using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open);
+            var revisionResponse = await client.CreateRevisionAsync(
+                subscriptionId: subscriptionId,
+                apiId: apiVersionId,
+                openApiSpec: revisionOpenApiSpec,
+                revisionDescription: revision.RevisionDescription).ConfigureAwait(false);
+
+            var createdRevision = revisionResponse as RevisionResponseModel;
+            if (createdRevision != null)
+            {
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RevisionCreated, EntityId = createdRevision.Id });
+            }
+        }
+
 
         private bool IsValidInput(string folderPath)
         {
