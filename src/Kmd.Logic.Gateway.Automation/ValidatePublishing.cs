@@ -35,9 +35,9 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             using var client = this.gatewayClientFactory.CreateClient();
+            using var validatePublishingRequest = GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel);
             var validatePublishingResult = await client.ValidatePublishingAsync(
-                this.options.SubscriptionId,
-                GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel)).ConfigureAwait(false);
+                this.options.SubscriptionId, validatePublishingRequest).ConfigureAwait(false);
 
             return validatePublishingResult.IsSuccess
                 ? new ValidationResult(validatePublishingResult)
