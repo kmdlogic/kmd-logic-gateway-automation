@@ -1,15 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using Kmd.Logic.Gateway.Automation.Client;
 using Kmd.Logic.Gateway.Automation.PublishFile;
+using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation.PreValidation
 {
     internal class ApisPreValidation : EntityPreValidationBase, IPreValidation
     {
-        public ApisPreValidation(string folderPath)
+        private readonly GatewayClientFactory gatewayClientFactory;
+        private readonly GatewayOptions options;
+
+        public ApisPreValidation(string folderPath, HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
             : base(folderPath)
         {
+            this.options = options;
+            this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
         }
 
         public IEnumerable<GatewayAutomationResult> ValidateAsync(PublishFileModel publishFileModel)
@@ -22,8 +30,24 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                     this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Duplicate api names exist" });
                 }
 
+                using var client = this.gatewayClientFactory.CreateClient();
+                var products = client.GetAllProducts(this.options.SubscriptionId, this.options.ProviderId);
+                var nameofproducts = products.Select(x => x.Name).ToList();
+                var combinedproducts = nameofproducts.Union(publishFileModel.Products.Select(y => y.Name).ToList()).ToList();
+
                 foreach (var api in publishFileModel.Apis)
                 {
+                    foreach (var version in api.ApiVersions)
+                    {
+                        foreach (var product in version.ProductNames)
+                        {
+                            if (!combinedproducts.Contains(product))
+                            {
+                                this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Product {product} doesn't exist in DB or YAML" });
+                            }
+                        }
+                    }
+
                     var apiPrefix = $"API: {api.Name}, {api.Path}";
                     var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Count() > 1);
                     if (duplicateVersions)
