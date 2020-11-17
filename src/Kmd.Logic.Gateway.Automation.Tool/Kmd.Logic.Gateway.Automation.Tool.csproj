@@ -1,24 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>netcoreapp3.1</TargetFramework>
-		<PackAsTool>true</PackAsTool>
-		<ToolCommandName>kmd-logic-gateway-automation</ToolCommandName>
-	</PropertyGroup>
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>kmd-logic-gateway-automation</ToolCommandName>
+  </PropertyGroup>
 
-	<PropertyGroup>
-		<Description>CLI Tool for KMD Logic Gateway Automation</Description>
-	</PropertyGroup>
+  <PropertyGroup>
+    <Description>CLI Tool for KMD Logic Gateway Automation</Description>
+  </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.8.0" />
-		<PackageReference Include="Serilog" Version="2.10.0" />
-		<PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
-	</ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="CommandLineParser" Version="2.8.0" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+  </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\Kmd.Logic.Gateway.Automation\Kmd.Logic.Gateway.Automation.csproj" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kmd.Logic.Gateway.Automation\Kmd.Logic.Gateway.Automation.csproj" />
+  </ItemGroup>
 
 </Project>
