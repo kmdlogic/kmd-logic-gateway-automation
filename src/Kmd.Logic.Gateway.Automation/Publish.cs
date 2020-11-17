@@ -205,9 +205,9 @@ namespace Kmd.Logic.Gateway.Automation
 
         private async Task CreateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, IList<GetProductListModel> allProducts, IList<ApiListModel> existingApis, Api api, ApiVersion apiVersion)
         {
-            Guid? apiVersionSetId = existingApis.FirstOrDefault(existingApi => existingApi.Name == api.Name)?.ApiVersionSetId;
+            Guid? apiVersionSetId = existingApis.FirstOrDefault(a => a.Name == api.Name)?.ApiVersionSetId;
 
-            var productIds = apiVersion.ProductNames.Select(productName => allProducts.SingleOrDefault(product => string.Compare(product.Name, productName, comparisonType: StringComparison.OrdinalIgnoreCase) == 0).Id).ToList();
+            var productIds = apiVersion.ProductNames.Select(n => allProducts.SingleOrDefault(p => string.Compare(p.Name, n, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)?.Id)?.ToList();
             using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open);
             using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open);
@@ -222,7 +222,7 @@ namespace Kmd.Logic.Gateway.Automation
                 providerId: providerId.ToString(),
                 visibility: apiVersion.Visibility,
                 backendServiceUrl: apiVersion.BackendLocation,
-                productIds: productIds,
+                productIds: productIds?.Where(x => x.HasValue)?.ToList(),
                 logo: logo,
                 documentation: document).ConfigureAwait(false);
 
