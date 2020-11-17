@@ -243,15 +243,12 @@ namespace Kmd.Logic.Gateway.Automation
                 return;
             }
 
-            foreach (var revision in revisions)
-            {
-                await this.CreateRevision(client, subscriptionId, apiVersionId, folderPath, revision).ConfigureAwait(false);
-            }
+            await Task.WhenAll(revisions.Select(r => this.CreateRevision(client, subscriptionId, apiVersionId, folderPath, r))).ConfigureAwait(false);
         }
 
         private async Task CreateRevision(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, Revision revision)
         {
-            using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open);
+            using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
             var revisionResponse = await client.CreateRevisionAsync(
                 subscriptionId: subscriptionId,
                 apiId: apiVersionId,
