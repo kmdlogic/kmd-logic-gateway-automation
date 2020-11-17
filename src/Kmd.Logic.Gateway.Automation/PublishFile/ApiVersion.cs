@@ -21,5 +21,7 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
         public string BackendLocation { get; set; }
 
         public IEnumerable<Revision> Revisions { get; set; }
+
+        public string Visibility { get; set; }
     }
 }
