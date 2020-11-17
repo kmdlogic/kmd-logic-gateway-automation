@@ -100,3 +100,23 @@ kmd-logic-gateway-automation version
 | --secret             | Required. Client secret in Logic Subscription Client Credentials. |
 | -p, --providerId     | Required. Provider ID in Logic.                                   |
 | -s, --subscriptionId | Required. Subscription ID in Logic.                               |
+
+### Azure Pipelines task
+
+Here is the example tasks definition, that are _must have_ for proper KMD Logic Gateway Automation Tool utilization in Azure Pipelines:
+
+```yaml
+- task: UseDotNet@2
+  displayName: Use .NET Core 3.1
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+
+- task: PowerShell@2
+  displayName: KMD Logic Gateway Automation CLI
+  inputs:
+    targetType: 'inline'
+    script: |
+      dotnet tool install --global kmd.logic.gateway.automation.tool --version <<tool_version>>
+      kmd-logic-gateway-automation <<command>> <<parameters>>
+```
