@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.Client.Models;
 using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
@@ -83,6 +84,13 @@ namespace Kmd.Logic.Gateway.Automation
                     products: publishFileModel.Products,
                     productValidationResults: validationResult.ValidatePublishingResult.Products,
                     folderPath: folderPath).ConfigureAwait(false);
+
+                await this.CreateOrUpdateApis(
+                    subscriptionId: this.options.SubscriptionId,
+                    providerId: this.options.ProviderId,
+                    apis: publishFileModel.Apis,
+                    apiValidationResults: validationResult.ValidatePublishingResult.Apis,
+                    folderPath: folderPath).ConfigureAwait(false);
             }
 
             return this.publishResults;
@@ -159,6 +167,71 @@ namespace Kmd.Logic.Gateway.Automation
             if (response != null)
             {
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id });
+            }
+        }
+
+        private async Task CreateOrUpdateApis(Guid subscriptionId, Guid providerId, IEnumerable<Api> apis, IEnumerable<ApiValidationResult> apiValidationResults, string folderPath)
+        {
+            if (!apis.Any())
+            {
+                return;
+            }
+
+            using var client = this.gatewayClientFactory.CreateClient();
+
+            var allProducts = await client.GetAllProductsAsync(subscriptionId, providerId).ConfigureAwait(false);
+            var existingApis = await client.GetAllApisAsync(subscriptionId, providerId).ConfigureAwait(false);
+
+            foreach (var api in apis)
+            {
+                foreach (var apiVersion in api.ApiVersions)
+                {
+                    var apiVersionValidationResult = apiValidationResults.SingleOrDefault(result => result.Name == api.Name && result.Version == apiVersion.VersionName);
+
+                    switch (apiVersionValidationResult.Status)
+                    {
+                        case ValidationStatus.CanBeCreated:
+                            await this.CreateApi(client, subscriptionId, providerId, folderPath, allProducts, existingApis, api, apiVersion).ConfigureAwait(false);
+                            break;
+                        case ValidationStatus.CanBeUpdated:
+                            // TO DO:Add the necessary code to update
+                            break;
+                        default:
+                            throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateApis");
+                    }
+                }
+            }
+        }
+
+        private async Task CreateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, IList<GetProductListModel> allProducts, IList<ApiListModel> existingApis, Api api, ApiVersion apiVersion)
+        {
+            Guid? apiVersionSetId = existingApis.FirstOrDefault(a => a.Name == api.Name)?.ApiVersionSetId;
+
+            var productIds = apiVersion.ProductNames.Select(n => allProducts.SingleOrDefault(p => string.Compare(p.Name, n, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)?.Id)?.ToList();
+            using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open);
+            using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open);
+            using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open);
+
+            var response = await client.CustomCreateApiAsync(
+                subscriptionId: subscriptionId,
+                name: api.Name,
+                path: api.Path,
+                apiVersion: apiVersion.VersionName,
+                openApiSpec: openApiSpec,
+                apiVersionSetId: apiVersionSetId,
+                providerId: providerId.ToString(),
+                visibility: apiVersion.Visibility,
+                backendServiceUrl: apiVersion.BackendLocation,
+                productIds: productIds?.Where(x => x.HasValue)?.ToList(),
+                logo: logo,
+                documentation: document).ConfigureAwait(false);
+
+            var createdApi = response as ApiListModel;
+
+            if (createdApi != null)
+            {
+                existingApis.Add(createdApi);
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
             }
         }
 
