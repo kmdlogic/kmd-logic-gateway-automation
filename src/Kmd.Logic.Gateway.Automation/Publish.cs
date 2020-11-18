@@ -194,7 +194,7 @@ namespace Kmd.Logic.Gateway.Automation
                             await this.CreateApi(client, subscriptionId, providerId, folderPath, allProducts, existingApis, api, apiVersion).ConfigureAwait(false);
                             break;
                         case ValidationStatus.CanBeUpdated:
-                            await this.UpdateApi(client, subscriptionId, providerId, apiVersionValidationResult, folderPath, allProducts, apiVersion).ConfigureAwait(false);
+                            await this.UpdateApi(client, subscriptionId, apiVersionValidationResult, folderPath, allProducts, apiVersion).ConfigureAwait(false);
                             break;
                         default:
                             throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateApis");
@@ -203,13 +203,12 @@ namespace Kmd.Logic.Gateway.Automation
             }
         }
 
-        private async Task UpdateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, ApiValidationResult apiVersionValidationResult, string folderPath, IList<GetProductListModel> allProducts, ApiVersion apiVersion)
+        private async Task UpdateApi(IGatewayClient client, Guid subscriptionId, ApiValidationResult apiVersionValidationResult, string folderPath, IList<GetProductListModel> allProducts, ApiVersion apiVersion)
         {
             // TO Do Update api version
             var productIds = apiVersion.ProductNames.Select(n => allProducts.SingleOrDefault(p => string.Compare(p.Name, n, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)?.Id)?.ToList();
             using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open, FileAccess.Read);
             using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open, FileAccess.Read);
-            using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
 
             var response = await client.CustomUpdateApiAsync(
                 subscriptionId: subscriptionId,
@@ -220,7 +219,8 @@ namespace Kmd.Logic.Gateway.Automation
                 backendServiceUrl: apiVersion.BackendLocation,
                 productIds: productIds?.Where(x => x.HasValue)?.ToList(),
                 logo: logo,
-                documentation: document).ConfigureAwait(false);
+                documentation: document,
+                status: apiVersion.Status.HasValue ? apiVersion.Status.Value.ToString() : default).ConfigureAwait(false);
 
             var updatedApi = response as ApiListModel;
 
@@ -251,7 +251,8 @@ namespace Kmd.Logic.Gateway.Automation
                 backendServiceUrl: apiVersion.BackendLocation,
                 productIds: productIds?.Where(x => x.HasValue)?.ToList(),
                 logo: logo,
-                documentation: document).ConfigureAwait(false);
+                documentation: document,
+                status: apiVersion.Status.HasValue ? apiVersion.Status.Value.ToString() : default).ConfigureAwait(false);
 
             var createdApi = response as ApiListModel;
 
