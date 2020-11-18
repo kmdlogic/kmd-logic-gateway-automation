@@ -205,7 +205,6 @@ namespace Kmd.Logic.Gateway.Automation
 
         private async Task UpdateApi(IGatewayClient client, Guid subscriptionId, ApiValidationResult apiVersionValidationResult, string folderPath, IList<GetProductListModel> allProducts, ApiVersion apiVersion)
         {
-            // TO Do Update api version
             var productIds = apiVersion.ProductNames.Select(n => allProducts.SingleOrDefault(p => string.Compare(p.Name, n, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)?.Id)?.ToList();
             using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open, FileAccess.Read);
             using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open, FileAccess.Read);
@@ -227,6 +226,8 @@ namespace Kmd.Logic.Gateway.Automation
             if (updatedApi != null)
             {
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id });
+
+                // TODO Create or Update revisions
             }
         }
 

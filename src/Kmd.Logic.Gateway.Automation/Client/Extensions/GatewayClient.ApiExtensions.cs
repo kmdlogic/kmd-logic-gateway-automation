@@ -384,8 +384,9 @@
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1307:Specify StringComparison", Justification = "This code is from auto genrated code")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "This code is from auto genrated code")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "This code is from auto genrated code")]
         public async Task<HttpOperationResponse<object>> CustomUpdateApiWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid apiId, string name = default(string), string apiVersion = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
@@ -452,7 +453,7 @@
 
             if (visibility != null)
             {
-                StringContent visibilityContent = new StringContent(SafeJsonConvert.SerializeObject(visibility, SerializationSettings).Trim('"'), System.Text.Encoding.UTF8);
+                StringContent visibilityContent = new StringContent(SafeJsonConvert.SerializeObject(visibility, this.SerializationSettings).Trim('"'), System.Text.Encoding.UTF8);
                 multiPartContent.Add(visibilityContent, "visibility");
             }
 
@@ -477,8 +478,8 @@
             {
                 StreamContent logoContent = new StreamContent(logo);
                 logoContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                ContentDispositionHeaderValue _contentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
-                _contentDispositionHeaderValue.Name = "logo";
+                ContentDispositionHeaderValue dispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+                dispositionHeaderValue.Name = "logo";
 
                 // get filename from stream if it's a file otherwise, just use  'unknown'
                 var fileStream = logo as FileStream;
@@ -486,15 +487,15 @@
                 if (System.Linq.Enumerable.Any(fileName, c => c > 127))
                 {
                     // non ASCII chars detected, need UTF encoding:
-                    _contentDispositionHeaderValue.FileNameStar = fileName;
+                    dispositionHeaderValue.FileNameStar = fileName;
                 }
                 else
                 {
                     // ASCII only
-                    _contentDispositionHeaderValue.FileName = fileName;
+                    dispositionHeaderValue.FileName = fileName;
                 }
 
-                logoContent.Headers.ContentDisposition = _contentDispositionHeaderValue;
+                logoContent.Headers.ContentDisposition = dispositionHeaderValue;
                 multiPartContent.Add(logoContent, "logo");
             }
 
@@ -518,24 +519,26 @@
                     // ASCII only
                     contentDispositionHeaderValue.FileName = fileNameContent;
                 }
+
                 documentationContent.Headers.ContentDisposition = contentDispositionHeaderValue;
                 multiPartContent.Add(documentationContent, "documentation");
             }
 
             if (status != null)
             {
-                StringContent statusContent = new StringContent(SafeJsonConvert.SerializeObject(status, SerializationSettings).Trim('"'), System.Text.Encoding.UTF8);
+                StringContent statusContent = new StringContent(SafeJsonConvert.SerializeObject(status, this.SerializationSettings).Trim('"'), System.Text.Encoding.UTF8);
                 multiPartContent.Add(statusContent, "status");
             }
 
             httpRequest.Content = multiPartContent;
 
             // Set Credentials
-            if (Credentials != null)
+            if (this.Credentials != null)
             {
                 cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(httpRequest, cancellationToken).ConfigureAwait(false);
+                await this.Credentials.ProcessHttpRequestAsync(httpRequest, cancellationToken).ConfigureAwait(false);
             }
+
             // Send Request
             if (shouldTrace)
             {
@@ -549,13 +552,13 @@
                 ServiceClientTracing.ReceiveResponse(invocationId, httpResponse);
             }
 
-            HttpStatusCode _statusCode = httpResponse.StatusCode;
+            HttpStatusCode statusCode = httpResponse.StatusCode;
             cancellationToken.ThrowIfCancellationRequested();
             string responseContent = null;
 
-            if ((int)_statusCode != 200 && (int)_statusCode != 400 && (int)_statusCode != 404 && (int)_statusCode != 409 && (int)_statusCode != 422)
+            if ((int)statusCode != 200 && (int)statusCode != 400 && (int)statusCode != 404 && (int)statusCode != 409 && (int)statusCode != 422)
             {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", statusCode));
                 if (httpResponse.Content != null)
                 {
                     responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
@@ -587,12 +590,12 @@
             result.Response = httpResponse;
 
             // Deserialize Response
-            if ((int)_statusCode == 200)
+            if ((int)statusCode == 200)
             {
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<ApiListModel>(responseContent, DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<ApiListModel>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -607,12 +610,12 @@
             }
 
             // Deserialize Response
-            if ((int)_statusCode == 400)
+            if ((int)statusCode == 400)
             {
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -627,12 +630,12 @@
             }
 
             // Deserialize Response
-            if ((int)_statusCode == 409)
+            if ((int)statusCode == 409)
             {
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -647,12 +650,12 @@
             }
 
             // Deserialize Response
-            if ((int)_statusCode == 422)
+            if ((int)statusCode == 422)
             {
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
