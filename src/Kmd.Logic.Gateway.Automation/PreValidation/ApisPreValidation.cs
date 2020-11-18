@@ -33,20 +33,29 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                 using var client = this.gatewayClientFactory.CreateClient();
                 var products = client.GetAllProducts(this.options.SubscriptionId, this.options.ProviderId);
                 var nameofproducts = products.Select(x => x.Name).ToList();
-                var combinedproducts = nameofproducts.Union(publishFileModel.Products.Select(y => y.Name).ToList()).ToList();
+                var consolidatedProductNames = nameofproducts.Union(publishFileModel.Products.Select(y => y.Name).ToList());
 
                 foreach (var api in publishFileModel.Apis)
                 {
+                    if (api.ApiVersions == null)
+                    {
+                        continue;
+                    }
+
                     foreach (var version in api.ApiVersions)
                     {
-                        foreach (var product in version.ProductNames)
+                        if (version != null)
                         {
-                            if (!combinedproducts.Contains(product))
+                            foreach (var product in version.ProductNames)
                             {
-                                this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Product {product} doesn't exist in DB or YAML" });
+                                if (!consolidatedProductNames.Contains(product))
+                                {
+                                    this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Product {product} doesn't exist in DB or YAML" });
+                                }
                             }
                         }
                     }
+
 
                     var apiPrefix = $"API: {api.Name}, {api.Path}";
                     var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Count() > 1);
