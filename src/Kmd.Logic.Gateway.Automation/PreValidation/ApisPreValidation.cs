@@ -56,7 +56,6 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                         }
                     }
 
-
                     var apiPrefix = $"API: {api.Name}, {api.Path}";
                     var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Count() > 1);
                     if (duplicateVersions)
