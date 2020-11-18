@@ -194,12 +194,39 @@ namespace Kmd.Logic.Gateway.Automation
                             await this.CreateApi(client, subscriptionId, providerId, folderPath, allProducts, existingApis, api, apiVersion).ConfigureAwait(false);
                             break;
                         case ValidationStatus.CanBeUpdated:
-                            // TO DO:Add the necessary code to update
+                            await this.UpdateApi(client, subscriptionId, providerId, apiVersionValidationResult, folderPath, allProducts, apiVersion).ConfigureAwait(false);
                             break;
                         default:
                             throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateApis");
                     }
                 }
+            }
+        }
+
+        private async Task UpdateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, ApiValidationResult apiVersionValidationResult, string folderPath, IList<GetProductListModel> allProducts, ApiVersion apiVersion)
+        {
+            // TO Do Update api version
+            var productIds = apiVersion.ProductNames.Select(n => allProducts.SingleOrDefault(p => string.Compare(p.Name, n, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)?.Id)?.ToList();
+            using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open, FileAccess.Read);
+            using var document = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiDocumentation), FileMode.Open, FileAccess.Read);
+            using var openApiSpec = new FileStream(path: Path.Combine(folderPath, apiVersion.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+
+            var response = await client.CustomUpdateApiAsync(
+                subscriptionId: subscriptionId,
+                apiId: apiVersionValidationResult.ApiId.Value,
+                name: apiVersionValidationResult.Name,
+                apiVersion: apiVersion.VersionName,
+                visibility: apiVersion.Visibility,
+                backendServiceUrl: apiVersion.BackendLocation,
+                productIds: productIds?.Where(x => x.HasValue)?.ToList(),
+                logo: logo,
+                documentation: document).ConfigureAwait(false);
+
+            var updatedApi = response as ApiListModel;
+
+            if (updatedApi != null)
+            {
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id });
             }
         }
 
