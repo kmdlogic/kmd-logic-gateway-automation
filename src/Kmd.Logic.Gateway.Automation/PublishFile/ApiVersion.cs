@@ -23,5 +23,7 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
         public IEnumerable<Revision> Revisions { get; set; }
 
         public string Visibility { get; set; }
+
+        public ApiStatus? Status { get; set; }
     }
 }
