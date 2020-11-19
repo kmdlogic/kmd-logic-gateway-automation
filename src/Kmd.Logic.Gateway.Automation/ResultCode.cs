@@ -23,6 +23,11 @@
         ApiCreated,
 
         /// <summary>
+        /// Api updated successfully.
+        /// </summary>
+        ApiUpdated,
+
+        /// <summary>
         /// Version created successfully.
         /// </summary>
         VersionCreated,

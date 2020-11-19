@@ -57,6 +57,7 @@ Apis:
       ProductNames: [nexus-2]
       PolicyXmlFile: ./apis/nexus2/policies.xml
       BackendLocation: http://nexus2
+      Status: Active
       Revisions:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus2/v1/nexus-r2.json
@@ -72,4 +73,5 @@ Apis:
       ProductNames: [nexus-2]
       PolicyXmlFile: ./apis/nexus3/policies.xml
       BackendLocation: http://nexus3
+      Status: Preview
    Path: nexus3
