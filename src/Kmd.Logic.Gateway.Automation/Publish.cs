@@ -232,6 +232,33 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 existingApis.Add(createdApi);
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
+                await this.CreateRevisions(client, subscriptionId, createdApi.Id.Value, folderPath, apiVersion.Revisions).ConfigureAwait(false);
+            }
+        }
+
+        private async Task CreateRevisions(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, IEnumerable<Revision> revisions)
+        {
+            if (revisions == null)
+            {
+                return;
+            }
+
+            await Task.WhenAll(revisions.Select(r => this.CreateRevision(client, subscriptionId, apiVersionId, folderPath, r))).ConfigureAwait(false);
+        }
+
+        private async Task CreateRevision(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, Revision revision)
+        {
+            using var revisionOpenApiSpec = new FileStream(path: Path.Combine(folderPath, revision.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
+            var revisionResponse = await client.CreateRevisionAsync(
+                subscriptionId: subscriptionId,
+                apiId: apiVersionId,
+                openApiSpec: revisionOpenApiSpec,
+                revisionDescription: revision.RevisionDescription).ConfigureAwait(false);
+
+            var createdRevision = revisionResponse as RevisionResponseModel;
+            if (createdRevision != null)
+            {
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RevisionCreated, EntityId = createdRevision.Id });
             }
         }
 
