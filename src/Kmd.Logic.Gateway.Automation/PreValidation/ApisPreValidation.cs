@@ -39,19 +39,17 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                 {
                     if (api.ApiVersions == null)
                     {
+                        this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Version shouldn't be null" });
                         continue;
                     }
 
                     foreach (var version in api.ApiVersions)
                     {
-                        if (version != null)
+                        foreach (var product in version.ProductNames)
                         {
-                            foreach (var product in version.ProductNames)
+                            if (!consolidatedProductNames.Contains(product))
                             {
-                                if (!consolidatedProductNames.Contains(product))
-                                {
-                                    this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Product {product} doesn't exist in DB or YAML" });
-                                }
+                                this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Product {product} doesn't exist in DB or YAML" });
                             }
                         }
                     }
