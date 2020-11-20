@@ -6,6 +6,6 @@
 
         public string OpenApiSpecFile { get; set; }
 
-        public string IsCurrent { get; set; }
+        public bool IsCurrent { get; set; }
     }
 }
