@@ -4,8 +4,20 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
     internal class PublishFileModel
     {
-        public IEnumerable<Product> Products { get; set; } = new List<Product>();
+        private IEnumerable<Product> products;
 
-        public IEnumerable<Api> Apis { get; set; } = new List<Api>();
+        public IEnumerable<Product> Products
+        {
+            get { return this.products ?? new List<Product>(); }
+            set { this.products = value; }
+        }
+
+        private IEnumerable<Api> apis;
+
+        public IEnumerable<Api> Apis
+        {
+            get { return this.apis ?? new List<Api>(); }
+            set { this.apis = value; }
+        }
     }
 }
