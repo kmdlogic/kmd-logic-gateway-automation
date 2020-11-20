@@ -16,11 +16,15 @@ namespace Kmd.Logic.Gateway.Automation
     {
         private readonly GatewayClientFactory gatewayClientFactory;
         private readonly GatewayOptions options;
+        private readonly HttpClient httpClient;
+        private readonly LogicTokenProviderFactory logicTokenProviderFactory;
 
         public ValidatePublishing(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
         {
             this.options = options;
             this.gatewayClientFactory = new GatewayClientFactory(tokenProviderFactory, httpClient, options);
+            this.httpClient = httpClient;
+            this.logicTokenProviderFactory = tokenProviderFactory;
         }
 
         public async Task<ValidationResult> ValidateAsync(string folderPath)
@@ -41,7 +45,7 @@ namespace Kmd.Logic.Gateway.Automation
                 });
             }
 
-            var preValidationsResults = PreValidateEntities(folderPath, publishFileModel);
+            var preValidationsResults = PreValidateEntities(folderPath, publishFileModel, this.httpClient, this.options, this.logicTokenProviderFactory);
             if (preValidationsResults.Any(r => r.IsError))
             {
                 return new ValidationResult(preValidationsResults);
@@ -103,12 +107,12 @@ namespace Kmd.Logic.Gateway.Automation
             return results;
         }
 
-        private static IEnumerable<GatewayAutomationResult> PreValidateEntities(string folderPath, PublishFileModel publishFileModel)
+        private static IEnumerable<GatewayAutomationResult> PreValidateEntities(string folderPath, PublishFileModel publishFileModel, HttpClient httpClient, GatewayOptions options, LogicTokenProviderFactory logicTokenProvider)
         {
             var preValidations = new List<IPreValidation>
             {
                 new ProductsPreValidation(folderPath),
-                new ApisPreValidation(folderPath),
+                new ApisPreValidation(folderPath, httpClient, logicTokenProvider,  options),
             };
 
             var publishResults = new List<GatewayAutomationResult>();
