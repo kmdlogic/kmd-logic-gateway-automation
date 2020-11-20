@@ -13,7 +13,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
         public IEnumerable<GatewayAutomationResult> ValidateAsync(PublishFileModel publishFileModel)
         {
-            if (publishFileModel != null)
+            if (publishFileModel != null && publishFileModel.Products != null && publishFileModel.Products.Any())
             {
                 var duplicateProducts = publishFileModel.Products.GroupBy(x => x.Name).Any(x => x.Count() > 1);
                 if (duplicateProducts)
