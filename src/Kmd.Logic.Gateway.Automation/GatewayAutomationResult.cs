@@ -21,7 +21,7 @@ namespace Kmd.Logic.Gateway.Automation
                 return $"Error Code: {this.ResultCode}, Message: {this.Message}{entityMessage}";
             }
 
-            if (!string.IsNullOrEmpty(this.Message))
+            if (string.IsNullOrEmpty(this.Message))
             {
                 return $"Result Code: {this.ResultCode}, Message: {entityMessage}";
             }
