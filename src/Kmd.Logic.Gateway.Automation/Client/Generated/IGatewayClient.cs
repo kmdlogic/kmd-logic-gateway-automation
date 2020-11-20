@@ -976,7 +976,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<string>> UpdateRevisionWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<object>> UpdateRevisionWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }

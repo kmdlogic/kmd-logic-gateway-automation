@@ -2120,7 +2120,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
             /// <param name='request'>
             /// The revision details to update
             /// </param>
-            public static string UpdateRevision(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request)
+            public static object UpdateRevision(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request)
             {
                 return operations.UpdateRevisionAsync(subscriptionId, apiId, apiRevisionId, request).GetAwaiter().GetResult();
             }
@@ -2146,7 +2146,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<string> UpdateRevisionAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<object> UpdateRevisionAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.UpdateRevisionWithHttpMessagesAsync(subscriptionId, apiId, apiRevisionId, request, null, cancellationToken).ConfigureAwait(false))
                 {

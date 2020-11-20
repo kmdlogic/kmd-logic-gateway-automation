@@ -7745,7 +7745,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<string>> UpdateRevisionWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> UpdateRevisionWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid apiId, System.Guid apiRevisionId, RevisionUpdateRequestModel request, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (request == null)
             {
@@ -7842,7 +7842,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 throw ex;
             }
             // Create Result
-            var _result = new HttpOperationResponse<string>();
+            var _result = new HttpOperationResponse<object>();
             _result.Request = _httpRequest;
             _result.Response = _httpResponse;
             // Deserialize Response
@@ -7851,7 +7851,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    _result.Body = SafeJsonConvert.DeserializeObject<string>(_responseContent, DeserializationSettings);
+                    _result.Body = SafeJsonConvert.DeserializeObject<RevisionResponseModel>(_responseContent, DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
