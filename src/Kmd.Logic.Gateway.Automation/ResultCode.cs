@@ -36,5 +36,10 @@
         /// Revision created successfully.
         /// </summary>
         RevisionCreated,
+
+        /// <summary>
+        /// Revision updated successfully.
+        /// </summary>
+        RevisionUpdated,
     }
 }
