@@ -28,6 +28,11 @@
         ApiUpdated,
 
         /// <summary>
+        /// Api version marked as current.
+        /// </summary>
+        ApiVersionMarkedAsCurrent,
+
+        /// <summary>
         /// Version created successfully.
         /// </summary>
         VersionCreated,
