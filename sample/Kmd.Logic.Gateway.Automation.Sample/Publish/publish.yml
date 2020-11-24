@@ -30,7 +30,7 @@ Apis:
       ProductNames: [nexus-1]
       PolicyXmlFile: ./apis/nexus/policies.xml
       BackendLocation: http://nexus
-      IsCurrent: true
+      IsCurrent: false
       Revisions:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus/v1/nexus-r2.json
