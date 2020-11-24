@@ -22,7 +22,7 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
         public IEnumerable<GatewayAutomationResult> ValidateAsync(PublishFileModel publishFileModel)
         {
-            if (publishFileModel != null)
+            if (publishFileModel != null && publishFileModel.Apis.Any())
             {
                 var duplicateApis = publishFileModel.Apis.GroupBy(x => x.Name).Any(x => x.Count() > 1);
                 if (duplicateApis)

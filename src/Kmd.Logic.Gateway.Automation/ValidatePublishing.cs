@@ -32,6 +32,19 @@ namespace Kmd.Logic.Gateway.Automation
             var publishYml = File.ReadAllText(Path.Combine(folderPath, "publish.yml"));
             var publishFileModel = new Deserializer().Deserialize<PublishFileModel>(publishYml);
 
+            if (publishFileModel != null && !publishFileModel.Products.Any() && !publishFileModel.Apis.Any())
+            {
+                return new ValidationResult(new List<GatewayAutomationResult>()
+                {
+                    new GatewayAutomationResult
+                    {
+                        IsError = true,
+                        ResultCode = ResultCode.ValidationFailed,
+                        Message = $"Both products and apis are empty in the file. Nothing to validate/publish",
+                    },
+                });
+            }
+
             var preValidationsResults = PreValidateEntities(folderPath, publishFileModel, this.httpClient, this.options, this.logicTokenProviderFactory);
             if (preValidationsResults.Any(r => r.IsError))
             {
