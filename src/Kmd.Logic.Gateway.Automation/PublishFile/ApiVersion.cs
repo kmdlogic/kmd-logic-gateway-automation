@@ -16,8 +16,6 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
 
         public IEnumerable<string> ProductNames { get; set; }
 
-        public string PolicyXmlFile { get; set; }
-
         public string BackendLocation { get; set; }
 
         public IEnumerable<Revision> Revisions { get; set; }

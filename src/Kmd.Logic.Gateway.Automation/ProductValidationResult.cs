@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation
@@ -8,6 +9,8 @@ namespace Kmd.Logic.Gateway.Automation
         public string Name { get; set; }
 
         public Guid? ProductId { get; set; }
+
+        public IEnumerable<PolicyValidationResult> Policies { get; set; }
 
         public override string ToString()
         {

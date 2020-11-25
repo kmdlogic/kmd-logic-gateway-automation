@@ -8,8 +8,6 @@
 
         public string Documentation { get; set; }
 
-        public string PoliciesXmlFile { get; set; }
-
         public string Description { get; set; }
 
         public string Published { get; set; }
