@@ -31,5 +31,7 @@
 #pragma warning restore CA1056 // URI-like properties should not be strings
 
         public string ApplicationId { get; set; }
+
+        public Policy Policy { get; set; }
     }
 }

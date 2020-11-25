@@ -84,7 +84,11 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                             this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.BackendLocation)} does not exist or not valid uri format" });
                         }
 
-                        this.ValidateFile(FileType.PolicyXml, version.PolicyXmlFile, apiVersionPrefix, nameof(version.PolicyXmlFile));
+                        if (version.Policy != null)
+                        {
+                            this.ValidateFile(FileType.PolicyXml, version.Policy.PolicyXmlFile, apiVersionPrefix, nameof(version.Policy.PolicyXmlFile));
+                        }
+
                         this.ValidateFile(FileType.Logo, version.ApiLogoFile, apiVersionPrefix, nameof(version.ApiLogoFile));
                         this.ValidateFile(FileType.Document, version.ApiDocumentation, apiVersionPrefix, nameof(version.ApiDocumentation));
                         this.ValidateFile(FileType.OpenApiSpec, version.OpenApiSpecFile, apiVersionPrefix, nameof(version.OpenApiSpecFile));
