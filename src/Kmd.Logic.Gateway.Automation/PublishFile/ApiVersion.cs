@@ -24,6 +24,6 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
 
         public ApiStatus? Status { get; set; }
 
-        public Policy Policy { get; set; }
+        public IEnumerable<CustomPolicy> CustomPolicies { get; set; }
     }
 }

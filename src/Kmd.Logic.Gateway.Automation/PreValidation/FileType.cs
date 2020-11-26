@@ -20,6 +20,6 @@
         /// <summary>
         /// Policy xml for api
         /// </summary>
-        PolicyXml,
+        CustomPolicyXml,
     }
 }

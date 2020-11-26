@@ -1,4 +1,6 @@
-﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
+﻿using System.Collections.Generic;
+
+namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
     internal class Product
     {
@@ -30,6 +32,6 @@
 
         public string ApplicationId { get; set; }
 
-        public Policy Policy { get; set; }
+        public IEnumerable<CustomPolicy> CustomPolicies { get; set; }
     }
 }
