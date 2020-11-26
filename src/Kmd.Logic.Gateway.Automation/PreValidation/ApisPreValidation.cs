@@ -37,10 +37,19 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
                 foreach (var api in publishFileModel.Apis)
                 {
+                    var apiPrefix = $"API: {api.Name}, {api.Path}";
+
                     if (api.ApiVersions == null)
                     {
                         this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Version shouldn't be null" });
                         continue;
+                    }
+
+                    if (api.ApiVersions
+                            .Where(v => v.IsCurrent.HasValue)
+                            .Count(v => v.IsCurrent == true) != 1)
+                    {
+                        this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiPrefix}] Only one Version must be set as current" });
                     }
 
                     foreach (var version in api.ApiVersions)
@@ -54,7 +63,6 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                         }
                     }
 
-                    var apiPrefix = $"API: {api.Name}, {api.Path}";
                     var duplicateVersions = api.ApiVersions.GroupBy(x => x.VersionName).Any(x => x.Count() > 1);
                     if (duplicateVersions)
                     {
@@ -82,6 +90,11 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                         if (string.IsNullOrEmpty(version.BackendLocation) || !Uri.IsWellFormedUriString(version.BackendLocation, UriKind.Absolute))
                         {
                             this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.BackendLocation)} does not exist or not valid uri format" });
+                        }
+
+                        if (!version.IsCurrent.HasValue)
+                        {
+                            this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.IsCurrent)} is not specified" });
                         }
 
                         this.ValidateFile(FileType.PolicyXml, version.PolicyXmlFile, apiVersionPrefix, nameof(version.PolicyXmlFile));

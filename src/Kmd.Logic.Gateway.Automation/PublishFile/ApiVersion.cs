@@ -25,5 +25,7 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
         public string Visibility { get; set; }
 
         public ApiStatus? Status { get; set; }
+
+        public bool? IsCurrent { get; set; }
     }
 }
