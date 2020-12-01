@@ -1,4 +1,6 @@
-﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
+﻿using System.Collections.Generic;
+
+namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
     internal class Product
     {
@@ -31,5 +33,9 @@
 #pragma warning restore CA1056 // URI-like properties should not be strings
 
         public string ApplicationId { get; set; }
+
+        public RateLimitPolicy RateLimitPolicy { get; set; }
+
+        public IEnumerable<CustomPolicy> CustomPolicies { get; set; }
     }
 }

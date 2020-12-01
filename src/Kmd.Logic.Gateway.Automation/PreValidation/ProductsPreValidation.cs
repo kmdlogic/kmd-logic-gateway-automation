@@ -31,6 +31,14 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
                     this.ValidateFile(FileType.Logo, product.Logo, product.Name, nameof(product.Logo));
                     this.ValidateFile(FileType.Document, product.Documentation, product.Name, nameof(product.Documentation));
+
+                    if (product.CustomPolicies != null)
+                    {
+                        foreach (var customPolicy in product.CustomPolicies)
+                        {
+                            this.ValidateFile(FileType.PolicyXml, customPolicy.PolicyXmlFile, productPrefix, nameof(customPolicy.PolicyXmlFile));
+                        }
+                    }
                 }
             }
 

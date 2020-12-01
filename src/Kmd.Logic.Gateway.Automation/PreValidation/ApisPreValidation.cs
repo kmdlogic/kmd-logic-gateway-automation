@@ -97,7 +97,6 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                             this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.IsCurrent)} is not specified" });
                         }
 
-                        this.ValidateFile(FileType.PolicyXml, version.PolicyXmlFile, apiVersionPrefix, nameof(version.PolicyXmlFile));
                         this.ValidateFile(FileType.Logo, version.ApiLogoFile, apiVersionPrefix, nameof(version.ApiLogoFile));
                         this.ValidateFile(FileType.Document, version.ApiDocumentation, apiVersionPrefix, nameof(version.ApiDocumentation));
                         this.ValidateFile(FileType.OpenApiSpec, version.OpenApiSpecFile, apiVersionPrefix, nameof(version.OpenApiSpecFile));
@@ -113,6 +112,14 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                                 }
 
                                 this.ValidateFile(FileType.OpenApiSpec, revision.OpenApiSpecFile, $"{api.Name} - {version.VersionName} - {revision.RevisionDescription}", nameof(revision.OpenApiSpecFile));
+                            }
+                        }
+
+                        if (version.CustomPolicies != null)
+                        {
+                            foreach (var customPolicy in version.CustomPolicies)
+                            {
+                                this.ValidateFile(FileType.PolicyXml, customPolicy.PolicyXmlFile, apiVersionPrefix, nameof(customPolicy.PolicyXmlFile));
                             }
                         }
                     }

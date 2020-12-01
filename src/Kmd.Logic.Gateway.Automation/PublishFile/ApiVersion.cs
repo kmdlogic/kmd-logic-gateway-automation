@@ -16,8 +16,6 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
 
         public IEnumerable<string> ProductNames { get; set; }
 
-        public string PolicyXmlFile { get; set; }
-
         public string BackendLocation { get; set; }
 
         public IEnumerable<Revision> Revisions { get; set; }
@@ -27,5 +25,9 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
         public ApiStatus? Status { get; set; }
 
         public bool? IsCurrent { get; set; }
+
+        public RateLimitPolicy RateLimitPolicy { get; set; }
+
+        public IEnumerable<CustomPolicy> CustomPolicies { get; set; }
     }
 }
