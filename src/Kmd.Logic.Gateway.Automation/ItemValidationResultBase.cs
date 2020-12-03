@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -6,6 +7,8 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public class ItemValidationResultBase
     {
+        public Guid? EntityId { get; set; }
+
         public ValidationStatus Status { get; set; }
 
         public IEnumerable<string> Errors { get; set; }

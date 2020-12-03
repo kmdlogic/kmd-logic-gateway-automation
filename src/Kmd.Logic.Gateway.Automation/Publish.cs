@@ -108,7 +108,7 @@ namespace Kmd.Logic.Gateway.Automation
                         await this.CreateProduct(client, subscriptionId, providerId, folderPath, product).ConfigureAwait(false);
                         break;
                     case ValidationStatus.CanBeUpdated:
-                        var productId = productValidationResult.ProductId.Value;
+                        var productId = productValidationResult.EntityId.Value;
                         await this.UpdateProduct(client, subscriptionId, providerId, folderPath, product, productId).ConfigureAwait(false);
                         break;
                     default:

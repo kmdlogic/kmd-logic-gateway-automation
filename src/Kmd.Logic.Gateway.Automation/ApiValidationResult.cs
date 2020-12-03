@@ -18,7 +18,7 @@ namespace Kmd.Logic.Gateway.Automation
 
         public IEnumerable<ApiRevisionValidationResult> Revisions { get; set; }
 
-        public IEnumerable<PolicyValidationResult> Policies { get; set; }
+        public PoliciesValidationResult Policies { get; set; }
 
         public override string ToString()
         {
