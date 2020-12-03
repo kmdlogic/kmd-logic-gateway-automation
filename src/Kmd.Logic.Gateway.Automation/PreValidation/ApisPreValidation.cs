@@ -125,18 +125,26 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                             }
                         }
 
-                        if (version.CustomPolicies != null)
-                        {
-                            foreach (var customPolicy in version.CustomPolicies)
-                            {
-                                this.ValidateFile(FileType.PolicyXml, customPolicy.PolicyXmlFile, apiVersionPrefix, nameof(customPolicy.PolicyXmlFile));
-                            }
-                        }
+                        this.ValidatePolicies(version, apiVersionPrefix);
                     }
                 }
             }
 
             return this.ValidationResults;
+        }
+
+        private void ValidatePolicies(ApiVersion version, string versionPrefix)
+        {
+            if (version.CustomPolicies != null)
+            {
+                foreach (var customPolicy in version.CustomPolicies)
+                {
+                    var policyPrefix = string.IsNullOrEmpty(customPolicy.Name)
+                        ? $"{versionPrefix}, Custom policy"
+                        : $"{versionPrefix}, Custom policy: {customPolicy.Name}";
+                    this.ValidateFile(FileType.CustomPolicyXml, customPolicy.XmlFile, policyPrefix, nameof(customPolicy.XmlFile));
+                }
+            }
         }
     }
 }

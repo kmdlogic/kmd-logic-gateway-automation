@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Kmd.Logic.Gateway.Automation.PublishFile
+﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
     public class RateLimitPolicy
     {

@@ -3,22 +3,22 @@
     internal enum FileType
     {
         /// <summary>
-        /// File type logo
+        /// Logo
         /// </summary>
         Logo,
 
         /// <summary>
-        /// File type for markdown document
+        /// Markdown document
         /// </summary>
         Document,
 
         /// <summary>
-        /// Json open api spec for api
+        /// JSON Open API spec of API
         /// </summary>
         OpenApiSpec,
 
         /// <summary>
-        /// Policy xml for api
+        /// Policy XML file
         /// </summary>
         CustomPolicyXml,
     }
