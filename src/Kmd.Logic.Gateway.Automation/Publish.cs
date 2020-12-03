@@ -227,6 +227,8 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id });
 
+                await this.IfSoThenMakeVersionCurrent(client, subscriptionId, updatedApi.Id.Value, apiVersion.IsCurrent.Value).ConfigureAwait(false);
+
                 await this.CreateOrUpdateRevisions(client, subscriptionId, folderPath, apiVersion, apiVersionValidationResult).ConfigureAwait(false);
             }
         }
@@ -253,7 +255,8 @@ namespace Kmd.Logic.Gateway.Automation
                 productIds: productIds?.Where(x => x.HasValue)?.ToList(),
                 logo: logo,
                 documentation: document,
-                status: apiVersion.Status.HasValue ? apiVersion.Status.Value.ToString() : default).ConfigureAwait(false);
+                status: apiVersion.Status.HasValue ? apiVersion.Status.Value.ToString() : default,
+                isCurrent: apiVersion.IsCurrent.Value).ConfigureAwait(false);
 
             var createdApi = response as ApiListModel;
 
@@ -261,6 +264,7 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 existingApis.Add(createdApi);
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
+
                 await this.CreateRevisions(client, subscriptionId, createdApi.Id.Value, folderPath, apiVersion.Revisions).ConfigureAwait(false);
             }
         }
@@ -330,6 +334,20 @@ namespace Kmd.Logic.Gateway.Automation
             if (updatedRevision != null)
             {
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RevisionUpdated, EntityId = updatedRevision.Id });
+            }
+        }
+
+        private async Task IfSoThenMakeVersionCurrent(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, bool isCurrent)
+        {
+            if (isCurrent)
+            {
+                var response = await client.MakeVersionIsCurrentAsync(subscriptionId, apiVersionId, isCurrent).ConfigureAwait(false);
+
+                var currentApiVersion = response as ApiListModel;
+                if (currentApiVersion != null)
+                {
+                    this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiVersionMarkedAsCurrent, EntityId = currentApiVersion.Id });
+                }
             }
         }
 

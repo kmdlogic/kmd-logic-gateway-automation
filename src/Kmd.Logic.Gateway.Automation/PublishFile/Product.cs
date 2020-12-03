@@ -32,6 +32,8 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
 
         public string ApplicationId { get; set; }
 
+        public RateLimitPolicy RateLimitPolicy { get; set; }
+
         public IEnumerable<CustomPolicy> CustomPolicies { get; set; }
     }
 }

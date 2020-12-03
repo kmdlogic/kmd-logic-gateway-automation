@@ -1,4 +1,8 @@
-﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
     internal class CustomPolicy
     {

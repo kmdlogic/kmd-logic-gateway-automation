@@ -48,7 +48,7 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Can't address. Has implications!!")]
         private async Task<HttpOperationResponse<object>> CustomCreateApiWithHttpMessagesAsync(System.Guid subscriptionId, string name, string path, string apiVersion, Stream openApiSpec, System.Guid? apiVersionSetId = default(System.Guid?), string providerId = default(string), string visibility = default(string), string backendServiceUrl = default(string), IList<System.Guid?> productIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), string status = default(string), bool? isCurrent = default(bool?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            ValidateRequest(name, path, apiVersion, openApiSpec);
+            ValidateRequest(name, path, apiVersion, openApiSpec, isCurrent);
 
             // Tracing
             bool shouldTrace = ServiceClientTracing.IsEnabled;
@@ -361,7 +361,7 @@
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("StyleCop.CSharp.OrderingRules", "SA1204:Static elements should appear before instance elements", Justification = "Not addressing for the sake of readability")]
-        private static void ValidateRequest(string name, string path, string apiVersion, Stream openApiSpec)
+        private static void ValidateRequest(string name, string path, string apiVersion, Stream openApiSpec, bool? isCurrent)
         {
             if (name == null)
             {
@@ -381,6 +381,11 @@
             if (openApiSpec == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "openApiSpec");
+            }
+
+            if (!isCurrent.HasValue)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "isCurrent");
             }
         }
 
