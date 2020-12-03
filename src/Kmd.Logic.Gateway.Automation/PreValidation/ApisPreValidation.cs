@@ -92,16 +92,6 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                             this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.BackendLocation)} does not exist or not valid uri format" });
                         }
 
-                        if (version.CustomPolicies != null && version.CustomPolicies.Any())
-                        {
-                            foreach (var customPolicy in version.CustomPolicies)
-                            {
-                                var policyName = string.IsNullOrEmpty(customPolicy.Name) ? "<no name>" : customPolicy.Name;
-                                var policyPrefix = $"{apiVersionPrefix}, Custom policy: {policyName}";
-                                this.ValidateFile(FileType.CustomPolicyXml, customPolicy.XmlFile, policyPrefix, nameof(customPolicy.XmlFile));
-                            }
-                        }
-
                         if (!version.IsCurrent.HasValue)
                         {
                             this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.IsCurrent)} is not specified" });
