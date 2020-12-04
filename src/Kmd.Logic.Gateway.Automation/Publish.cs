@@ -250,22 +250,27 @@ namespace Kmd.Logic.Gateway.Automation
                 {
                     var apiVersionValidationResult = apiValidationResults.SingleOrDefault(result => result.Name == api.Name && result.Version == apiVersion.VersionName);
 
-                    switch (apiVersionValidationResult.Status)
+                    var apiId = apiVersionValidationResult.Status switch
                     {
-                        case ValidationStatus.CanBeCreated:
-                            await this.CreateApi(client, subscriptionId, providerId, folderPath, allProducts, existingApis, api, apiVersion).ConfigureAwait(false);
-                            break;
-                        case ValidationStatus.CanBeUpdated:
-                            await this.UpdateApi(client, subscriptionId, apiVersionValidationResult, folderPath, allProducts, apiVersion).ConfigureAwait(false);
-                            break;
-                        default:
-                            throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateApis");
-                    }
+                        ValidationStatus.CanBeCreated => await this.CreateApi(client, subscriptionId, providerId, folderPath, allProducts, existingApis, api, apiVersion).ConfigureAwait(false),
+                        ValidationStatus.CanBeUpdated => await this.UpdateApi(client, subscriptionId, apiVersionValidationResult, folderPath, allProducts, apiVersion).ConfigureAwait(false),
+                        _ => throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateApis"),
+                    };
+
+                    await this.CreateOrUpdatePolicies(
+                        client: client,
+                        subscriptionId: subscriptionId,
+                        entityId: apiId,
+                        folderPath: folderPath,
+                        policiesResults: apiVersionValidationResult.Policies,
+                        entityType: "Api",
+                        rateLimitPolicy: apiVersion.RateLimitPolicy,
+                        customPolicies: apiVersion.CustomPolicies).ConfigureAwait(false);
                 }
             }
         }
 
-        private async Task UpdateApi(IGatewayClient client, Guid subscriptionId, ApiValidationResult apiVersionValidationResult, string folderPath, IList<GetProductListModel> allProducts, ApiVersion apiVersion)
+        private async Task<Guid?> UpdateApi(IGatewayClient client, Guid subscriptionId, ApiValidationResult apiVersionValidationResult, string folderPath, IList<GetProductListModel> allProducts, ApiVersion apiVersion)
         {
             var productIds = apiVersion.ProductNames.Select(n => allProducts.SingleOrDefault(p => string.Compare(p.Name, n, comparisonType: StringComparison.OrdinalIgnoreCase) == 0)?.Id)?.ToList();
             using var logo = new FileStream(path: Path.Combine(folderPath, apiVersion.ApiLogoFile), FileMode.Open, FileAccess.Read);
@@ -292,10 +297,14 @@ namespace Kmd.Logic.Gateway.Automation
                 await this.IfSoThenMakeVersionCurrent(client, subscriptionId, updatedApi.Id.Value, apiVersion.IsCurrent.Value).ConfigureAwait(false);
 
                 await this.CreateOrUpdateRevisions(client, subscriptionId, folderPath, apiVersion, apiVersionValidationResult).ConfigureAwait(false);
+
+                return updatedApi.Id;
             }
+
+            return null;
         }
 
-        private async Task CreateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, IList<GetProductListModel> allProducts, IList<ApiListModel> existingApis, Api api, ApiVersion apiVersion)
+        private async Task<Guid?> CreateApi(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, IList<GetProductListModel> allProducts, IList<ApiListModel> existingApis, Api api, ApiVersion apiVersion)
         {
             Guid? apiVersionSetId = existingApis.FirstOrDefault(a => a.Name == api.Name)?.ApiVersionSetId;
 
@@ -328,7 +337,11 @@ namespace Kmd.Logic.Gateway.Automation
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
 
                 await this.CreateRevisions(client, subscriptionId, createdApi.Id.Value, folderPath, apiVersion.Revisions).ConfigureAwait(false);
+
+                return createdApi.Id;
             }
+
+            return null;
         }
 
         private async Task CreateRevisions(IGatewayClient client, Guid subscriptionId, Guid apiVersionId, string folderPath, IEnumerable<Revision> revisions)
