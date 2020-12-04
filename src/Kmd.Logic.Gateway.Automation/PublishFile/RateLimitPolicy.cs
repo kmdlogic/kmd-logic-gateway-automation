@@ -4,6 +4,8 @@
     {
         public string Name { get; }
 
+        public string Description { get; set; }
+
         public int Calls { get; }
 
         public int RenewalPeriod { get; }

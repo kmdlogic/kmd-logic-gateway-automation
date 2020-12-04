@@ -102,22 +102,78 @@ namespace Kmd.Logic.Gateway.Automation
             foreach (var productValidationResult in productValidationResults)
             {
                 var product = products.Single(p => p.Name == productValidationResult.Name);
-                switch (productValidationResult.Status)
+                var productId = productValidationResult.Status switch
+                {
+                    ValidationStatus.CanBeCreated => await this.CreateProduct(client, subscriptionId, providerId, folderPath, product).ConfigureAwait(false),
+                    ValidationStatus.CanBeUpdated => await this.UpdateProduct(client, subscriptionId, providerId, folderPath, product, productValidationResult.EntityId.Value).ConfigureAwait(false),
+                    _ => throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateProducts"),
+                };
+
+                await this.CreateOrUpdatePolicies(
+                    client: client,
+                    subscriptionId: subscriptionId,
+                    entityId: productId,
+                    folderPath: folderPath,
+                    policiesResults: productValidationResult.Policies,
+                    entityType: "Product",
+                    rateLimitPolicy: product.RateLimitPolicy,
+                    customPolicies: product.CustomPolicies).ConfigureAwait(false);
+            }
+        }
+
+        private async Task CreateOrUpdatePolicies(
+            IGatewayClient client,
+            Guid subscriptionId,
+            Guid? entityId,
+            string folderPath,
+            PoliciesValidationResult policiesResults,
+            string entityType,
+            RateLimitPolicy rateLimitPolicy,
+            IEnumerable<CustomPolicy> customPolicies)
+        {
+            if (entityId.HasValue)
+            {
+                var rateLimitPolicyRequest = new RateLimitPolicyRequest(
+                    rateLimitPolicy.Name, entityId, entityType, rateLimitPolicy.Description, rateLimitPolicy.Calls, rateLimitPolicy.RenewalPeriod);
+                switch (policiesResults.RateLimitPolicy.Status)
                 {
                     case ValidationStatus.CanBeCreated:
-                        await this.CreateProduct(client, subscriptionId, providerId, folderPath, product).ConfigureAwait(false);
+                        var created = await client.CreateRateLimitPolicyAsync(subscriptionId, rateLimitPolicyRequest).ConfigureAwait(false);
+                        this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
                         break;
                     case ValidationStatus.CanBeUpdated:
-                        var productId = productValidationResult.EntityId.Value;
-                        await this.UpdateProduct(client, subscriptionId, providerId, folderPath, product, productId).ConfigureAwait(false);
+                        // TODO: Update RateLimitPolicy
                         break;
                     default:
-                        throw new NotSupportedException("Unsupported ValidationStatus in CreateOrUpdateProducts");
+                        throw new NotSupportedException("Unsupported RateLimitPolicy ValidationStatus in CreateOrUpdatePolicies");
+                }
+
+                foreach (var customPolicy in customPolicies)
+                {
+                    var customPolicyResult = policiesResults.CustomPolicies.Single(cp => string.Equals(cp.Name, customPolicy.Name, StringComparison.OrdinalIgnoreCase));
+
+                    using var xmlFs = new FileStream(path: Path.Combine(folderPath, customPolicy.XmlFile), FileMode.Open, FileAccess.Read);
+                    using var sr = new StreamReader(xmlFs);
+                    var xmlContent = await sr.ReadToEndAsync().ConfigureAwait(false);
+
+                    var customPolicyRequest = new CustomPolicyRequest(customPolicy.Name, xmlContent, entityId, customPolicy.Description, entityType);
+                    switch (customPolicyResult.Status)
+                    {
+                        case ValidationStatus.CanBeCreated:
+                            var created = await client.CreateCustomPolicyAsync(subscriptionId, customPolicyRequest).ConfigureAwait(false);
+                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
+                            break;
+                        case ValidationStatus.CanBeUpdated:
+                            // TODO: Update CustomPolicy
+                            break;
+                        default:
+                            throw new NotSupportedException("Unsupported CustomPolicy ValidationStatus in CreateOrUpdatePolicies");
+                    }
                 }
             }
         }
 
-        private async Task CreateProduct(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, Product product)
+        private async Task<Guid?> CreateProduct(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, Product product)
         {
             using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
@@ -140,10 +196,13 @@ namespace Kmd.Logic.Gateway.Automation
             if (response != null)
             {
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                return response.Id;
             }
+
+            return null;
         }
 
-        private async Task UpdateProduct(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, Product product, Guid productId)
+        private async Task<Guid?> UpdateProduct(IGatewayClient client, Guid subscriptionId, Guid providerId, string folderPath, Product product, Guid productId)
         {
             using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
@@ -167,7 +226,10 @@ namespace Kmd.Logic.Gateway.Automation
             if (response != null)
             {
                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id });
+                return response.Id;
             }
+
+            return null;
         }
 
         private async Task CreateOrUpdateApis(Guid subscriptionId, Guid providerId, IEnumerable<Api> apis, IEnumerable<ApiValidationResult> apiValidationResults, string folderPath)
