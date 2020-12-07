@@ -2,12 +2,12 @@
 {
     public class RateLimitPolicy
     {
-        public string Name { get; }
+        public string Name { get; set; }
 
         public string Description { get; set; }
 
-        public int Calls { get; }
+        public int Calls { get; set; }
 
-        public int RenewalPeriod { get; }
+        public int RenewalPeriod { get; set; }
     }
 }

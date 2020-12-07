@@ -103,6 +103,9 @@ namespace Kmd.Logic.Gateway.Automation.Client
                     var rev = api.Revisions.ElementAt(revIndex);
                     await AddApiRevisionContent(requestContent, rev, apiIndex, revIndex).ConfigureAwait(false);
                 }
+
+                // Add Policies
+                AddPolicies(requestContent, $"Apis[{apiIndex}]", api.Policies);
             }
 
             // Add Products
@@ -110,6 +113,9 @@ namespace Kmd.Logic.Gateway.Automation.Client
             {
                 var product = request.Products.ElementAt(productIndex);
                 AddProductContent(requestContent, product, productIndex);
+
+                // Add Policies
+                AddPolicies(requestContent, $"Products[{productIndex}]", product.Policies);
             }
 
             return requestContent;
@@ -148,6 +154,23 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 requestContent.Add(
                     new StringContent(api.ProductNames.ElementAt(productNameIndex)),
                     $"Apis[{apiIndex}].ProductNames[{productNameIndex}]");
+            }
+        }
+
+        private static void AddPolicies(MultipartFormDataContent requestContent, string rootPrefix, PoliciesValidationModel policies)
+        {
+            if (policies.RateLimitPolicy != null)
+            {
+                requestContent.Add(new StringContent(policies.RateLimitPolicy.Name), $"{rootPrefix}.Policies.RateLimitPolicy.Name");
+                requestContent.Add(new StringContent($"{policies.RateLimitPolicy.Calls}"), $"{rootPrefix}.Policies.RateLimitPolicy.Calls");
+                requestContent.Add(new StringContent($"{policies.RateLimitPolicy.RenewalPeriod}"), $"{rootPrefix}.Policies.RateLimitPolicy.RenewalPeriod");
+            }
+
+            for (int cpIndex = 0; cpIndex < policies.CustomPolicies.Count(); cpIndex++)
+            {
+                var customPolicy = policies.CustomPolicies.ElementAt(cpIndex);
+                requestContent.Add(new StringContent(customPolicy.Name), $"{rootPrefix}.Policies.CustomPolicies[{cpIndex}].Name");
+                requestContent.Add(new StringContent(customPolicy.Xml), $"{rootPrefix}.Policies.CustomPolicies[{cpIndex}].Xml");
             }
         }
 #pragma warning restore CA2000 // Dispose objects before losing scope

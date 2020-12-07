@@ -11,7 +11,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
             string version,
             Stream openApiSpec,
             IEnumerable<string> productNames,
-            IEnumerable<ApiRevisionValidationModel> revisions)
+            IEnumerable<ApiRevisionValidationModel> revisions,
+            PoliciesValidationModel policies)
         {
             this.Name = name;
             this.Path = path;
@@ -19,6 +20,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
             this.OpenApiSpec = openApiSpec;
             this.ProductNames = productNames;
             this.Revisions = revisions;
+            this.Policies = policies;
         }
 
         public string Name { get; }
@@ -32,5 +34,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         public IEnumerable<string> ProductNames { get; }
 
         public IEnumerable<ApiRevisionValidationModel> Revisions { get; }
+
+        public PoliciesValidationModel Policies { get; }
     }
 }
