@@ -19,6 +19,15 @@ Products:
    ClientCredentialRequired: false
    ProviderApprovalRequired: false
    LegalTerms: nexus-2 Terms
+   RateLimitPolicy:
+    Name: name1
+    Description: desc1
+    Calls: 3
+    RenewalPeriod: 30
+   CustomPolicies:
+   - Name: test-1
+     Description: description-custom-1
+     XmlFile: ./apis/nexus/policies.xml
 Apis:
  - Name: nexus
    ApiVersions:
@@ -28,20 +37,27 @@ Apis:
       OpenApiSpecFile: ./apis/nexus/nexus-v1.json
       Published: true
       ProductNames: [nexus-1]
-      PolicyXmlFile: ./apis/nexus/policies.xml
       BackendLocation: http://nexus
       IsCurrent: false
       Revisions:
        - RevisionDescription: Rev2
          OpenApiSpecFile: ./apis/nexus/v1/nexus-r2.json
          IsCurrent: true
+      RateLimitPolicy:
+        Name: name1
+        Description: desc1
+        Calls: 3
+        RenewalPeriod: 30
+      CustomPolicies:
+      - Name: test-1
+        Description: description-custom-1
+        XmlFile: ./apis/nexus/policies.xml
     - VersionName: v2
       ApiLogoFile: ./apis/nexus/nexus-v2.png
       ApiDocumentation: ./apis/nexus/markdown-sample.md
       OpenApiSpecFile: ./apis/nexus/nexus-v2.json
       Published: true
       ProductNames: [nexus-1]
-      PolicyXmlFile: ./apis/nexus/policies.xml
       BackendLocation: http://nexus
       IsCurrent: true
       Revisions:
@@ -57,7 +73,6 @@ Apis:
       OpenApiSpecFile: ./apis/nexus2/nexus-v1.json
       Published: true
       ProductNames: [nexus-2]
-      PolicyXmlFile: ./apis/nexus2/policies.xml
       BackendLocation: http://nexus2
       Status: Active
       IsCurrent: true
@@ -74,7 +89,6 @@ Apis:
       OpenApiSpecFile: ./apis/nexus3/nexus-v1.json
       Published: true
       ProductNames: [nexus-2]
-      PolicyXmlFile: ./apis/nexus3/policies.xml
       BackendLocation: http://nexus3
       IsCurrent: true
       Status: Preview
