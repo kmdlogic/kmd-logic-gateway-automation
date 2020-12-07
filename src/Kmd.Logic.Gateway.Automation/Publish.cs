@@ -133,41 +133,47 @@ namespace Kmd.Logic.Gateway.Automation
         {
             if (entityId.HasValue)
             {
-                var rateLimitPolicyRequest = new RateLimitPolicyRequest(
-                    rateLimitPolicy.Name, entityId, entityType, rateLimitPolicy.Description, rateLimitPolicy.Calls, rateLimitPolicy.RenewalPeriod);
-                switch (policiesResults.RateLimitPolicy.Status)
+                if (rateLimitPolicy != null)
                 {
-                    case ValidationStatus.CanBeCreated:
-                        var created = await client.CreateRateLimitPolicyAsync(subscriptionId, rateLimitPolicyRequest).ConfigureAwait(false);
-                        this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
-                        break;
-                    case ValidationStatus.CanBeUpdated:
-                        // TODO: Update RateLimitPolicy
-                        break;
-                    default:
-                        throw new NotSupportedException("Unsupported RateLimitPolicy ValidationStatus in CreateOrUpdatePolicies");
-                }
-
-                foreach (var customPolicy in customPolicies)
-                {
-                    var customPolicyResult = policiesResults.CustomPolicies.Single(cp => string.Equals(cp.Name, customPolicy.Name, StringComparison.OrdinalIgnoreCase));
-
-                    using var xmlFs = new FileStream(path: Path.Combine(folderPath, customPolicy.XmlFile), FileMode.Open, FileAccess.Read);
-                    using var sr = new StreamReader(xmlFs);
-                    var xmlContent = await sr.ReadToEndAsync().ConfigureAwait(false);
-
-                    var customPolicyRequest = new CustomPolicyRequest(customPolicy.Name, xmlContent, entityId, customPolicy.Description, entityType);
-                    switch (customPolicyResult.Status)
+                    var rateLimitPolicyRequest = new RateLimitPolicyRequest(
+                        rateLimitPolicy.Name, entityId, entityType, rateLimitPolicy.Description, rateLimitPolicy.Calls, rateLimitPolicy.RenewalPeriod);
+                    switch (policiesResults.RateLimitPolicy.Status)
                     {
                         case ValidationStatus.CanBeCreated:
-                            var created = await client.CreateCustomPolicyAsync(subscriptionId, customPolicyRequest).ConfigureAwait(false);
+                            var created = await client.CreateRateLimitPolicyAsync(subscriptionId, rateLimitPolicyRequest).ConfigureAwait(false);
                             this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
                             break;
                         case ValidationStatus.CanBeUpdated:
-                            // TODO: Update CustomPolicy
+                            // TODO: Update RateLimitPolicy
                             break;
                         default:
-                            throw new NotSupportedException("Unsupported CustomPolicy ValidationStatus in CreateOrUpdatePolicies");
+                            throw new NotSupportedException("Unsupported RateLimitPolicy ValidationStatus in CreateOrUpdatePolicies");
+                    }
+                }
+
+                if (customPolicies != null)
+                {
+                    foreach (var customPolicy in customPolicies)
+                    {
+                        var customPolicyResult = policiesResults.CustomPolicies.Single(cp => string.Equals(cp.Name, customPolicy.Name, StringComparison.OrdinalIgnoreCase));
+
+                        using var xmlFs = new FileStream(path: Path.Combine(folderPath, customPolicy.XmlFile), FileMode.Open, FileAccess.Read);
+                        using var sr = new StreamReader(xmlFs);
+                        var xmlContent = await sr.ReadToEndAsync().ConfigureAwait(false);
+
+                        var customPolicyRequest = new CustomPolicyRequest(customPolicy.Name, xmlContent, entityId, customPolicy.Description, entityType);
+                        switch (customPolicyResult.Status)
+                        {
+                            case ValidationStatus.CanBeCreated:
+                                var created = await client.CreateCustomPolicyAsync(subscriptionId, customPolicyRequest).ConfigureAwait(false);
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
+                                break;
+                            case ValidationStatus.CanBeUpdated:
+                                // TODO: Update CustomPolicy
+                                break;
+                            default:
+                                throw new NotSupportedException("Unsupported CustomPolicy ValidationStatus in CreateOrUpdatePolicies");
+                        }
                     }
                 }
             }
@@ -278,7 +284,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             var response = await client.CustomUpdateApiAsync(
                 subscriptionId: subscriptionId,
-                apiId: apiVersionValidationResult.ApiId.Value,
+                apiId: apiVersionValidationResult.EntityId.Value,
                 name: apiVersionValidationResult.Name,
                 apiVersion: apiVersion.VersionName,
                 visibility: apiVersion.Visibility,
@@ -370,11 +376,11 @@ namespace Kmd.Logic.Gateway.Automation
             for (int i = 0; i < validationResults.Length; i++)
             {
                 var revision = revisions[i];
-                var revisionId = validationResults[i].ApiRevisionId;
+                var revisionId = validationResults[i].EntityId;
 
                 tasks[i] = validationResults[i].Status == ValidationStatus.CanBeCreated
-                    ? Task.Run(() => this.CreateRevision(client, subscriptionId, apiVersionValidationResult.ApiId.Value, folderPath, revision))
-                    : Task.Run(() => this.UpdateRevision(client, subscriptionId, apiVersionValidationResult.ApiId.Value, revisionId.Value, folderPath, revision));
+                    ? Task.Run(() => this.CreateRevision(client, subscriptionId, apiVersionValidationResult.EntityId.Value, folderPath, revision))
+                    : Task.Run(() => this.UpdateRevision(client, subscriptionId, apiVersionValidationResult.EntityId.Value, revisionId.Value, folderPath, revision));
             }
 
             return Task.WhenAll(tasks);

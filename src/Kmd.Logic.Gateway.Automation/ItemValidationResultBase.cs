@@ -26,6 +26,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
             else
             {
+                sb.Append(this.EntityId.HasValue ? $"* Entity ID: {this.EntityId.Value}\n" : string.Empty);
                 sb.AppendLine($"* Status: {this.Status}");
             }
 

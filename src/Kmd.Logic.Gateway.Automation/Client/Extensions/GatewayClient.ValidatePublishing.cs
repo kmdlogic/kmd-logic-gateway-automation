@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Microsoft.Rest;
 
 namespace Kmd.Logic.Gateway.Automation.Client
@@ -219,6 +221,11 @@ namespace Kmd.Logic.Gateway.Automation.Client
                         }
                     }
                 }
+
+                if (api.Policies != null)
+                {
+                    ValidatePoliciesRequest(api.Policies);
+                }
             }
 
             foreach (var product in request.Products)
@@ -226,6 +233,62 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 if (string.IsNullOrEmpty(product.Name))
                 {
                     throw new ValidationException(ValidationRules.CannotBeNull, "Products.Name");
+                }
+
+                if (product.Policies != null)
+                {
+                    ValidatePoliciesRequest(product.Policies);
+                }
+            }
+        }
+
+        public static void ValidatePoliciesRequest(PoliciesValidationModel policiesValidationModel)
+        {
+            if (policiesValidationModel.RateLimitPolicy != null)
+            {
+                if (string.IsNullOrEmpty(policiesValidationModel.RateLimitPolicy.Name))
+                {
+                    throw new ValidationException(ValidationRules.CannotBeNull, "RateLimitPolicy.Name");
+                }
+
+                if (policiesValidationModel.RateLimitPolicy.Calls < 1)
+                {
+                    throw new ValidationException(ValidationRules.InclusiveMinimum, "RateLimitPolicy.Calls");
+                }
+
+                if (policiesValidationModel.RateLimitPolicy.RenewalPeriod < 1)
+                {
+                    throw new ValidationException(ValidationRules.InclusiveMinimum, "RateLimitPolicy.RenewalPeriod");
+                }
+
+                if (policiesValidationModel.RateLimitPolicy.RenewalPeriod > 300)
+                {
+                    throw new ValidationException(ValidationRules.InclusiveMaximum, "RateLimitPolicy.RenewalPeriod");
+                }
+            }
+
+            if (policiesValidationModel.CustomPolicies != null)
+            {
+                foreach (var customPolicy in policiesValidationModel.CustomPolicies)
+                {
+                    if (string.IsNullOrEmpty(customPolicy.Name))
+                    {
+                        throw new ValidationException(ValidationRules.CannotBeNull, "CustomPolicy.Name");
+                    }
+
+                    if (string.IsNullOrEmpty(customPolicy.Xml))
+                    {
+                        throw new ValidationException(ValidationRules.CannotBeNull, "CustomPolicy.Xml");
+                    }
+
+                    try
+                    {
+                        XElement.Parse(customPolicy.Xml);
+                    }
+                    catch (XmlException xe)
+                    {
+                        throw new ValidationException("XmlError", "CustomPolicy.Xml", xe.Message);
+                    }
                 }
             }
         }
