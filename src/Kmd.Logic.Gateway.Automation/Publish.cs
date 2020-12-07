@@ -166,7 +166,7 @@ namespace Kmd.Logic.Gateway.Automation
                         {
                             case ValidationStatus.CanBeCreated:
                                 var created = await client.CreateCustomPolicyAsync(subscriptionId, customPolicyRequest).ConfigureAwait(false);
-                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyCreated, EntityId = created.Id });
                                 break;
                             case ValidationStatus.CanBeUpdated:
                                 // TODO: Update CustomPolicy
