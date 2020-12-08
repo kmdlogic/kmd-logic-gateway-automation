@@ -46,5 +46,15 @@
         /// Revision updated successfully.
         /// </summary>
         RevisionUpdated,
+
+        /// <summary>
+        /// Rate limit policy created successfully.
+        /// </summary>
+        RateLimitPolicyCreated,
+
+        /// <summary>
+        /// Custom policy created successfully.
+        /// </summary>
+        CustomPolicyCreated,
     }
 }

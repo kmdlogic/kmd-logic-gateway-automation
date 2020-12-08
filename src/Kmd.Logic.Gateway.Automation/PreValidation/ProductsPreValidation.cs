@@ -31,10 +31,26 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
 
                     this.ValidateFile(FileType.Logo, product.Logo, product.Name, nameof(product.Logo));
                     this.ValidateFile(FileType.Document, product.Documentation, product.Name, nameof(product.Documentation));
+
+                    this.ValidatePolicies(product, productPrefix);
                 }
             }
 
             return this.ValidationResults;
+        }
+
+        private void ValidatePolicies(Product product, string productPrefix)
+        {
+            if (product.CustomPolicies != null)
+            {
+                foreach (var customPolicy in product.CustomPolicies)
+                {
+                    var policyPrefix = string.IsNullOrEmpty(customPolicy.Name)
+                        ? $"{productPrefix}, Custom policy"
+                        : $"{productPrefix}, Custom policy: {customPolicy.Name}";
+                    this.ValidateFile(FileType.CustomPolicyXml, customPolicy.XmlFile, policyPrefix, nameof(customPolicy.XmlFile));
+                }
+            }
         }
     }
 }

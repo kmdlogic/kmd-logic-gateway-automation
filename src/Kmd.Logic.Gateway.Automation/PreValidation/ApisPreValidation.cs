@@ -97,7 +97,6 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                             this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"[{apiVersionPrefix}] {nameof(version.IsCurrent)} is not specified" });
                         }
 
-                        this.ValidateFile(FileType.PolicyXml, version.PolicyXmlFile, apiVersionPrefix, nameof(version.PolicyXmlFile));
                         this.ValidateFile(FileType.Logo, version.ApiLogoFile, apiVersionPrefix, nameof(version.ApiLogoFile));
                         this.ValidateFile(FileType.Document, version.ApiDocumentation, apiVersionPrefix, nameof(version.ApiDocumentation));
                         this.ValidateFile(FileType.OpenApiSpec, version.OpenApiSpecFile, apiVersionPrefix, nameof(version.OpenApiSpecFile));
@@ -115,11 +114,27 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                                 this.ValidateFile(FileType.OpenApiSpec, revision.OpenApiSpecFile, $"{api.Name} - {version.VersionName} - {revision.RevisionDescription}", nameof(revision.OpenApiSpecFile));
                             }
                         }
+
+                        this.ValidatePolicies(version, apiVersionPrefix);
                     }
                 }
             }
 
             return this.ValidationResults;
+        }
+
+        private void ValidatePolicies(ApiVersion version, string versionPrefix)
+        {
+            if (version.CustomPolicies != null)
+            {
+                foreach (var customPolicy in version.CustomPolicies)
+                {
+                    var policyPrefix = string.IsNullOrEmpty(customPolicy.Name)
+                        ? $"{versionPrefix}, Custom policy"
+                        : $"{versionPrefix}, Custom policy: {customPolicy.Name}";
+                    this.ValidateFile(FileType.CustomPolicyXml, customPolicy.XmlFile, policyPrefix, nameof(customPolicy.XmlFile));
+                }
+            }
         }
     }
 }

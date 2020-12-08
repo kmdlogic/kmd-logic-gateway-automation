@@ -52,7 +52,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             using var client = this.gatewayClientFactory.CreateClient();
-            using var validatePublishingRequest = GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel);
+            using var validatePublishingRequest = await GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel).ConfigureAwait(false);
             var validatePublishingResult = await client.ValidatePublishingAsync(
                 this.options.SubscriptionId, validatePublishingRequest).ConfigureAwait(false);
 
@@ -125,7 +125,7 @@ namespace Kmd.Logic.Gateway.Automation
             return publishResults;
         }
 
-        private static ValidatePublishingRequest GetValidatePublishingRequest(string folderPath, Guid providerId, PublishFileModel input)
+        private static async Task<ValidatePublishingRequest> GetValidatePublishingRequest(string folderPath, Guid providerId, PublishFileModel input)
         {
             var apis = new List<ApiValidationModel>();
             foreach (var api in input.Apis)
@@ -138,19 +138,44 @@ namespace Kmd.Logic.Gateway.Automation
                         var fsRev = new FileStream(Path.Combine(folderPath, r.OpenApiSpecFile), FileMode.Open, FileAccess.Read);
                         return new ApiRevisionValidationModel(fsRev, r.RevisionDescription);
                     });
+
                     apis.Add(new ApiValidationModel(
                         api.Name,
                         api.Path,
                         apiVersion.VersionName,
                         fs,
                         apiVersion.ProductNames,
-                        revisions));
+                        revisions,
+                        await GetPoliciesValidationModel(folderPath, apiVersion.CustomPolicies, apiVersion.RateLimitPolicy).ConfigureAwait(false)));
                 }
             }
 
-            var products = input.Products.Select(p => new ProductValidationModel(p.Name));
+            var products = await Task.WhenAll(input.Products.Select(async p => new ProductValidationModel(
+                p.Name,
+                await GetPoliciesValidationModel(folderPath, p.CustomPolicies, p.RateLimitPolicy).ConfigureAwait(false)))).ConfigureAwait(false);
 
             return new ValidatePublishingRequest(providerId, apis, products);
+        }
+
+        private static async Task<PoliciesValidationModel> GetPoliciesValidationModel(
+            string folderPath,
+            IEnumerable<CustomPolicy> customPolicies,
+            RateLimitPolicy rateLimitPolicy)
+        {
+            var rateLimitPolicyToValidate = rateLimitPolicy == null
+                ? null
+                : new RateLimitPolicyValidationModel(rateLimitPolicy.Name, rateLimitPolicy.Calls, rateLimitPolicy.RenewalPeriod);
+
+            var customPoliciesToValidate = customPolicies == null
+                ? Enumerable.Empty<CustomPolicyValidationModel>()
+                : await Task.WhenAll(customPolicies.Select(async cp =>
+                {
+                    using var xmlFs = new FileStream(Path.Combine(folderPath, cp.XmlFile), FileMode.Open, FileAccess.Read);
+                    using var sr = new StreamReader(xmlFs);
+                    return new CustomPolicyValidationModel(cp.Name, await sr.ReadToEndAsync().ConfigureAwait(false));
+                })).ConfigureAwait(false);
+
+            return new PoliciesValidationModel(customPoliciesToValidate, rateLimitPolicyToValidate);
         }
     }
 }

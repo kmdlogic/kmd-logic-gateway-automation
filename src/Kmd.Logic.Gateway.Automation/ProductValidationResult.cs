@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace Kmd.Logic.Gateway.Automation
 {
@@ -7,13 +6,13 @@ namespace Kmd.Logic.Gateway.Automation
     {
         public string Name { get; set; }
 
-        public Guid? ProductId { get; set; }
+        public PoliciesValidationResult Policies { get; set; }
 
         public override string ToString()
         {
             var sb = new StringBuilder();
             sb.AppendLine($"* Product Name: {this.Name}");
-            sb.Append(this.ProductId.HasValue ? $"* Product ID: {this.ProductId.Value}\n" : string.Empty);
+            sb.Append(this.EntityId.HasValue ? $"* Product ID: {this.EntityId.Value}\n" : string.Empty);
             sb.Append(base.ToString());
             return sb.ToString();
         }

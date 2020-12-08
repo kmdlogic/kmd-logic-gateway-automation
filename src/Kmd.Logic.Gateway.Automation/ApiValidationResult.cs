@@ -12,11 +12,11 @@ namespace Kmd.Logic.Gateway.Automation
 
         public string Version { get; set; }
 
-        public Guid? ApiId { get; set; }
-
         public Guid? ApiVersionSetId { get; set; }
 
         public IEnumerable<ApiRevisionValidationResult> Revisions { get; set; }
+
+        public PoliciesValidationResult Policies { get; set; }
 
         public override string ToString()
         {
@@ -24,7 +24,6 @@ namespace Kmd.Logic.Gateway.Automation
             sb.AppendLine($"* API Name: {this.Name}");
             sb.AppendLine($"* Path: {this.Path}");
             sb.AppendLine($"* Version: {this.Version}");
-            sb.Append(this.ApiId.HasValue ? $"* Api ID: {this.ApiId.Value}\n" : string.Empty);
             sb.Append(this.ApiVersionSetId.HasValue ? $"* API version set: {this.ApiVersionSetId.Value}\n" : string.Empty);
             sb.Append(base.ToString());
 
