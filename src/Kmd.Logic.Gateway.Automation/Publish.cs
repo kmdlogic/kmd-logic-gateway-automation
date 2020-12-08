@@ -157,8 +157,7 @@ namespace Kmd.Logic.Gateway.Automation
                     {
                         var customPolicyResult = policiesResults.CustomPolicies.Single(cp => string.Equals(cp.Name, customPolicy.Name, StringComparison.OrdinalIgnoreCase));
 
-                        using var xmlFs = new FileStream(path: Path.Combine(folderPath, customPolicy.XmlFile), FileMode.Open, FileAccess.Read);
-                        using var sr = new StreamReader(xmlFs);
+                        using var sr = new StreamReader(Path.Combine(folderPath, customPolicy.XmlFile));
                         var xmlContent = await sr.ReadToEndAsync().ConfigureAwait(false);
 
                         var customPolicyRequest = new CustomPolicyRequest(customPolicy.Name, xmlContent, entityId, customPolicy.Description, entityType);
