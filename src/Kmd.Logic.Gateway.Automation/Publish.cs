@@ -136,7 +136,7 @@ namespace Kmd.Logic.Gateway.Automation
                 if (rateLimitPolicy != null)
                 {
                     var rateLimitPolicyRequest = new RateLimitPolicyRequest(
-                    rateLimitPolicy.Name, entityId, entityType, rateLimitPolicy.Description, rateLimitPolicy.Calls, rateLimitPolicy.RenewalPeriod);
+                        rateLimitPolicy.Name, entityId, entityType, rateLimitPolicy.Description, rateLimitPolicy.Calls, rateLimitPolicy.RenewalPeriod);
                     switch (policiesResults.RateLimitPolicy.Status)
                     {
                         case ValidationStatus.CanBeCreated:
@@ -169,12 +169,8 @@ namespace Kmd.Logic.Gateway.Automation
                                 this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyCreated, EntityId = created.Id });
                                 break;
                             case ValidationStatus.CanBeUpdated:
-                                foreach (var custompolicy in policiesResults.CustomPolicies)
-                                {
-                                    var updated = await client.UpdateCustomPolicyAsync(subscriptionId, custompolicy.EntityId.Value, customPolicyRequest).ConfigureAwait(false);
-                                    this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyUpdated, EntityId = updated.Id });
-                                }
-
+                                var updated = await client.UpdateCustomPolicyAsync(subscriptionId, customPolicyResult.EntityId.Value, customPolicyRequest).ConfigureAwait(false);
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyUpdated, EntityId = updated.Id });
                                 break;
                             default:
                                 throw new NotSupportedException("Unsupported CustomPolicy ValidationStatus in CreateOrUpdatePolicies");
