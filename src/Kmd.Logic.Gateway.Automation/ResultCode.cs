@@ -53,8 +53,18 @@
         RateLimitPolicyCreated,
 
         /// <summary>
+        /// Rate limit policy updated successfully.
+        /// </summary>
+        RateLimitPolicyUpdated,
+
+        /// <summary>
         /// Custom policy created successfully.
         /// </summary>
         CustomPolicyCreated,
+
+        /// <summary>
+        /// Custom policy updated successfully.
+        /// </summary>
+        CustomPolicyUpdated,
     }
 }
