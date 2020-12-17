@@ -7,6 +7,8 @@ env:
 on:
   push:
     branches: [ master, develop ]
+    paths: 
+    - 'src/**'
   pull_request:
     branches: [ master, develop ]
 
@@ -17,6 +19,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Get current time
+      uses: 1466587594/get-current-time@v2
+      id: current-time
+      with:
+        format: YYYYMMDD-HHmm
+
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -25,7 +34,7 @@ jobs:
       run: dotnet restore '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj'
 
     - name: Build - PreRelease
-      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore
+      run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Debug --no-restore -p:VersionSuffix=dev-${{ steps.current-time.outputs.formattedTime }}
       if: GITHUB.REF != 'refs/heads/master'
     - name: Build - Release
       run: dotnet build '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --configuration Release --no-restore
@@ -35,8 +44,8 @@ jobs:
       run: dotnet test --no-restore --verbosity normal
 
     - name: Pack - PreRelease
-      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore --version-suffix dev-$GITHUB_RUN_NUMBER
-      if: GITHUB.REF == 'refs/heads/develop'
+      run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore -p:VersionSuffix=dev-${{ steps.current-time.outputs.formattedTime }}
+      if: GITHUB.REF != 'refs/heads/master'
     - name: Pack - Release
       run: dotnet pack '${{ env.PROJPATH }}/Kmd.Logic.Gateway.Automation.Tool.csproj' --output ${{ env.PROJPATH }}/nupkgs --no-restore
       if: GITHUB.REF == 'refs/heads/master'

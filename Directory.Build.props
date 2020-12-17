@@ -4,12 +4,10 @@
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
 		<LangVersion>latest</LangVersion>
 		<TreatWarningsAsErrors Condition="'$(Configuration)' == 'Release'">true</TreatWarningsAsErrors>
-		<NoWarn>$(NoWarn);CS1591;CA1812;SA1309;SA1600;SA1633;SA1200;SA1202;SA1201;CA1016;CA1303</NoWarn>
+		<NoWarn>$(NoWarn);CS1591;CA1812;SA1309;SA1600;SA1633;SA1200;SA1202;SA1201;CA1016;CA1303;CS1573</NoWarn>
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<Version>0.0.1</Version>
-		<Version Condition=" '$(VersionSuffix)' != '' ">$(Version)-$(VersionSuffix)</Version>
 		<Authors>Logic</Authors>
 		<Company>KMD</Company>
 		<Product>Logic</Product>
@@ -19,7 +17,10 @@
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+
+		<VersionPrefix Condition=" '$(VersionPrefix)' == '' ">0.3.0</VersionPrefix>
+		<Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
+		<Version Condition=" '$(Version)' == '' ">$(VersionPrefix)</Version>
 	</PropertyGroup>
 
 	<ItemGroup>

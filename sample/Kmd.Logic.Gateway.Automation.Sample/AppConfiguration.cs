@@ -1,4 +1,5 @@
-﻿using Kmd.Logic.Identity.Authorization;
+﻿using System;
+using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation.Sample
 {
@@ -7,5 +8,7 @@ namespace Kmd.Logic.Gateway.Automation.Sample
         public LogicTokenProviderOptions TokenProvider { get; set; } = new LogicTokenProviderOptions();
 
         public GatewayOptions Gateway { get; set; } = new GatewayOptions();
+
+        public string FolderPath { get; set; }
     }
 }
