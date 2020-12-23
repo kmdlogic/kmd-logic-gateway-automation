@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Linq;
 
 namespace Kmd.Logic.Gateway.Automation.Tool
 {
