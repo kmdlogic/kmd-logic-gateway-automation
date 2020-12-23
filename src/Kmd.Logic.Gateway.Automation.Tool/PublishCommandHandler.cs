@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Kmd.Logic.Gateway.Automation.Tool
 {
@@ -21,7 +22,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                 Console.WriteLine(result.ToString());
             }
 
-            return 0;
+            return results.Any(result => result.IsError) ? 1 : 0;
         }
     }
 }
