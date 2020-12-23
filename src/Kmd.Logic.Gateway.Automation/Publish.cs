@@ -78,16 +78,24 @@ namespace Kmd.Logic.Gateway.Automation
             }
             else
             {
+                using var client = this.gatewayClientFactory.CreateClient();
+                var providerId = this.options.ProviderId.HasValue
+                    ? this.options.ProviderId.Value
+                    : (await client.GetGatewayProvidersAsync(this.options.SubscriptionId.ToString()).ConfigureAwait(false))
+                        .Single(x => x.SubscriptionId == this.options.SubscriptionId).Id.Value;
+
                 await this.CreateOrUpdateProducts(
+                    client,
                     subscriptionId: this.options.SubscriptionId,
-                    providerId: this.options.ProviderId,
+                    providerId: providerId,
                     products: publishFileModel.Products,
                     productValidationResults: validationResult.ValidatePublishingResult.Products,
                     folderPath: folderPath).ConfigureAwait(false);
 
                 await this.CreateOrUpdateApis(
+                    client,
                     subscriptionId: this.options.SubscriptionId,
-                    providerId: this.options.ProviderId,
+                    providerId: providerId,
                     apis: publishFileModel.Apis,
                     apiValidationResults: validationResult.ValidatePublishingResult.Apis,
                     folderPath: folderPath).ConfigureAwait(false);
@@ -96,9 +104,8 @@ namespace Kmd.Logic.Gateway.Automation
             return this.publishResults;
         }
 
-        private async Task CreateOrUpdateProducts(Guid subscriptionId, Guid providerId, IEnumerable<Product> products, IEnumerable<ProductValidationResult> productValidationResults, string folderPath)
+        private async Task CreateOrUpdateProducts(IGatewayClient client, Guid subscriptionId, Guid providerId, IEnumerable<Product> products, IEnumerable<ProductValidationResult> productValidationResults, string folderPath)
         {
-            using var client = this.gatewayClientFactory.CreateClient();
             foreach (var productValidationResult in productValidationResults)
             {
                 var product = products.Single(p => p.Name == productValidationResult.Name);
@@ -239,14 +246,12 @@ namespace Kmd.Logic.Gateway.Automation
             return null;
         }
 
-        private async Task CreateOrUpdateApis(Guid subscriptionId, Guid providerId, IEnumerable<Api> apis, IEnumerable<ApiValidationResult> apiValidationResults, string folderPath)
+        private async Task CreateOrUpdateApis(IGatewayClient client, Guid subscriptionId, Guid providerId, IEnumerable<Api> apis, IEnumerable<ApiValidationResult> apiValidationResults, string folderPath)
         {
             if (!apis.Any())
             {
                 return;
             }
-
-            using var client = this.gatewayClientFactory.CreateClient();
 
             var allProducts = await client.GetAllProductsAsync(subscriptionId, providerId).ConfigureAwait(false);
             var existingApis = await client.GetAllApisAsync(subscriptionId, providerId).ConfigureAwait(false);
