@@ -7,9 +7,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 {
     internal class PublishCommandHandler : CommandHandlerBase
     {
-#pragma warning disable CA1801 // Remove unused parameter
         public async Task<int> Handle(PublishCommand cmd)
-#pragma warning restore CA1801 // Remove unused parameter
         {
             this.Initialize(cmd);
 
