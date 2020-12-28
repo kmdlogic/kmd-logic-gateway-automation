@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Kmd.Logic.Gateway.Automation.Client;
 using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation
@@ -26,6 +28,18 @@ namespace Kmd.Logic.Gateway.Automation
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
+            }
+
+            if (!options.ProviderId.HasValue || options.ProviderId.Value == Guid.Empty)
+            {
+                using var client = new GatewayClientFactory(tokenProviderFactory, httpClient, options).CreateClient();
+                var provider = client.GetGatewayProviders(options.SubscriptionId.ToString())?.SingleOrDefault(x => x.SubscriptionId == options.SubscriptionId);
+                if (provider == null)
+                {
+                    throw new ArgumentException("providerId not found");
+                }
+
+                options.ProviderId = provider.Id;
             }
 
             this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);

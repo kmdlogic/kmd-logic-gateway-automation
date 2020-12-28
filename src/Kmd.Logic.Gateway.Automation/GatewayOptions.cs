@@ -23,6 +23,6 @@ namespace Kmd.Logic.Gateway.Automation
         /// <summary>
         /// Gets or sets the Logic Provider Id.
         /// </summary>
-        public Guid ProviderId { get; set; }
+        public Guid? ProviderId { get; set; }
     }
 }
