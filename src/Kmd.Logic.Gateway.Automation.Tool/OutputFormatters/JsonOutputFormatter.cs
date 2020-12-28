@@ -1,22 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace Kmd.Logic.Gateway.Automation.Tool.OutputFormatters
 {
     internal class JsonOutputFormatter : IOutputFormatter
     {
-        private JsonSerializerOptions jsonSerializerOptions = new JsonSerializerOptions { WriteIndented = true };
+        private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore};
 
         public void PrintResults(ValidationResult validationResult)
         {
-            Console.WriteLine(JsonSerializer.Serialize(validationResult, typeof(ValidationResult), this.jsonSerializerOptions));
+            Console.WriteLine(JsonConvert.SerializeObject(validationResult, Formatting.Indented, this.jsonSerializerSettings));
         }
 
         public void PrintResults(IEnumerable<GatewayAutomationResult> gatewayAutomationResults)
         {
-            Console.WriteLine(JsonSerializer.Serialize(gatewayAutomationResults, typeof(IEnumerable<GatewayAutomationResult>), this.jsonSerializerOptions));
+            Console.WriteLine(JsonConvert.SerializeObject(gatewayAutomationResults, Formatting.Indented, this.jsonSerializerSettings));
         }
     }
 }

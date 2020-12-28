@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Kmd.Logic.Gateway.Automation
 {
@@ -9,6 +11,7 @@ namespace Kmd.Logic.Gateway.Automation
     {
         public Guid? EntityId { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
         public ValidationStatus Status { get; set; }
 
         public IEnumerable<string> Errors { get; set; }
