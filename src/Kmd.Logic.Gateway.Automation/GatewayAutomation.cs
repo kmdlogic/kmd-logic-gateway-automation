@@ -30,7 +30,7 @@ namespace Kmd.Logic.Gateway.Automation
                 throw new ArgumentNullException(nameof(options));
             }
 
-            if (!options.ProviderId.HasValue)
+            if (!options.ProviderId.HasValue || options.ProviderId.Value == Guid.Empty)
             {
                 using var client = new GatewayClientFactory(tokenProviderFactory, httpClient, options).CreateClient();
                 var provider = client.GetGatewayProviders(options.SubscriptionId.ToString())?.SingleOrDefault(x => x.SubscriptionId == options.SubscriptionId);
