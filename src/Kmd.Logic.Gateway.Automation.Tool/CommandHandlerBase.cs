@@ -1,4 +1,5 @@
 ﻿using System;
+using Kmd.Logic.Gateway.Automation.Tool.OutputFormatters;
 using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation.Tool
@@ -8,6 +9,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 #pragma warning disable SA1401 // Fields should be private
         protected LogicTokenProviderFactory logicTokenProviderFactory;
         protected GatewayOptions gatewayOptions;
+        protected IOutputFormatter outputFormatter;
 #pragma warning restore SA1401 // Fields should be private
 
         protected void Initialize(CommandBase cmd)
@@ -26,6 +28,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                 ProviderId = cmd.ProviderId,
             };
             this.gatewayOptions.GatewayServiceUri = cmd.GatewayUrl ?? this.gatewayOptions.GatewayServiceUri;
+            this.outputFormatter = cmd.OutputFormat == OutputFormat.Json ? new JsonOutputFormatter() : new ListOutputFormatter();
         }
 
         public void Dispose()

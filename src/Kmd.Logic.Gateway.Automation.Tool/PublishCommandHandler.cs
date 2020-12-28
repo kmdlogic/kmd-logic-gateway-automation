@@ -16,10 +16,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
             var gatewayAutomation = new GatewayAutomation(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
             var results = await gatewayAutomation.PublishAsync(cmd.FolderPath).ConfigureAwait(false);
 
-            foreach (var result in results)
-            {
-                Console.WriteLine(result.ToString());
-            }
+            this.outputFormatter.PrintResults(results);
 
             return 0;
         }

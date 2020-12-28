@@ -28,5 +28,8 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
         [Option('v', "verbose", HelpText = "Logs everything.")]
         public bool Verbose { get; set; }
+
+        [Option('o', "output", HelpText = "Output format.")]
+        public OutputFormat OutputFormat { get; set; }
     }
 }
