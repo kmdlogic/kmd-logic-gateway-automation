@@ -16,14 +16,16 @@ namespace Kmd.Logic.Gateway.Automation
     {
         private readonly GatewayOptions options;
         private readonly ValidatePublishing validatePublishing;
-        private readonly PublishApis _publishApis;
-        private readonly PublishProducts _publishProducts;
-        private readonly PublishPolicies _publishPolicies;
+        private readonly PublishApis publishApis;
+        private readonly PublishProducts publishProducts;
         private List<GatewayAutomationResult> publishResults;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
         /// </summary>
+        /// <param name="httpClient">The HTTP client to use. The caller is expected to manage this resource and it will not be disposed.</param>
+        /// <param name="tokenProviderFactory">The Logic access token provider factory.</param>
+        /// <param name="options">The required configuration options.</param>
         public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
         {
             if (tokenProviderFactory == null)
@@ -39,9 +41,8 @@ namespace Kmd.Logic.Gateway.Automation
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             this.validatePublishing = new ValidatePublishing(httpClient, tokenProviderFactory, options);
             this.publishResults = new List<GatewayAutomationResult>();
-            this._publishPolicies = new PublishPolicies(httpClient, tokenProviderFactory, options, this.publishResults);
-            this._publishApis = new PublishApis(httpClient, tokenProviderFactory, options, this.publishResults);
-            this._publishProducts = new PublishProducts(httpClient, tokenProviderFactory, options, this.publishResults);
+            this.publishApis = new PublishApis(httpClient, tokenProviderFactory, options, this.publishResults);
+            this.publishProducts = new PublishProducts(httpClient, tokenProviderFactory, options, this.publishResults);
         }
 
         /// <summary>
@@ -78,21 +79,19 @@ namespace Kmd.Logic.Gateway.Automation
             }
             else
             {
-              await this._publishProducts.CreateOrUpdateProducts(
-                    subscriptionId: this.options.SubscriptionId,
-                    providerId: this.options.ProviderId,
-                    products: publishFileModel.Products,
-                    productValidationResults: validationResult.ValidatePublishingResult.Products,
-                    folderPath: folderPath).ConfigureAwait(false);
+                await this.publishProducts.CreateOrUpdateProducts(
+                      subscriptionId: this.options.SubscriptionId,
+                      providerId: this.options.ProviderId.Value,
+                      products: publishFileModel.Products,
+                      productValidationResults: validationResult.ValidatePublishingResult.Products,
+                      folderPath: folderPath).ConfigureAwait(false);
 
-              await this._publishApis.CreateOrUpdateApis(
+                await this.publishApis.CreateOrUpdateApis(
                     subscriptionId: this.options.SubscriptionId,
-                    providerId: this.options.ProviderId,
+                    providerId: this.options.ProviderId.Value,
                     apis: publishFileModel.Apis,
                     apiValidationResults: validationResult.ValidatePublishingResult.Apis,
                     folderPath: folderPath).ConfigureAwait(false);
-
-            
             }
 
             return this.publishResults;
