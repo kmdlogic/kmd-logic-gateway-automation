@@ -31,7 +31,6 @@ namespace Kmd.Logic.Gateway.Automation
         public async Task<ValidationResult> ValidateAsync(string folderPath)
         {
             var publishYml = File.ReadAllText(Path.Combine(folderPath, "publish.yml"));
-
             var publishFileModel = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build().Deserialize<PublishFileModel>(publishYml);
 
             if (publishFileModel != null && !publishFileModel.Products.Any() && !publishFileModel.Apis.Any())
