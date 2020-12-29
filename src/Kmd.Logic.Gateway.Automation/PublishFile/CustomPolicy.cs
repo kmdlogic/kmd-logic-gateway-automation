@@ -1,6 +1,6 @@
 ﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    internal class CustomPolicy
+    public class CustomPolicy
     {
         public string Name { get; set; }
 

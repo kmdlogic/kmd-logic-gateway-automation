@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    internal class ApiVersion
+    public class ApiVersion
     {
         public string VersionName { get; set; }
 
