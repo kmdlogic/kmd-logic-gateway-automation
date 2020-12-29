@@ -81,14 +81,14 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 await this.CreateOrUpdateProducts(
                     subscriptionId: this.options.SubscriptionId,
-                    providerId: this.options.ProviderId,
+                    providerId: this.options.ProviderId.Value,
                     products: publishFileModel.Products,
                     productValidationResults: validationResult.ValidatePublishingResult.Products,
                     folderPath: folderPath).ConfigureAwait(false);
 
                 await this.CreateOrUpdateApis(
                     subscriptionId: this.options.SubscriptionId,
-                    providerId: this.options.ProviderId,
+                    providerId: this.options.ProviderId.Value,
                     apis: publishFileModel.Apis,
                     apiValidationResults: validationResult.ValidatePublishingResult.Apis,
                     folderPath: folderPath).ConfigureAwait(false);
