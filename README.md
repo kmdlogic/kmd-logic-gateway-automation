@@ -98,7 +98,7 @@ kmd-logic-gateway-automation version
 | --scope              | Authorization scope in Logic Subscription Client Credentials.     |
 | --clientId           | Required. Client ID in Logic Subscription Client Credentials.     |
 | --secret             | Required. Client secret in Logic Subscription Client Credentials. |
-| -p, --providerId     | Required. Provider ID in Logic.                                   |
+| -p, --providerId     | Provider ID in Logic.                                             |
 | -s, --subscriptionId | Required. Subscription ID in Logic.                               |
 
 ### Azure Pipelines task

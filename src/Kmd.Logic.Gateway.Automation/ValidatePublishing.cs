@@ -52,7 +52,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             using var client = this.gatewayClientFactory.CreateClient();
-            using var validatePublishingRequest = await GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel).ConfigureAwait(false);
+            using var validatePublishingRequest = await GetValidatePublishingRequest(folderPath, this.options.ProviderId.Value, publishFileModel).ConfigureAwait(false);
             var validatePublishingResult = await client.ValidatePublishingAsync(
                 this.options.SubscriptionId, validatePublishingRequest).ConfigureAwait(false);
 
