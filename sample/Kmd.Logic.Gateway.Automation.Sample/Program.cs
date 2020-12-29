@@ -65,8 +65,6 @@ namespace Kmd.Logic.Gateway.Automation.Sample
             {
                 Console.WriteLine(result.ToString());
             }
-
-            Console.WriteLine("WIP");
         }
 #pragma warning restore CA1031
     }
