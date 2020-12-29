@@ -6,7 +6,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool.OutputFormatters
 {
     internal class JsonOutputFormatter : IOutputFormatter
     {
-        private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore};
+        private JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, ContractResolver = new ValidationResultContractResolver() };
 
         public void PrintResults(ValidationResult validationResult)
         {

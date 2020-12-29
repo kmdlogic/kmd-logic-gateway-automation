@@ -1,9 +1,12 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Kmd.Logic.Gateway.Automation
 {
     public class GatewayAutomationResult
     {
+        [JsonConverter(typeof(StringEnumConverter))]
         public ResultCode ResultCode { get; set; }
 
         public string Message { get; set; }
