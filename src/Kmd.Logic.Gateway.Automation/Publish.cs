@@ -24,9 +24,6 @@ namespace Kmd.Logic.Gateway.Automation
         /// <summary>
         /// Initializes a new instance of the <see cref="Publish"/> class.
         /// </summary>
-        /// <param name="httpClient">The HTTP client to use. The caller is expected to manage this resource and it will not be disposed.</param>
-        /// <param name="tokenProviderFactory">The Logic access token provider factory.</param>
-        /// <param name="options">The required configuration options.</param>
         public Publish(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options)
         {
             if (tokenProviderFactory == null)
@@ -81,19 +78,21 @@ namespace Kmd.Logic.Gateway.Automation
             }
             else
             {
-                await this._publishProducts.CreateOrUpdateProducts(
-                      subscriptionId: this.options.SubscriptionId,
-                      providerId: this.options.ProviderId,
-                      products: publishFileModel.Products,
-                      productValidationResults: validationResult.ValidatePublishingResult.Products,
-                      folderPath: folderPath).ConfigureAwait(false);
+              await this._publishProducts.CreateOrUpdateProducts(
+                    subscriptionId: this.options.SubscriptionId,
+                    providerId: this.options.ProviderId,
+                    products: publishFileModel.Products,
+                    productValidationResults: validationResult.ValidatePublishingResult.Products,
+                    folderPath: folderPath).ConfigureAwait(false);
 
-                await this._publishApis.CreateOrUpdateApis(
-                      subscriptionId: this.options.SubscriptionId,
-                      providerId: this.options.ProviderId,
-                      apis: publishFileModel.Apis,
-                      apiValidationResults: validationResult.ValidatePublishingResult.Apis,
-                      folderPath: folderPath).ConfigureAwait(false);
+              await this._publishApis.CreateOrUpdateApis(
+                    subscriptionId: this.options.SubscriptionId,
+                    providerId: this.options.ProviderId,
+                    apis: publishFileModel.Apis,
+                    apiValidationResults: validationResult.ValidatePublishingResult.Apis,
+                    folderPath: folderPath).ConfigureAwait(false);
+
+            
             }
 
             return this.publishResults;

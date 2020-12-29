@@ -75,6 +75,11 @@ namespace Kmd.Logic.Gateway.Automation
                 {
                     foreach (var customPolicy in customPolicies)
                     {
+                        if (policiesResults == null)
+                        {
+                            throw new ArgumentNullException(nameof(policiesResults));
+                        }
+
                         var customPolicyResult = policiesResults.CustomPolicies.Single(cp => string.Equals(cp.Name, customPolicy.Name, StringComparison.OrdinalIgnoreCase));
 
                         using var sr = new StreamReader(Path.Combine(folderPath, customPolicy.XmlFile));
