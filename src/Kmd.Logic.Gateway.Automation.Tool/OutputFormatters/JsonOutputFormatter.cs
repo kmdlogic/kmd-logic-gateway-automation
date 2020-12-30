@@ -17,7 +17,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool.OutputFormatters
 
         public void PrintResults(IEnumerable<GatewayAutomationResult> gatewayAutomationResults)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(gatewayAutomationResults, Formatting.Indented, this.jsonSerializerSettings));
+            Console.WriteLine(JsonConvert.SerializeObject(gatewayAutomationResults.ToJson(), Formatting.Indented, this.jsonSerializerSettings));
         }
     }
 }

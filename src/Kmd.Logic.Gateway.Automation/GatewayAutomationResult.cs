@@ -6,7 +6,6 @@ namespace Kmd.Logic.Gateway.Automation
 {
     public class GatewayAutomationResult
     {
-        [JsonConverter(typeof(StringEnumConverter))]
         public ResultCode ResultCode { get; set; }
 
         public string Message { get; set; }

@@ -11,7 +11,6 @@ namespace Kmd.Logic.Gateway.Automation
     {
         public Guid? EntityId { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
         public ValidationStatus Status { get; set; }
 
         public IEnumerable<string> Errors { get; set; }
