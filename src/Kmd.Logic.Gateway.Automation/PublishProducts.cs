@@ -11,7 +11,7 @@ using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class PublishProducts
+    internal class PublishProducts
     {
         private readonly PublishPolicies _publishPolicies;
         private readonly GatewayOptions options;

@@ -1,6 +1,6 @@
 ﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    public class Revision
+    internal class Revision
     {
         public string RevisionDescription { get; set; }
 

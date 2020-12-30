@@ -13,11 +13,11 @@ namespace Kmd.Logic.Gateway.Automation
         /// <remarks>
         /// This option should not be overridden except for testing purposes.
         /// </remarks>
-        public Uri GatewayServiceUri { get; set; } = new Uri("https://gateway.kmdlogic.io/gateway/v1");
+        public Uri GatewayServiceUri { get; set; } = new Uri("https://kmd-logic-api-shareddev-webapp.azurewebsites.net");
 
         /// <summary>
         /// Gets or sets the Logic Subscription.
-        /// </summary>
+        /// </summary>t
         public Guid SubscriptionId { get; set; }
 
         /// <summary>

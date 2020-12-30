@@ -12,7 +12,7 @@ using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class PublishPolicies
+    internal class PublishPolicies
     {
         private readonly GatewayOptions options;
         private readonly GatewayClientFactory gatewayClientFactory;

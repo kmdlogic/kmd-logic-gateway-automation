@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    public class Product
+    internal class Product
     {
         public string Name { get; set; }
 

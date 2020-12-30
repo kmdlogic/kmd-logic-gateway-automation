@@ -2,7 +2,7 @@
 
 namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    public class Api
+    internal class Api
     {
         public string Name { get; set; }
 

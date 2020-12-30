@@ -12,7 +12,7 @@ using Kmd.Logic.Identity.Authorization;
 
 namespace Kmd.Logic.Gateway.Automation
 {
-    public class PublishApis
+    internal class PublishApis
     {
         private readonly PublishPolicies _publishPolicies;
         private readonly GatewayOptions options;
@@ -37,7 +37,7 @@ namespace Kmd.Logic.Gateway.Automation
             this._publishPolicies = new PublishPolicies(httpClient, tokenProviderFactory, options, this._publishResults);
         }
 
-        public async Task CreateOrUpdateApis(Guid subscriptionId, Guid providerId, IEnumerable<Api> apis, IEnumerable<ApiValidationResult> apiValidationResults, string folderPath)
+        internal async Task CreateOrUpdateApis(Guid subscriptionId, Guid providerId, IEnumerable<Api> apis, IEnumerable<ApiValidationResult> apiValidationResults, string folderPath)
         {
             if (!apis.Any())
             {
