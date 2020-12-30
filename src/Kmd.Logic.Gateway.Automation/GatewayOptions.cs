@@ -17,7 +17,7 @@ namespace Kmd.Logic.Gateway.Automation
 
         /// <summary>
         /// Gets or sets the Logic Subscription.
-        /// </summary>t
+        /// </summary>
         public Guid SubscriptionId { get; set; }
 
         /// <summary>
