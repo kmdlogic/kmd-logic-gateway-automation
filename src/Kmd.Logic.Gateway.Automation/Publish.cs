@@ -9,6 +9,7 @@ using Kmd.Logic.Gateway.Automation.Client.Models;
 using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Kmd.Logic.Gateway.Automation
 {
@@ -62,7 +63,7 @@ namespace Kmd.Logic.Gateway.Automation
             using var publishYml = File.OpenText(Path.Combine(folderPath, @"publish.yml"));
             try
             {
-                publishFileModel = new Deserializer().Deserialize<PublishFileModel>(publishYml);
+                publishFileModel = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build().Deserialize<PublishFileModel>(publishYml);
             }
             catch (Exception e) when (e is YamlDotNet.Core.SemanticErrorException || e is YamlDotNet.Core.SyntaxErrorException)
             {
