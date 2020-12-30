@@ -12,6 +12,8 @@ namespace Kmd.Logic.Gateway.Automation
 
         public Guid? EntityId { get; set; }
 
+        public string EntityName { get; set; }
+
         public bool IsError { get; set; }
 
         public override string ToString()

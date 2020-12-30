@@ -141,11 +141,11 @@ namespace Kmd.Logic.Gateway.Automation
                     {
                         case ValidationStatus.CanBeCreated:
                             var created = await client.CreateRateLimitPolicyAsync(subscriptionId, rateLimitPolicyRequest).ConfigureAwait(false);
-                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
+                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id, EntityName = rateLimitPolicy.Name });
                             break;
                         case ValidationStatus.CanBeUpdated:
                             var updated = await client.UpdateRateLimitPolicyAsync(subscriptionId, policiesResults.RateLimitPolicy.EntityId.Value, rateLimitPolicyRequest).ConfigureAwait(false);
-                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyUpdated, EntityId = updated.Id });
+                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyUpdated, EntityId = updated.Id, EntityName = rateLimitPolicy.Name });
                             break;
                         default:
                             throw new NotSupportedException("Unsupported RateLimitPolicy ValidationStatus in CreateOrUpdatePolicies");
@@ -166,11 +166,11 @@ namespace Kmd.Logic.Gateway.Automation
                         {
                             case ValidationStatus.CanBeCreated:
                                 var created = await client.CreateCustomPolicyAsync(subscriptionId, customPolicyRequest).ConfigureAwait(false);
-                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyCreated, EntityId = created.Id });
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyCreated, EntityId = created.Id, EntityName = customPolicy.Name });
                                 break;
                             case ValidationStatus.CanBeUpdated:
                                 var updated = await client.UpdateCustomPolicyAsync(subscriptionId, customPolicyResult.EntityId.Value, customPolicyRequest).ConfigureAwait(false);
-                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyUpdated, EntityId = updated.Id });
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyUpdated, EntityId = updated.Id, EntityName = customPolicy.Name });
                                 break;
                             default:
                                 throw new NotSupportedException("Unsupported CustomPolicy ValidationStatus in CreateOrUpdatePolicies");
@@ -202,7 +202,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (response != null)
             {
-                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id, EntityName = product.Name });
                 return response.Id;
             }
 
@@ -232,7 +232,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (response != null)
             {
-                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id });
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id, EntityName = product.Name });
                 return response.Id;
             }
 
@@ -299,7 +299,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (updatedApi != null)
             {
-                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id });
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id, EntityName = updatedApi.Name });
 
                 await this.IfSoThenMakeVersionCurrent(client, subscriptionId, updatedApi.Id.Value, apiVersion.IsCurrent.Value).ConfigureAwait(false);
 
@@ -341,7 +341,7 @@ namespace Kmd.Logic.Gateway.Automation
             if (createdApi != null)
             {
                 existingApis.Add(createdApi);
-                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
+                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id, EntityName = createdApi.Name });
 
                 await this.CreateRevisions(client, subscriptionId, createdApi.Id.Value, folderPath, apiVersion.Revisions).ConfigureAwait(false);
 
@@ -428,7 +428,7 @@ namespace Kmd.Logic.Gateway.Automation
                 var currentApiVersion = response as ApiListModel;
                 if (currentApiVersion != null)
                 {
-                    this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiVersionMarkedAsCurrent, EntityId = currentApiVersion.Id });
+                    this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiVersionMarkedAsCurrent, EntityId = currentApiVersion.Id, EntityName = currentApiVersion.Name });
                 }
             }
         }

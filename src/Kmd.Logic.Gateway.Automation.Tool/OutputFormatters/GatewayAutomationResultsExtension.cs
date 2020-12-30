@@ -21,6 +21,11 @@ namespace Kmd.Logic.Gateway.Automation.Tool.OutputFormatters
                         resultItemJson.EntityId = gatewayAutomationResultItem.EntityId.Value;
                     }
 
+                    if (!string.IsNullOrEmpty(gatewayAutomationResultItem.EntityName))
+                    {
+                        resultItemJson.Name = gatewayAutomationResultItem.EntityName;
+                    }
+
                     var resultCodeName = Enum.GetName(typeof(ResultCode), gatewayAutomationResultItem.ResultCode);
 
                     if (gatewayAutomationResultItem.IsError)
