@@ -60,11 +60,11 @@ namespace Kmd.Logic.Gateway.Automation
                     {
                         case ValidationStatus.CanBeCreated:
                             var created = await client.CreateRateLimitPolicyAsync(subscriptionId, rateLimitPolicyRequest).ConfigureAwait(false);
-                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id });
+                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyCreated, EntityId = created.Id, EntityName = created.Name });
                             break;
                         case ValidationStatus.CanBeUpdated:
                             var updated = await client.UpdateRateLimitPolicyAsync(subscriptionId, policiesResults.RateLimitPolicy.EntityId.Value, rateLimitPolicyRequest).ConfigureAwait(false);
-                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyUpdated, EntityId = updated.Id });
+                            this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.RateLimitPolicyUpdated, EntityId = updated.Id, EntityName = updated.Name });
                             break;
                         default:
                             throw new NotSupportedException("Unsupported RateLimitPolicy ValidationStatus in CreateOrUpdatePolicies");
@@ -90,11 +90,11 @@ namespace Kmd.Logic.Gateway.Automation
                         {
                             case ValidationStatus.CanBeCreated:
                                 var created = await client.CreateCustomPolicyAsync(subscriptionId, customPolicyRequest).ConfigureAwait(false);
-                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyCreated, EntityId = created.Id });
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyCreated, EntityId = created.Id, EntityName = created.Name });
                                 break;
                             case ValidationStatus.CanBeUpdated:
                                 var updated = await client.UpdateCustomPolicyAsync(subscriptionId, customPolicyResult.EntityId.Value, customPolicyRequest).ConfigureAwait(false);
-                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyUpdated, EntityId = updated.Id });
+                                this.publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.CustomPolicyUpdated, EntityId = updated.Id, EntityName = updated.Name });
                                 break;
                             default:
                                 throw new NotSupportedException("Unsupported CustomPolicy ValidationStatus in CreateOrUpdatePolicies");

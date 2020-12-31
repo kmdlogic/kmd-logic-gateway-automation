@@ -89,7 +89,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (response != null)
             {
-                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id });
+                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id, EntityName = response.Name });
                 return response.Id;
             }
 
@@ -119,7 +119,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (response != null)
             {
-                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id });
+                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id, EntityName = response.Name });
                 return response.Id;
             }
 
