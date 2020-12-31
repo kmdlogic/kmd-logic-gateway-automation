@@ -1,6 +1,6 @@
 ﻿namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
-    public class RateLimitPolicy
+    internal class RateLimitPolicy
     {
         public string Name { get; set; }
 
