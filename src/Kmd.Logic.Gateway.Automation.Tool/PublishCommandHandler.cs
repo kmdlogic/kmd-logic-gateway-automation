@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -6,9 +7,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 {
     internal class PublishCommandHandler : CommandHandlerBase
     {
-#pragma warning disable CA1801 // Remove unused parameter
         public async Task<int> Handle(PublishCommand cmd)
-#pragma warning restore CA1801 // Remove unused parameter
         {
             this.Initialize(cmd);
 
@@ -18,7 +17,7 @@ namespace Kmd.Logic.Gateway.Automation.Tool
 
             this.outputFormatter.PrintResults(results);
 
-            return 0;
+            return results.Any(result => result.IsError) ? 1 : 0;
         }
     }
 }

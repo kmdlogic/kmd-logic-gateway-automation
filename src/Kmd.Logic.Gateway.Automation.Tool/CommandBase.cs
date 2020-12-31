@@ -20,11 +20,11 @@ namespace Kmd.Logic.Gateway.Automation.Tool
         [Option("secret", Required = true, HelpText = "Client secret in Logic Subscription Client Credentials.")]
         public string ClientSecret { get; set; }
 
-        [Option('p', "providerId", Required = true, HelpText = "Provider ID in Logic.")]
-        public Guid ProviderId { get; set; }
-
         [Option('s', "subscriptionId", Required = true, HelpText = "Subscription ID in Logic.")]
         public Guid SubscriptionId { get; set; }
+
+        [Option('p', "providerId", HelpText = "Provider ID in Logic.")]
+        public Guid ProviderId { get; set; }
 
         [Option('v', "verbose", HelpText = "Logs everything.")]
         public bool Verbose { get; set; }
