@@ -109,7 +109,7 @@ namespace Kmd.Logic.Gateway.Automation
             if (createdApi != null)
             {
                 existingApis.Add(createdApi);
-                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id });
+                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = apiVersionSetId.HasValue ? ResultCode.VersionCreated : ResultCode.ApiCreated, EntityId = createdApi.Id, EntityName = createdApi.Name });
 
                 await this.CreateRevisions(client, subscriptionId, createdApi.Id.Value, folderPath, apiVersion.Revisions).ConfigureAwait(false);
 
@@ -167,7 +167,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             if (updatedApi != null)
             {
-                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id });
+                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiUpdated, EntityId = updatedApi.Id, EntityName = updatedApi.Name });
 
                 await this.IfSoThenMakeVersionCurrent(client, subscriptionId, updatedApi.Id.Value, apiVersion.IsCurrent.Value).ConfigureAwait(false);
 
@@ -230,7 +230,7 @@ namespace Kmd.Logic.Gateway.Automation
                 var currentApiVersion = response as ApiListModel;
                 if (currentApiVersion != null)
                 {
-                    this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiVersionMarkedAsCurrent, EntityId = currentApiVersion.Id });
+                    this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ApiVersionMarkedAsCurrent, EntityId = currentApiVersion.Id, EntityName = currentApiVersion.Name });
                 }
             }
         }
