@@ -18,7 +18,7 @@ namespace Kmd.Logic.Gateway.Automation
         private readonly GatewayClientFactory gatewayClientFactory;
         private List<GatewayAutomationResult> _publishResults;
 
-        public PublishProducts(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options, List<GatewayAutomationResult> publishResults)
+        internal PublishProducts(HttpClient httpClient, LogicTokenProviderFactory tokenProviderFactory, GatewayOptions options, List<GatewayAutomationResult> publishResults)
         {
             this.options = options ?? throw new ArgumentNullException(nameof(options));
             if (tokenProviderFactory == null)

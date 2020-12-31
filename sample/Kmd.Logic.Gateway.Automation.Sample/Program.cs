@@ -46,7 +46,6 @@ namespace Kmd.Logic.Gateway.Automation.Sample
                 .CreateLogger();
         }
 
-#pragma warning disable CS1998
         private static async Task Run(AppConfiguration configuration)
         {
             var validator = new ConfigurationValidator(configuration);
@@ -66,6 +65,5 @@ namespace Kmd.Logic.Gateway.Automation.Sample
                 Console.WriteLine(result.ToString());
             }
         }
-#pragma warning restore CA1031
     }
 }
