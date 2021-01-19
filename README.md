@@ -91,15 +91,16 @@ kmd-logic-gateway-automation version
 
 ### Parameters
 
-| Parameter name       | Description                                                       |
-|----------------------|-------------------------------------------------------------------|
-| -f, --folderPath     | Required. Path of the root folder with 'publish.yml' file.        |
-| -g, --gatewayUrl     | Gateway URL.                                                      |
-| --scope              | Authorization scope in Logic Subscription Client Credentials.     |
-| --clientId           | Required. Client ID in Logic Subscription Client Credentials.     |
-| --secret             | Required. Client secret in Logic Subscription Client Credentials. |
-| -p, --providerId     | Required. Provider ID in Logic.                                   |
-| -s, --subscriptionId | Required. Subscription ID in Logic.                               |
+| Parameter name       | Description                                                        |
+|----------------------|--------------------------------------------------------------------|
+| -f, --folderPath     | Required. Path of the root folder with 'publish.yml' file.         |
+| -g, --gatewayUrl     | Gateway URL.                                                       |
+| --scope              | Authorization scope in Logic Subscription Client Credentials.      |
+| --clientId           | Required. Client ID in Logic Subscription Client Credentials.      |
+| --secret             | Required. Client secret in Logic Subscription Client Credentials.  |
+| -p, --providerId     | Provider ID in Logic.                                              |
+| -s, --subscriptionId | Required. Subscription ID in Logic.                                |
+| -o, --output         | Output format. Supported values are list and json. Default is list.|
 
 ### Azure Pipelines task
 

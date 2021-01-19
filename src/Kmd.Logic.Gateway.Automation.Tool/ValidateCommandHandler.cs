@@ -16,17 +16,8 @@ namespace Kmd.Logic.Gateway.Automation.Tool
                 using var httpClient = new HttpClient();
                 var gatewayAutomation = new GatewayAutomation(httpClient, this.logicTokenProviderFactory, this.gatewayOptions);
                 var validationResult = await gatewayAutomation.ValidateAsync(cmd.FolderPath).ConfigureAwait(false);
-                if (validationResult.IsError)
-                {
-                    foreach (var error in validationResult.Errors)
-                    {
-                        Console.WriteLine(error.ToString());
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(validationResult.ValidatePublishingResult.ToString());
-                }
+
+                this.outputFormatter.PrintResults(validationResult);
 
                 return !validationResult.IsError ? 0 : 1;
             }

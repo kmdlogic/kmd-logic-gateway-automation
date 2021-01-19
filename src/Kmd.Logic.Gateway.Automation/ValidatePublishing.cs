@@ -9,6 +9,7 @@ using Kmd.Logic.Gateway.Automation.PreValidation;
 using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Kmd.Logic.Gateway.Automation
 {
@@ -30,7 +31,7 @@ namespace Kmd.Logic.Gateway.Automation
         public async Task<ValidationResult> ValidateAsync(string folderPath)
         {
             var publishYml = File.ReadAllText(Path.Combine(folderPath, "publish.yml"));
-            var publishFileModel = new Deserializer().Deserialize<PublishFileModel>(publishYml);
+            var publishFileModel = new DeserializerBuilder().WithNamingConvention(CamelCaseNamingConvention.Instance).Build().Deserialize<PublishFileModel>(publishYml);
 
             if (publishFileModel != null && !publishFileModel.Products.Any() && !publishFileModel.Apis.Any())
             {
@@ -52,7 +53,7 @@ namespace Kmd.Logic.Gateway.Automation
             }
 
             using var client = this.gatewayClientFactory.CreateClient();
-            using var validatePublishingRequest = await GetValidatePublishingRequest(folderPath, this.options.ProviderId, publishFileModel).ConfigureAwait(false);
+            using var validatePublishingRequest = await GetValidatePublishingRequest(folderPath, this.options.ProviderId.Value, publishFileModel).ConfigureAwait(false);
             var validatePublishingResult = await client.ValidatePublishingAsync(
                 this.options.SubscriptionId, validatePublishingRequest).ConfigureAwait(false);
 
