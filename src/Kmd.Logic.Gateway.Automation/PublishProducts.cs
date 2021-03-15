@@ -74,6 +74,7 @@ namespace Kmd.Logic.Gateway.Automation
             var response = await client.CreateProductAsync(
                 subscriptionId: subscriptionId,
                 name: product.Name,
+                key: product.Key,
                 description: product.Description,
                 providerId: providerId.ToString(),
                 apiKeyRequired: product.ApiKeyRequired,
@@ -104,6 +105,7 @@ namespace Kmd.Logic.Gateway.Automation
                 subscriptionId: subscriptionId,
                 productId: productId,
                 name: product.Name,
+                key: product.Key,
                 description: product.Description,
                 providerId: providerId.ToString(),
                 apiKeyRequired: product.ApiKeyRequired,
