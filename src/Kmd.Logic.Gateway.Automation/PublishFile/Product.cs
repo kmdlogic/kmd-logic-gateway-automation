@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Kmd.Logic.Gateway.Automation.PublishFile
 {
     internal class Product
     {
-        private const string Value = "^[a-zA-Z0-9-]*$";
-
         public string Name { get; set; }
 
-        [RegularExpression(Value, ErrorMessage = "Key accepts only Alphanumeric characters and hypen")]
         public string Key { get; set; }
 
         public string Logo { get; set; }

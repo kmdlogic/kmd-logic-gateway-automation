@@ -13,7 +13,6 @@
     <PackageReference Include="Microsoft.Rest.ClientRuntime" Version="2.3.22" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Kmd.Logic.Identity.Authorization" Version="2.0.0" />
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <PackageReference Include="YamlDotNet" Version="8.1.2" />
   </ItemGroup>
 

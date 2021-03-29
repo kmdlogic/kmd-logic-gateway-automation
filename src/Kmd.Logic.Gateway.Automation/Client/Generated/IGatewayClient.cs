@@ -563,6 +563,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='name'>
         /// </param>
+        /// <param name="key">
+        /// </param>
         /// <param name='description'>
         /// </param>
         /// <param name='providerId'>
@@ -641,6 +643,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// Subscription ID
         /// </param>
         /// <param name='name'>
+        /// </param>
+        /// <param name="key">
         /// </param>
         /// <param name='description'>
         /// </param>
