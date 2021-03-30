@@ -6,8 +6,6 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
     {
         public string Name { get; set; }
 
-        public string Key { get; set; }
-
         public string Logo { get; set; }
 
         public string Documentation { get; set; }
