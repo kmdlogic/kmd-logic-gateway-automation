@@ -21,6 +21,12 @@ namespace Kmd.Logic.Gateway.Automation.PreValidation
                     this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Duplicate product names exist" });
                 }
 
+                var duplicateProductKey = publishFileModel.Products.GroupBy(x => x.Key).Any(x => x.Count() > 1);
+                if (duplicateProductKey)
+                {
+                    this.ValidationResults.Add(new GatewayAutomationResult { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = $"Duplicate product keys exist" });
+                }
+
                 foreach (var product in publishFileModel.Products)
                 {
                     var productPrefix = $"Product: {product.Name}";
