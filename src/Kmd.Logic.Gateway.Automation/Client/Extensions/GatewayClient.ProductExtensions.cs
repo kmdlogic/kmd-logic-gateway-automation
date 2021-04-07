@@ -642,7 +642,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<string>(responseContent, this.DeserializationSettings);
+                    Console.WriteLine(result.Body);
                 }
                 catch (JsonException ex)
                 {
@@ -663,26 +664,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 try
                 {
                     result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    httpRequest.Dispose();
-                    if (httpResponse != null)
-                    {
-                        httpResponse.Dispose();
-                    }
-
-                    throw new SerializationException("Unable to deserialize the response.", responseContent, ex);
-                }
-            }
-
-            // Deserialize Response
-            if ((int)statusCode == 422)
-            {
-                responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
+                    Console.WriteLine(result.Body);
                 }
                 catch (JsonException ex)
                 {
