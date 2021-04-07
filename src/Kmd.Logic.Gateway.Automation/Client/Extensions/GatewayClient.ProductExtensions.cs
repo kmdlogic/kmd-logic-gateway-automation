@@ -305,7 +305,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<ApiListModel>(responseContent, this.DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<ProductListModel>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
@@ -622,7 +622,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<ApiListModel>(responseContent, this.DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<ProductListModel>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
