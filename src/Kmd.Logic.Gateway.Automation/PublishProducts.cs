@@ -97,6 +97,10 @@ namespace Kmd.Logic.Gateway.Automation
 
                 return createdProduct.Id;
             }
+            else if (createdProduct == null)
+            {
+                this._publishResults.Add(new GatewayAutomationResult() { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = response.ToString() });
+            }
 
             return null;
         }
@@ -129,6 +133,11 @@ namespace Kmd.Logic.Gateway.Automation
             {
                 this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = updatedProduct.Id, EntityName = updatedProduct.Name });
                 return updatedProduct.Id;
+            }
+            else if (updatedProduct == null)
+            {
+                var errorMessage = $"Product update failed for ProductId: {productId} as {response}";
+                this._publishResults.Add(new GatewayAutomationResult() { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = errorMessage });
             }
 
             return null;
