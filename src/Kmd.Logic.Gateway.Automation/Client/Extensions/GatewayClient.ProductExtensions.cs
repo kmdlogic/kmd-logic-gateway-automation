@@ -643,7 +643,6 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 try
                 {
                     result.Body = SafeJsonConvert.DeserializeObject<string>(responseContent, this.DeserializationSettings);
-                    Console.WriteLine(result.Body);
                 }
                 catch (JsonException ex)
                 {
@@ -664,7 +663,6 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 try
                 {
                     result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
-                    Console.WriteLine(result.Body);
                 }
                 catch (JsonException ex)
                 {
