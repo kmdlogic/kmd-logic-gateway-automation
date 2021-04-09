@@ -9,6 +9,7 @@ on:
     branches: [ master, develop ]
     paths: 
     - 'src/**'
+    - 'Directory.Build.props'
   pull_request:
     branches: [ master, develop ]
 
