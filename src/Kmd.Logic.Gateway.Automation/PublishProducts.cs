@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Kmd.Logic.Gateway.Automation.Client;
+using Kmd.Logic.Gateway.Automation.Client.Models;
 using Kmd.Logic.Gateway.Automation.PublishFile;
 using Kmd.Logic.Identity.Authorization;
 
@@ -71,9 +72,10 @@ namespace Kmd.Logic.Gateway.Automation
         {
             using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
-            var response = await client.CreateProductAsync(
+            var response = await client.CustomCreateProductAsync(
                 subscriptionId: subscriptionId,
                 name: product.Name,
+                key: product.Key,
                 description: product.Description,
                 providerId: providerId.ToString(),
                 apiKeyRequired: product.ApiKeyRequired,
@@ -87,10 +89,17 @@ namespace Kmd.Logic.Gateway.Automation
                 openidConfigCustomUrl: product.OpenidConfigCustomUrl,
                 applicationId: product.ApplicationId).ConfigureAwait(false);
 
-            if (response != null)
+            var createdProduct = response as ProductListModel;
+
+            if (createdProduct != null)
             {
-                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = response.Id, EntityName = response.Name });
-                return response.Id;
+                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductCreated, EntityId = createdProduct.Id, EntityName = createdProduct.Name });
+
+                return createdProduct.Id;
+            }
+            else if (createdProduct == null)
+            {
+                this._publishResults.Add(new GatewayAutomationResult() { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = response.ToString() });
             }
 
             return null;
@@ -100,10 +109,11 @@ namespace Kmd.Logic.Gateway.Automation
         {
             using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
-            var response = await client.UpdateProductAsync(
+            var response = await client.CustomUpdateProductAsync(
                 subscriptionId: subscriptionId,
                 productId: productId,
                 name: product.Name,
+                key: product.Key,
                 description: product.Description,
                 providerId: providerId.ToString(),
                 apiKeyRequired: product.ApiKeyRequired,
@@ -117,10 +127,17 @@ namespace Kmd.Logic.Gateway.Automation
                 openidConfigCustomUrl: product.OpenidConfigCustomUrl,
                 applicationId: product.ApplicationId).ConfigureAwait(false);
 
-            if (response != null)
+            var updatedProduct = response as ProductListModel;
+
+            if (updatedProduct != null)
             {
-                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = response.Id, EntityName = response.Name });
-                return response.Id;
+                this._publishResults.Add(new GatewayAutomationResult() { ResultCode = ResultCode.ProductUpdated, EntityId = updatedProduct.Id, EntityName = updatedProduct.Name });
+                return updatedProduct.Id;
+            }
+            else if (updatedProduct == null)
+            {
+                var errorMessage = $"Product update failed for ProductId: {productId} as {response}";
+                this._publishResults.Add(new GatewayAutomationResult() { IsError = true, ResultCode = ResultCode.ValidationFailed, Message = errorMessage });
             }
 
             return null;

@@ -153,6 +153,7 @@ namespace Kmd.Logic.Gateway.Automation
 
             var products = await Task.WhenAll(input.Products.Select(async p => new ProductValidationModel(
                 p.Name,
+                p.Key,
                 await GetPoliciesValidationModel(folderPath, p.CustomPolicies, p.RateLimitPolicy).ConfigureAwait(false)))).ConfigureAwait(false);
 
             return new ValidatePublishingRequest(providerId, apis, products);
