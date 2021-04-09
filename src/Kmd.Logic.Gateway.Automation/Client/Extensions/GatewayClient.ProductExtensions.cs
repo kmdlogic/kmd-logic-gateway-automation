@@ -325,7 +325,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 responseContent = await httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
                 try
                 {
-                    result.Body = SafeJsonConvert.DeserializeObject<IDictionary<string, IList<string>>>(responseContent, this.DeserializationSettings);
+                    result.Body = SafeJsonConvert.DeserializeObject<string>(responseContent, this.DeserializationSettings);
                 }
                 catch (JsonException ex)
                 {
