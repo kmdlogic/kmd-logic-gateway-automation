@@ -11,7 +11,7 @@
 		<Authors>Logic</Authors>
 		<Company>KMD</Company>
 		<Product>Logic</Product>
-		<PackageTags>kmd;logic;Gateway</PackageTags>
+		<PackageTags>kmd;logic;Gateway;Marketplace</PackageTags>
 		<PackageIcon>favicon-32x32.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/kmdlogic/kmd-logic-gateway-automation</PackageProjectUrl>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
