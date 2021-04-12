@@ -137,6 +137,10 @@ namespace Kmd.Logic.Gateway.Automation.Client
         private static void AddProductContent(MultipartFormDataContent requestContent, ProductValidationModel product, int productIndex)
         {
             requestContent.Add(new StringContent(product.Name), $"Products[{productIndex}].Name");
+            if (product.Key != null)
+            {
+                requestContent.Add(new StringContent(product.Key), $"Products[{productIndex}].Key");
+            }
         }
 
         private static async Task AddApiContent(MultipartFormDataContent requestContent, ApiValidationModel api, int apiIndex)

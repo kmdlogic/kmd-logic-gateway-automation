@@ -1402,6 +1402,70 @@
         ]
       }
     },
+    "/marketplace/products": {
+      "get": {
+        "tags": [
+          "Marketplace"
+        ],
+        "summary": "Retrives all published products.",
+        "operationId": "Search",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/ProductItem"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/marketplace/products/{key}": {
+      "get": {
+        "tags": [
+          "Marketplace"
+        ],
+        "summary": "Retrieves details for specific product.",
+        "operationId": "GetMarketplace",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "key",
+            "in": "path",
+            "description": "Key of the product.",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/ProductDetails"
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/subscriptions/{subscriptionId}/gateway/policies/entityId={entityId}&entityType={entityType}": {
       "get": {
         "tags": [
@@ -1634,6 +1698,12 @@
             "type": "string"
           },
           {
+            "name": "key",
+            "in": "formData",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9-]*$"
+          },
+          {
             "name": "description",
             "in": "formData",
             "type": "string"
@@ -1843,6 +1913,12 @@
             "in": "formData",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "key",
+            "in": "formData",
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9-]*$"
           },
           {
             "name": "description",
@@ -2087,13 +2163,42 @@
         ]
       }
     },
+    "/gateway/products": {
+      "get": {
+        "tags": [
+          "Product"
+        ],
+        "summary": "Retrives all published products.",
+        "operationId": "Search",
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/GetProductListModel"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/subscriptions/{subscriptionId}/gateway/usage-report/product-owner/products/{productId}": {
       "get": {
         "tags": [
           "ProductOwnerUsageReport"
         ],
         "summary": "Retrieve all usage of a product within a date range",
-        "operationId": "GetUsageWithinDateRange",
+        "operationId": "GetUsageWithinDateRangeForProduct",
         "produces": [
           "application/json",
           "text/json"
@@ -2156,7 +2261,7 @@
           "ProductOwnerUsageReport"
         ],
         "summary": "Retrieve all usage of a product by an api key id within a date range",
-        "operationId": "GetUsageByApiKeyWithinDateRange",
+        "operationId": "GetUsageByApiKeyWithinDateRangeForProduct",
         "produces": [
           "application/json",
           "text/json"
@@ -2227,7 +2332,7 @@
           "ProductOwnerUsageReport"
         ],
         "summary": "Download a csv file summarizing product usage by api key",
-        "operationId": "DownloadSubscriptionUsageReport",
+        "operationId": "DownloadSubscriptionUsageReportForProduct",
         "parameters": [
           {
             "name": "subscriptionId",
@@ -2391,6 +2496,70 @@
           },
           "401": {
             "description": "Unauthorized user"
+          }
+        },
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/subscriptions/{subscriptionId}/gateway/publishing/validate": {
+      "post": {
+        "tags": [
+          "Publish"
+        ],
+        "summary": "Validates publishing APIs and Products parameters",
+        "operationId": "ValidatePublishing",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "name": "subscriptionId",
+            "in": "path",
+            "description": "Logic subscriptionId",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "providerId",
+            "in": "formData",
+            "type": "string",
+            "format": "uuid"
+          },
+          {
+            "name": "apis",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ApiValidationModel"
+            }
+          },
+          {
+            "name": "products",
+            "in": "formData",
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/ProductValidationModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Publishing validation results of API and Product.",
+            "schema": {
+              "$ref": "#/definitions/ValidatePublishingResult"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
           }
         },
         "security": [
@@ -2931,6 +3100,9 @@
         "name": {
           "type": "string"
         },
+        "key": {
+          "type": "string"
+        },
         "description": {
           "type": "string"
         },
@@ -3459,6 +3631,67 @@
         }
       }
     },
+    "ProductItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "shortDescription": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "format": "uri",
+          "type": "string"
+        }
+      }
+    },
+    "ProductDetails": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "providerName": {
+          "type": "string"
+        },
+        "key": {
+          "type": "string"
+        },
+        "documentationUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "productTerms": {
+          "type": "string"
+        },
+        "logoUrl": {
+          "format": "uri",
+          "type": "string"
+        },
+        "clientCredentialsRequired": {
+          "type": "boolean"
+        },
+        "providerApprovalRequired": {
+          "type": "boolean"
+        },
+        "applicationId": {
+          "format": "uuid",
+          "type": "string"
+        }
+      }
+    },
     "PolicyModel": {
       "type": "object",
       "properties": {
@@ -3526,6 +3759,9 @@
           "type": "string"
         },
         "name": {
+          "type": "string"
+        },
+        "key": {
           "type": "string"
         },
         "description": {
@@ -3620,6 +3856,310 @@
         },
         "message": {
           "type": "string"
+        }
+      }
+    },
+    "ApiRevisionValidationModel": {
+      "required": [
+        "openApiSpec"
+      ],
+      "type": "object",
+      "properties": {
+        "openApiSpec": {
+          "type": "file"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "CustomPolicyValidationModel": {
+      "required": [
+        "name",
+        "xml"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "xml": {
+          "type": "string"
+        }
+      }
+    },
+    "RateLimitPolicyValidationModel": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "calls": {
+          "format": "int32",
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": 1
+        },
+        "renewalPeriod": {
+          "format": "int32",
+          "type": "integer",
+          "maximum": 300,
+          "minimum": 1
+        }
+      }
+    },
+    "PoliciesValidationModel": {
+      "type": "object",
+      "properties": {
+        "customPolicies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomPolicyValidationModel"
+          }
+        },
+        "rateLimitPolicy": {
+          "$ref": "#/definitions/RateLimitPolicyValidationModel"
+        }
+      }
+    },
+    "ApiValidationModel": {
+      "required": [
+        "name",
+        "openApiSpec",
+        "path",
+        "version"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "openApiSpec": {
+          "type": "file"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "productNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "revisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiRevisionValidationModel"
+          }
+        },
+        "policies": {
+          "$ref": "#/definitions/PoliciesValidationModel"
+        }
+      }
+    },
+    "ProductValidationModel": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "policies": {
+          "$ref": "#/definitions/PoliciesValidationModel"
+        }
+      }
+    },
+    "ApiRevisionValidationResult": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CanBeCreated",
+            "CanBeUpdated",
+            "Error"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "RateLimitPolicyValidationResult": {
+      "type": "object",
+      "properties": {
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CanBeCreated",
+            "CanBeUpdated",
+            "Error"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "CustomPolicyValidationResult": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CanBeCreated",
+            "CanBeUpdated",
+            "Error"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "PoliciesValidationResult": {
+      "type": "object",
+      "properties": {
+        "rateLimitPolicy": {
+          "$ref": "#/definitions/RateLimitPolicyValidationResult"
+        },
+        "customPolicies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CustomPolicyValidationResult"
+          }
+        }
+      }
+    },
+    "ApiValidationResult": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "apiVersionSetId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "revisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiRevisionValidationResult"
+          }
+        },
+        "policies": {
+          "$ref": "#/definitions/PoliciesValidationResult"
+        },
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CanBeCreated",
+            "CanBeUpdated",
+            "Error"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ProductValidationResult": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "policies": {
+          "$ref": "#/definitions/PoliciesValidationResult"
+        },
+        "entityId": {
+          "format": "uuid",
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "CanBeCreated",
+            "CanBeUpdated",
+            "Error"
+          ]
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "ValidatePublishingResult": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "apis": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ApiValidationResult"
+          }
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProductValidationResult"
+          }
+        },
+        "isSuccess": {
+          "type": "boolean"
         }
       }
     },
