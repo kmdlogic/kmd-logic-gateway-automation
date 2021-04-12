@@ -1,3 +1,6 @@
+0.3.3
+* Added new tags
+
 0.3.2
 * Added posibility to define `Key` as part of product description
 
