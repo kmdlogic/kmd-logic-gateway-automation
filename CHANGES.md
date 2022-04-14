@@ -1,5 +1,5 @@
 0.3.4
-* Added contact provider field for product
+* Added `Contact Provider` as part of product description
 
 0.3.3
 * Added new tags

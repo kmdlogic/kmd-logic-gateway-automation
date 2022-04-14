@@ -14,6 +14,8 @@ namespace Kmd.Logic.Gateway.Automation.PublishFile
 
         public string Description { get; set; }
 
+        public string ContactProvider { get; set; }
+
         public string Published { get; set; }
 
         public bool? ApiKeyRequired { get; set; }
