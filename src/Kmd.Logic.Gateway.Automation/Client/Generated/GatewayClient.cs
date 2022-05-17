@@ -4690,7 +4690,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProductListModel>> UpdateProductWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProductListModel>> UpdateProductWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4703,6 +4703,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 tracingParameters.Add("productId", productId);
                 tracingParameters.Add("name", name);
                 tracingParameters.Add("description", description);
+                tracingParameters.Add("contactProvider", contactProvider);
                 tracingParameters.Add("providerId", providerId);
                 tracingParameters.Add("apiKeyRequired", apiKeyRequired);
                 tracingParameters.Add("clientCredentialRequired", clientCredentialRequired);
@@ -5239,7 +5240,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProductListModel>> CreateProductWithHttpMessagesAsync(System.Guid subscriptionId, string name, string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProductListModel>> CreateProductWithHttpMessagesAsync(System.Guid subscriptionId, string name, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -5255,6 +5256,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 tracingParameters.Add("subscriptionId", subscriptionId);
                 tracingParameters.Add("name", name);
                 tracingParameters.Add("description", description);
+                tracingParameters.Add("contactProvider", contactProvider);
                 tracingParameters.Add("providerId", providerId);
                 tracingParameters.Add("apiKeyRequired", apiKeyRequired);
                 tracingParameters.Add("providerApprovalRequired", providerApprovalRequired);

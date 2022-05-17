@@ -565,6 +565,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='description'>
         /// </param>
+        /// <param name='contactProvider'>
+        /// </param>
         /// <param name='providerId'>
         /// </param>
         /// <param name='apiKeyRequired'>
@@ -598,7 +600,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProductListModel>> UpdateProductWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProductListModel>> UpdateProductWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Deletes the product
@@ -644,6 +646,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='description'>
         /// </param>
+        /// <param name='contactProvider'>
+        /// </param>
         /// <param name='providerId'>
         /// </param>
         /// <param name='apiKeyRequired'>
@@ -677,7 +681,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProductListModel>> CreateProductWithHttpMessagesAsync(System.Guid subscriptionId, string name, string description = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProductListModel>> CreateProductWithHttpMessagesAsync(System.Guid subscriptionId, string name, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Retrieve all gateway products for the admin

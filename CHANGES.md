@@ -1,3 +1,6 @@
+0.3.4
+* Added `Contact Provider` as part of product description
+
 0.3.3
 * Added new tags
 
