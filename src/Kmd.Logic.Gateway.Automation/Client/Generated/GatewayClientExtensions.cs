@@ -1243,9 +1243,11 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='documentation'>
         /// </param>
-        public static ProductListModel UpdateProduct(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream))
+        /// <param name='getStarted'>
+        /// </param>
+        public static ProductListModel UpdateProduct(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream))
         {
-            return operations.UpdateProductAsync(subscriptionId, productId, name, description, contactProvider, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation).GetAwaiter().GetResult();
+            return operations.UpdateProductAsync(subscriptionId, productId, name, description, contactProvider, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation, getStarted).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -1293,12 +1295,14 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='documentation'>
         /// </param>
+        /// <param name='getStarted'>
+        /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<ProductListModel> UpdateProductAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<ProductListModel> UpdateProductAsync(this IGatewayClient operations, System.Guid subscriptionId, System.Guid productId, string name = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var _result = await operations.UpdateProductWithHttpMessagesAsync(subscriptionId, productId, name, description, contactProvider, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation, null, cancellationToken).ConfigureAwait(false))
+            using (var _result = await operations.UpdateProductWithHttpMessagesAsync(subscriptionId, productId, name, description, contactProvider, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation, getStarted, null, cancellationToken).ConfigureAwait(false))
             {
                 return _result.Body;
             }
@@ -1421,9 +1425,9 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='applicationId'>
         /// </param>
-        public static ProductListModel CreateProduct(this IGatewayClient operations, System.Guid subscriptionId, string name, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string))
+        public static ProductListModel CreateProduct(this IGatewayClient operations, System.Guid subscriptionId, string name, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string))
         {
-            return operations.CreateProductAsync(subscriptionId, name, description, contactProvider, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId).GetAwaiter().GetResult();
+            return operations.CreateProductAsync(subscriptionId, name, description, contactProvider, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, getStarted, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId).GetAwaiter().GetResult();
         }
 
         /// <summary>
@@ -1458,6 +1462,8 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// </param>
         /// <param name='documentation'>
         /// </param>
+        /// <param name='getStarted'>
+        /// </param>
         /// <param name='clientCredentialRequired'>
         /// </param>
         /// <param name='openidConfigIssuer'>
@@ -1471,9 +1477,9 @@ namespace Kmd.Logic.Gateway.Automation.Client
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        public static async Task<ProductListModel> CreateProductAsync(this IGatewayClient operations, System.Guid subscriptionId, string name, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task<ProductListModel> CreateProductAsync(this IGatewayClient operations, System.Guid subscriptionId, string name, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var _result = await operations.CreateProductWithHttpMessagesAsync(subscriptionId, name, description, contactProvider, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId, null, cancellationToken).ConfigureAwait(false))
+            using (var _result = await operations.CreateProductWithHttpMessagesAsync(subscriptionId, name, description, contactProvider, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, getStarted, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId, null, cancellationToken).ConfigureAwait(false))
             {
                 return _result.Body;
             }

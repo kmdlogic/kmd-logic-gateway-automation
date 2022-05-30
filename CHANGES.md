@@ -1,3 +1,6 @@
+0.3.5
+* Added `Get Started Note` as part of product description
+
 0.3.4
 * Added `Contact Provider` as part of product description
 
