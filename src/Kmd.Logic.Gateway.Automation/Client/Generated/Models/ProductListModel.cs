@@ -31,7 +31,7 @@ namespace Kmd.Logic.Gateway.Automation.Client.Models
         /// 'Private'</param>
         /// <param name="synchronization">Possible values include: 'Pending',
         /// 'Active', 'Faulted'</param>
-        public ProductListModel(System.Guid? id = default(System.Guid?), string name = default(string), string description = default(string), string contactProvider = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), System.Guid? applicationId = default(System.Guid?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), System.Guid? providerId = default(System.Guid?), string logoUrl = default(string), string documentationUrl = default(string), string synchronization = default(string))
+        public ProductListModel(System.Guid? id = default(System.Guid?), string name = default(string), string description = default(string), string contactProvider = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), System.Guid? applicationId = default(System.Guid?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), System.Guid? providerId = default(System.Guid?), string logoUrl = default(string), string documentationUrl = default(string), string getStartedUrl = default(string), string synchronization = default(string))
         {
             Id = id;
             Name = name;
@@ -49,6 +49,7 @@ namespace Kmd.Logic.Gateway.Automation.Client.Models
             ProviderId = providerId;
             LogoUrl = logoUrl;
             DocumentationUrl = documentationUrl;
+            GetStartedUrl = getStartedUrl;
             Synchronization = synchronization;
             CustomInit();
         }
@@ -140,6 +141,11 @@ namespace Kmd.Logic.Gateway.Automation.Client.Models
         /// </summary>
         [JsonProperty(PropertyName = "documentationUrl")]
         public string DocumentationUrl { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "getStartedUrl")]
+        public string GetStartedUrl { get; set; }
 
         /// <summary>
         /// Gets or sets possible values include: 'Pending', 'Active',

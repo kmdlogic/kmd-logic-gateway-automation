@@ -20,9 +20,9 @@ namespace Kmd.Logic.Gateway.Automation.Client
     /// </summary>
     internal partial interface IGatewayClient
     {
-        Task<object> CustomCreateProductAsync(System.Guid subscriptionId, string name, string key, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<object> CustomCreateProductAsync(System.Guid subscriptionId, string name, string key, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
-        Task<object> CustomUpdateProductAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string key = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<object> CustomUpdateProductAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string key = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
     }
 
     /// <summary>
@@ -30,24 +30,24 @@ namespace Kmd.Logic.Gateway.Automation.Client
     /// </summary>
     internal partial class GatewayClient : IGatewayClient
     {
-        public async Task<object> CustomCreateProductAsync(System.Guid subscriptionId, string name, string key, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<object> CustomCreateProductAsync(System.Guid subscriptionId, string name, string key, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var result = await this.CustomCreateProductWithHttpMessagesAsync(subscriptionId, name, key, description, contactProvider, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId, null, cancellationToken).ConfigureAwait(false))
+            using (var result = await this.CustomCreateProductWithHttpMessagesAsync(subscriptionId, name, key, description, contactProvider, providerId, apiKeyRequired, providerApprovalRequired, productTerms, visibility, apiIds, logo, documentation, getStarted, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, applicationId, null, cancellationToken).ConfigureAwait(false))
             {
                 return result.Body;
             }
         }
 
-        public async Task<object> CustomUpdateProductAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string key = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<object> CustomUpdateProductAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string key = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            using (var result = await this.CustomUpdateProductWithHttpMessagesAsync(subscriptionId, productId, name, key, description, contactProvider, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation, null, cancellationToken).ConfigureAwait(false))
+            using (var result = await this.CustomUpdateProductWithHttpMessagesAsync(subscriptionId, productId, name, key, description, contactProvider, providerId, apiKeyRequired, clientCredentialRequired, openidConfigIssuer, openidConfigCustomUrl, providerApprovalRequired, applicationId, productTerms, visibility, apiIds, logo, documentation, getStarted, null, cancellationToken).ConfigureAwait(false))
             {
                 return result.Body;
             }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "Can't address. Has implications!!")]
-        private async Task<HttpOperationResponse<object>> CustomCreateProductWithHttpMessagesAsync(System.Guid subscriptionId, string name, string key, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task<HttpOperationResponse<object>> CustomCreateProductWithHttpMessagesAsync(System.Guid subscriptionId, string name, string key, string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? providerApprovalRequired = default(bool?), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), string applicationId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -74,6 +74,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 tracingParameters.Add("apiIds", apiIds);
                 tracingParameters.Add("logo", logo);
                 tracingParameters.Add("documentation", documentation);
+                tracingParameters.Add("getStarted", getStarted);
                 tracingParameters.Add("clientCredentialRequired", clientCredentialRequired);
                 tracingParameters.Add("openidConfigIssuer", openidConfigIssuer);
                 tracingParameters.Add("openidConfigCustomUrl", openidConfigCustomUrl);
@@ -247,6 +248,31 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 multiPartContent.Add(documentationContent, "documentation");
             }
 
+            if (getStarted != null)
+            {
+                StreamContent getStartedContent = new StreamContent(getStarted);
+                getStartedContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                ContentDispositionHeaderValue getStartedContentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+                getStartedContentDispositionHeaderValue.Name = "getStarted";
+
+                // get filename from stream if it's a file otherwise, just use  'unknown'
+                var getStartedfileStream = getStarted as FileStream;
+                var getStartedfileName = (getStartedfileStream != null ? getStartedfileStream.Name : null) ?? "unknown";
+                if (System.Linq.Enumerable.Any(getStartedfileName, c => c > 127))
+                {
+                    // non ASCII chars detected, need UTF encoding:
+                    getStartedContentDispositionHeaderValue.FileNameStar = getStartedfileName;
+                }
+                else
+                {
+                    // ASCII only
+                    getStartedContentDispositionHeaderValue.FileName = getStartedfileName;
+                }
+
+                getStartedContent.Headers.ContentDisposition = getStartedContentDispositionHeaderValue;
+                multiPartContent.Add(getStartedContent, "getStarted");
+            }
+
             httpRequest.Content = multiPartContent;
 
             // Set Credentials
@@ -373,7 +399,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Reliability", "CA2000:Dispose objects before losing scope", Justification = "This code is from auto genrated code")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "This code is from auto genrated code")]
 
-        public async Task<HttpOperationResponse<object>> CustomUpdateProductWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string key = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<object>> CustomUpdateProductWithHttpMessagesAsync(System.Guid subscriptionId, System.Guid productId, string name = default(string), string key = default(string), string description = default(string), string contactProvider = default(string), string providerId = default(string), bool? apiKeyRequired = default(bool?), bool? clientCredentialRequired = default(bool?), string openidConfigIssuer = default(string), string openidConfigCustomUrl = default(string), bool? providerApprovalRequired = default(bool?), string applicationId = default(string), string productTerms = default(string), string visibility = default(string), IList<System.Guid?> apiIds = default(IList<System.Guid?>), Stream logo = default(Stream), Stream documentation = default(Stream), Stream getStarted = default(Stream), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool shouldTrace = ServiceClientTracing.IsEnabled;
@@ -395,6 +421,7 @@ namespace Kmd.Logic.Gateway.Automation.Client
                 tracingParameters.Add("apiIds", apiIds);
                 tracingParameters.Add("logo", logo);
                 tracingParameters.Add("documentation", documentation);
+                tracingParameters.Add("getStarted", getStarted);
                 tracingParameters.Add("clientCredentialRequired", clientCredentialRequired);
                 tracingParameters.Add("openidConfigIssuer", openidConfigIssuer);
                 tracingParameters.Add("openidConfigCustomUrl", openidConfigCustomUrl);
@@ -569,6 +596,31 @@ namespace Kmd.Logic.Gateway.Automation.Client
 
                 documentationContent.Headers.ContentDisposition = documentationContentDispositionHeaderValue;
                 multiPartContent.Add(documentationContent, "documentation");
+            }
+
+            if (getStarted != null)
+            {
+                StreamContent getStartedContent = new StreamContent(getStarted);
+                getStartedContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
+                ContentDispositionHeaderValue getStartedContentDispositionHeaderValue = new ContentDispositionHeaderValue("form-data");
+                getStartedContentDispositionHeaderValue.Name = "getStarted";
+
+                // get filename from stream if it's a file otherwise, just use  'unknown'
+                var getStartedfileStream = getStarted as FileStream;
+                var getStartedfileName = (getStartedfileStream != null ? getStartedfileStream.Name : null) ?? "unknown";
+                if (System.Linq.Enumerable.Any(getStartedfileName, c => c > 127))
+                {
+                    // non ASCII chars detected, need UTF encoding:
+                    getStartedContentDispositionHeaderValue.FileNameStar = getStartedfileName;
+                }
+                else
+                {
+                    // ASCII only
+                    getStartedContentDispositionHeaderValue.FileName = getStartedfileName;
+                }
+
+                getStartedContent.Headers.ContentDisposition = getStartedContentDispositionHeaderValue;
+                multiPartContent.Add(getStartedContent, "getStarted");
             }
 
             httpRequest.Content = multiPartContent;
