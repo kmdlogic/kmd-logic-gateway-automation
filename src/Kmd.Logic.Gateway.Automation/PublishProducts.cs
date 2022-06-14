@@ -72,7 +72,7 @@ namespace Kmd.Logic.Gateway.Automation
         {
             using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
-            using var getStart = new FileStream(path: Path.Combine(folderPath, product.GetStarted), FileMode.Open);
+            using var getStart = string.IsNullOrEmpty(product.GetStarted) ? null : new FileStream(path: Path.Combine(folderPath, product.GetStarted), FileMode.Open);
             var response = await client.CustomCreateProductAsync(
                 subscriptionId: subscriptionId,
                 name: product.Name,
@@ -112,6 +112,7 @@ namespace Kmd.Logic.Gateway.Automation
         {
             using var logo = new FileStream(path: Path.Combine(folderPath, product.Logo), FileMode.Open);
             using var document = new FileStream(path: Path.Combine(folderPath, product.Documentation), FileMode.Open);
+            using var getStart = string.IsNullOrEmpty(product.GetStarted) ? null : new FileStream(path: Path.Combine(folderPath, product.GetStarted), FileMode.Open);
             var response = await client.CustomUpdateProductAsync(
                 subscriptionId: subscriptionId,
                 productId: productId,
@@ -126,6 +127,7 @@ namespace Kmd.Logic.Gateway.Automation
                 visibility: product.Visibility,
                 logo: logo,
                 documentation: document,
+                getStarted: getStart,
                 clientCredentialRequired: product.ClientCredentialRequired,
                 openidConfigIssuer: product.OpenidConfigIssuer,
                 openidConfigCustomUrl: product.OpenidConfigCustomUrl,
