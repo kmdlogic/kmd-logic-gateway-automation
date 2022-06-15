@@ -1,3 +1,6 @@
+0.3.6
+* Bug fix - Making `Get Started Note` as an optional field for product creation and updation
+
 0.3.5
 * Added `Get Started Note` as part of product description
 
